@@ -19,10 +19,12 @@ namespace MFA
     public partial class NewAccount2 : Page
     {
         private string otpauth;
-        public NewAccount2(string OtpAuth)
+        private Main Menu;
+        public NewAccount2(string OtpAuth,Main menu)
         {
             InitializeComponent();
             otpauth = OtpAuth;
+            Menu = menu;
         }
 
         private void SaveNewAccount(object sender, EventArgs e) 
@@ -38,9 +40,18 @@ namespace MFA
 
                 string Savefile = System.IO.Path.Combine(appDirectory, "Account.dat");
 
-                StreamWriter sw = new StreamWriter(Savefile);
-                sw.WriteLine(AccountName.Text + ";" + otpauth);
-                sw.Close();
+                using (StreamWriter sw = File.AppendText(Savefile))
+                {
+                    sw.WriteLine(AccountName.Text + ";" + otpauth); 
+                }
+
+                //StreamWriter sw = new StreamWriter(Savefile);
+                //sw.WriteLine(AccountName.Text + ";" + otpauth);
+                //sw.Close();
+
+                NavigationService.GoBack();
+                NavigationService.GoBack();
+                Menu.UpdateList();
             }
             else
             {

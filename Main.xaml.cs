@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,38 +20,122 @@ namespace MFA
     public partial class Main : Page
     {
         private MainWindow windows ;
+        private List<string> AccountName = new List<string>();
+        private List<string> OtpUri = new List<string>();
+
         public Main(MainWindow window)
         {
             InitializeComponent();
             windows = window;
-            //GenerateOtp();
+
+            string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+            string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+            if (File.Exists(filePath))
+            {
+                string[] lignes = File.ReadAllLines(filePath);
+
+                foreach (string line in lignes) 
+                {
+                    string[] part = line.Split(';');
+
+                    if (part.Length == 2)
+                    {
+                        AccountName.Add(part[0]);
+                        OtpUri.Add(part[1]);
+                    }
+                }
+            }
+
+            ListAccount();
+        }
+
+        private void ListAccount()
+        {
+            AccountList.Items.Clear();
+
+            for (int i = 0; i < AccountName.Count; i++)
+            {
+                Button button = new Button();
+                button.Content = AccountName[i];
+                button.Click += AccountView;
+
+                ListViewItem item = new ListViewItem();
+                item.Content = button;
+
+                AccountList.Items.Add(item);
+            }
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             if (windows != null)
             {
-                windows.Page.Navigate(new NewAccount(windows));
+                windows.Page.Navigate(new NewAccount(windows,this));
             }
         }
 
-        public void GenerateOtp()
+        private void AccountView(object sender, RoutedEventArgs e)
         {
-            //string otpauthUri = "otpauth://totp/Google%3Apoubelletest109%40gmail.com?secret=gopbvckkpsixmpfefithgvclpwzs3brc&issuer=Google";
-            string otpauthUri="";
+            string AC;
+            string OU;
 
-            var uri = new Uri(otpauthUri);
-            var query = uri.Query.TrimStart('?');
-            var queryParams = System.Web.HttpUtility.ParseQueryString(query);
-            var secretBase32 = queryParams["secret"];
+            Button? button = sender as Button;
 
-            var secretBytes = Base32Encoding.ToBytes(secretBase32);
+            if (button != null)
+            {
+                ListViewItem? item = FindAncestor<ListViewItem>(button);
 
-            var totp = new OtpNet.Totp(secretBytes, step: 30);
+                if (item != null)
+                {
+                    int index=AccountList.Items.IndexOf(item);
 
-            var otp = totp.ComputeTotp();
+                    AC = AccountName[index];
+                    OU = OtpUri[index];
+                    windows.Page.Navigate(new SelectAccount(AC, OU));
+                }
+            }
+        }
 
-            //OtpCode.Text = otp.ToString();
+        private T? FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            do
+            {
+                if (current is T ancestor)
+                {
+                    return ancestor;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+
+        public void UpdateList()
+        {
+            AccountName.Clear();
+            OtpUri.Clear();
+
+            string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+            string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+            if (File.Exists(filePath))
+            {
+                string[] lignes = File.ReadAllLines(filePath);
+
+                foreach (string line in lignes)
+                {
+                    string[] part = line.Split(';');
+
+                    if (part.Length == 2)
+                    {
+                        AccountName.Add(part[0]);
+                        OtpUri.Add(part[1]);
+                    }
+                }
+            }
+
+            ListAccount();
         }
     }
 }

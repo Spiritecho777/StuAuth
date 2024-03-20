@@ -20,12 +20,14 @@ namespace MFA
     {
         private Point startPoint;
         private MainWindow main;
+        private Main menu;
         
 
-        public NewAccount(MainWindow main)
+        public NewAccount(MainWindow main,Main menu)
         {
             InitializeComponent();
             this.main = main;
+            this.menu = menu;
         }
 
         private void Back(object sender, RoutedEventArgs e)
@@ -41,7 +43,7 @@ namespace MFA
             if(result != null) 
             {
                 System.Windows.MessageBox.Show(result.Text);
-                main.NewAccount(result.Text.ToString());
+                main.NewAccount(result.Text.ToString(),menu);
                 //NavigationService(new NewAccount2(result.Text.ToString()));
                 //textBox.Text = result.Text;
                 return result.Text;

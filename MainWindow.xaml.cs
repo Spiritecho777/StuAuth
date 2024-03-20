@@ -22,14 +22,9 @@ namespace MFA
             Page.Navigate(new Main(this));
         }
 
-        public void NewAccount(string OtpAuth)
+        public void NewAccount(string OtpAuth,Main menu)
         {
-            Page.NavigationService.Navigate(new NewAccount2(OtpAuth));
-        }
-
-        public void SelectAccount()
-        {
-
+            Page.NavigationService.Navigate(new NewAccount2(OtpAuth,menu));
         }
     }
 }
