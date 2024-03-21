@@ -5,16 +5,27 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuAuth", "StuAuth.csproj", "{707A68A3-3AF9-4DDE-AE35-24D85DF92AD2}"
 EndProject
+Project("{840C416C-B8F3-42BC-B0DD-F6BB14C9F8CB}") = "StuAuth Installer", "StuAuth Installer\StuAuth Installer.aiproj", "{6B1CEF50-37DD-4D6D-A37A-07D3ACB63AB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		DefaultBuild|Any CPU = DefaultBuild|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{707A68A3-3AF9-4DDE-AE35-24D85DF92AD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{707A68A3-3AF9-4DDE-AE35-24D85DF92AD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{707A68A3-3AF9-4DDE-AE35-24D85DF92AD2}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
+		{707A68A3-3AF9-4DDE-AE35-24D85DF92AD2}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
 		{707A68A3-3AF9-4DDE-AE35-24D85DF92AD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{707A68A3-3AF9-4DDE-AE35-24D85DF92AD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B1CEF50-37DD-4D6D-A37A-07D3ACB63AB2}.Debug|Any CPU.ActiveCfg = DefaultBuild
+		{6B1CEF50-37DD-4D6D-A37A-07D3ACB63AB2}.Debug|Any CPU.Build.0 = DefaultBuild
+		{6B1CEF50-37DD-4D6D-A37A-07D3ACB63AB2}.DefaultBuild|Any CPU.ActiveCfg = DefaultBuild
+		{6B1CEF50-37DD-4D6D-A37A-07D3ACB63AB2}.DefaultBuild|Any CPU.Build.0 = DefaultBuild
+		{6B1CEF50-37DD-4D6D-A37A-07D3ACB63AB2}.Release|Any CPU.ActiveCfg = DefaultBuild
+		{6B1CEF50-37DD-4D6D-A37A-07D3ACB63AB2}.Release|Any CPU.Build.0 = DefaultBuild
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

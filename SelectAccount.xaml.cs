@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
 
 namespace MFA
 {
@@ -45,12 +47,31 @@ namespace MFA
             var otp = totp.ComputeTotp();
 
             MDP.Content=otp;
-            //MessageBox.Show(otp);
+
+            essai.Text = "https://accounts.google.com/v3/signin/challenge/totp?TL=AEzbmxwGvaQ1wRBBEC0Vp97gN32jSI2vDXYKLMfDmCwVykDkiEAdm-SYpAGrsSK6&checkConnection=youtube%3A290&checkedDomains=youtube&cid=2&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ddm=0&dsh=S-184504961%3A1711031620385582&flowEntry=ServiceLogin&flowName=GlifWebSignIn&ifkv=ARZ0qKKB_KD9zeTZykGcYkVJJH5KoiELQo0LKOw-1WP1k0LmaMvPqGp3dr1xnaJglm0o0ApabzHboQ&pstMsg=1&rip=1&service=mail&theme=mn";
+
+            /*if (!string.IsNullOrEmpty(essai.Text))
+            {
+                IWebDriver driver = new FirefoxDriver();
+
+                driver.Navigate().GoToUrl(essai.Text);
+
+                IWebElement searchBox = driver.FindElement(By.CssSelector("input[type='text']"));
+
+                searchBox.SendKeys(MDP.Content.ToString());
+
+                driver.Quit();
+            }*/
         }
 
         private void Back(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
+        }
+
+        private void Copy_Click(object sender, RoutedEventArgs e) 
+        {
+            Clipboard.SetData(DataFormats.Text, (Object)MDP.Content);
         }
     }
 }
