@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.Drawing;
@@ -9,10 +10,7 @@ using Color = System.Drawing.Color;
 using Cursors = System.Windows.Forms.Cursors;
 using ZXing;
 using ZXing.Windows.Compatibility;
-//using System.Drawing.Imaging;
-//using PixelFormat = System.Drawing.Imaging.PixelFormat;
-//using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-//using Page = System.Windows.Controls.Page;
+using OtpNet;
 
 namespace MFA
 {
@@ -20,8 +18,7 @@ namespace MFA
     {
         private Point startPoint;
         private MainWindow main;
-        private Main menu;
-        
+        private Main menu;     
 
         public NewAccount(MainWindow main,Main menu)
         {
@@ -42,25 +39,21 @@ namespace MFA
             Result result = reader.Decode(bitmap);
             if(result != null) 
             {
-                System.Windows.MessageBox.Show(result.Text);
+                main.Visibility = Visibility.Visible;
                 main.NewAccount(result.Text.ToString(),menu);
-                //NavigationService(new NewAccount2(result.Text.ToString()));
-                //textBox.Text = result.Text;
                 return result.Text;
             }
             else
             {
-                System.Windows.MessageBox.Show("eux ya rien");
+                main.Visibility = Visibility.Visible;
+                System.Windows.MessageBox.Show("Pas de QR code trouver");
                 return "Pas de QR code trouver";
             }
         }
 
         private void StartSelection(Screen screen)
         {
-            //Main.Hide();
-
-            //Point mousePosition = System.Windows.Forms.Control.MousePosition;
-            //Screen mouseScreen = Screen.FromPoint(mousePosition);
+            main.Hide();
             
             Rectangle screenBounds = screen.Bounds;
             using (Bitmap screenBitmap = new Bitmap(screenBounds.Width, screenBounds.Height))
@@ -104,9 +97,6 @@ namespace MFA
                         Graphics selectedGraphics = Graphics.FromImage(selectedBitmap);
                         selectedGraphics.DrawImage(screenBitmap, 0, 0, selectedRegion, GraphicsUnit.Pixel);
                         string qrCodeData = DecodeQRCode(selectedBitmap);
-
-                        //selectedBitmap.Save("c:\\users\\Asumi\\Desktop\\essai.png", ImageFormat.Png);
-
                     };
 
                     selectionForm.Controls.Add(pictureBox);
@@ -119,6 +109,52 @@ namespace MFA
         {
             Screen currentScreen = Screen.FromPoint(System.Windows.Forms.Control.MousePosition);
             StartSelection(currentScreen);
+        }
+
+        private void Confirm(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Import_Click(object sender, RoutedEventArgs e)
+        {
+            int i = 0;
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Fichiers texte (*.txt)|*.txt";
+            ofd.Title = "Sélectionnez un fichier texte";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                string filePath= ofd.FileName;
+
+                using StreamReader reader = new StreamReader(filePath);
+                {
+
+                    string[] lignes = File.ReadAllLines(filePath);
+
+                    foreach (string line in lignes)
+                    {
+                        i++;
+
+                        string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+
+                        if (!Directory.Exists(appDirectory))
+                        {
+                            Directory.CreateDirectory(appDirectory);
+                        }
+
+                        string Savefile = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+                        using (StreamWriter sw = File.AppendText(Savefile))
+                        {
+                            sw.WriteLine( i + ";" + line);
+                        }
+                    }
+                }
+            }
+            NavigationService.GoBack();
+            menu.UpdateList();
         }
     }
 }

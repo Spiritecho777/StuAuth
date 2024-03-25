@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using OtpNet;
+using System.Windows.Markup;
 
 namespace MFA
 {
@@ -92,6 +93,7 @@ namespace MFA
 
                     AC = AccountName[index];
                     OU = OtpUri[index];
+                    button.Style = FindResource("CustomButton") as Style;
                     windows.Page.Navigate(new SelectAccount(AC, OU));
                 }
             }
@@ -134,8 +136,60 @@ namespace MFA
                     }
                 }
             }
-
             ListAccount();
+        }
+
+        private void Del_Click(object sender, RoutedEventArgs e)
+        {
+            string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+            string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+            if (File.Exists(filePath))
+            {
+                int selectedIndex = AccountList.SelectedIndex;
+                if (selectedIndex >= 0) 
+                {
+                    AccountName.RemoveAt(selectedIndex);
+
+                    List<string> lines = File.ReadAllLines(filePath).ToList();
+                    lines.RemoveAt(selectedIndex);
+
+                    File.WriteAllLines(filePath, lines);
+                }
+            }
+            UpdateList();
+        }
+
+        private void rename_Click(object sender, RoutedEventArgs e)
+        {
+            if (AccountList.SelectedItem != null)
+            {
+                string newName = Microsoft.VisualBasic.Interaction.InputBox("Entrez le nouveau nom");
+
+                if (!string.IsNullOrEmpty(newName))
+                {
+                    string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+                    string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+                    if (File.Exists(filePath))
+                    {
+                        int selectedIndex = AccountList.SelectedIndex;
+                        if (selectedIndex >= 0)
+                        {
+                            List<string> lines = File.ReadAllLines(filePath).ToList();
+                            string[] part = lines[selectedIndex].Split(';');
+                            if (part.Length == 2)
+                            {
+                                part[0] = newName;
+                                lines[selectedIndex] = string.Join(";", part);
+                            }
+
+                            File.WriteAllLines(filePath, lines);
+                        }
+                    }
+                    UpdateList();
+                }
+            }
         }
     }
 }
