@@ -5,14 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MFA"
       mc:Ignorable="d" 
-      Title="SelectAccount" Height="400" Width="300" Background="LightGray">
+      Title="SelectAccount" Height="610" Width="410" Background="LightGray">
 
     <Grid>
-        <Label x:Name="MDP" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" FontSize="30" Height="45" Margin="0,-100,0,0" VerticalAlignment="Center" Width="200"/>
-        <Label x:Name="AccountName" HorizontalAlignment="Left" FontSize="20" Height="45" Margin="20,-180,0,0" VerticalAlignment="Center" Width="280"/>
-        <Label x:Name="TempsRestant" HorizontalAlignment="Center" FontSize="20" Height="45" Margin="0,20,0,0" VerticalAlignment="Center" Width="35"/>
-        <Button x:Name="back" Content="Retour" HorizontalAlignment="Left" Height="29" Margin="20,20,0,0" VerticalAlignment="Top" Width="71" Click="Back"/>
-        <Button x:Name="Copy" Content="++" HorizontalAlignment="Left" Height="32" Margin="189,320,0,0" VerticalAlignment="Top" Width="81" Click="Copy_Click"/>
-        <TextBox x:Name="essai" HorizontalAlignment="Left" Height="36" Margin="53,257,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="217"/>
+        <Label x:Name="MDP" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" FontSize="50" Height="80" Margin="0,-100,0,0" VerticalAlignment="Center" Width="200"/>
+        <Label x:Name="AccountName" HorizontalAlignment="Left" FontSize="20" Height="45" Margin="20,-280,0,0" VerticalAlignment="Center" Width="280"/>
+        <Label x:Name="TempsRestant" HorizontalAlignment="Center" FontSize="20" Height="45" Margin="0,50,0,0" VerticalAlignment="Center" Width="35"/>
+        <Button x:Name="back" Content="Retour" HorizontalAlignment="Left" Height="30" Margin="20,20,0,0" VerticalAlignment="Top" Width="71" Click="Back"/>
+        <Button x:Name="Copy" Content="++" HorizontalAlignment="Right" Height="32" Margin="0,0,30,50" VerticalAlignment="Bottom" Width="81" Click="Copy_Click"/>
+        <TextBox x:Name="essai" HorizontalAlignment="Center" Height="36" Margin="-20,300,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="330"/>
     </Grid>
 </Page>

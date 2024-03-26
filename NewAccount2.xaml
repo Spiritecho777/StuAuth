@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MFA"
       mc:Ignorable="d" 
-      Title="NewAccount2" Height="400" Width="300" Background="LightGray">
+      Title="NewAccount2" Height="610" Width="410" Background="LightGray">
 
     <Grid>
         <TextBox x:Name="AccountName" HorizontalAlignment="Center" Height="32" Margin="0,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>

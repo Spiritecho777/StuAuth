@@ -29,7 +29,7 @@ namespace MFA
             InitializeComponent();
             windows = window;
 
-            string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+            /*string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
             string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
 
             if (File.Exists(filePath))
@@ -48,7 +48,8 @@ namespace MFA
                 }
             }
 
-            ListAccount();
+            ListAccount();*/
+            UpdateList();
         }
 
         private void ListAccount()
@@ -63,6 +64,7 @@ namespace MFA
 
                 ListViewItem item = new ListViewItem();
                 item.Content = button;
+                button.Style = FindResource("CustomButton") as Style;
 
                 AccountList.Items.Add(item);
             }
