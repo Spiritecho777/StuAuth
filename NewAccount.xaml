@@ -7,6 +7,24 @@
       mc:Ignorable="d" 
       Title="NewAccount" Height="610" Width="410" Background="LightGray">
 
+    <Page.Resources>
+        <Style TargetType="Button" x:Key="ChargedButton">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
     <Grid>
         <Button x:Name="Retour" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Margin="40,40,0,0" Width="30" Click="Back"/>
         <Button x:Name="Import" Content="Import" HorizontalAlignment="Right" VerticalAlignment="Top" Height="30" Margin="0,40,40,0" Width="50" Click="Import_Click"/>

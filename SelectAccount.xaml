@@ -7,6 +7,24 @@
       mc:Ignorable="d" 
       Title="SelectAccount" Height="610" Width="410" Background="LightGray">
 
+    <Page.Resources>
+        <Style TargetType="Button" x:Key="ChargedButton">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    </Page.Resources>
+
     <Grid>
         <Label x:Name="MDP" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" FontSize="50" Height="80" Margin="0,-100,0,0" VerticalAlignment="Center" Width="200"/>
         <Label x:Name="AccountName" HorizontalAlignment="Left" FontSize="20" Height="45" Margin="20,-280,0,0" VerticalAlignment="Center" Width="280"/>

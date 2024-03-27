@@ -16,28 +16,35 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="5">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="Button" x:Key="ChargedButton">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
-    
+
     <Grid>
-        <Button x:Name="Add" Content="+" Height="30" FontSize="20" VerticalContentAlignment="Top" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,77,0" Width="30" Click="Add_Click"/>
-        <Button x:Name="Del" Content="-" Height="30" FontSize="20" VerticalContentAlignment="Top" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,37,0" ToolTip="Clique droit sur le compte que vous souhaitez supprimer" Width="30" Click="Del_Click"/>
-        <Button Content="Renommée" Height="30" FontSize="15" VerticalContentAlignment="Top" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22,10,0,0" Width="80" ToolTip="Clique droit sur le compte que vous souhaitez renommer" Click="rename_Click"/>
-        <ListView x:Name="AccountList" HorizontalAlignment="Center" Height="500" Margin="-15,45,0,0" VerticalAlignment="Top" Width="350">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Button Height="30" Width="200"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Button x:Name="Add" Content="+" FontSize="20" Margin="0,10,77,0" Width="30" Click="Add_Click" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Del" Content="-" FontSize="20" Margin="0,10,37,0" ToolTip="Clique droit sur le compte que vous souhaitez supprimer" Width="30" Click="Del_Click" Style="{StaticResource ChargedButton}"/>
+        <Button Content="Renommée" FontSize="15" Margin="0,10,307,0" Width="80" ToolTip="Clique droit sur le compte que vous souhaitez renommer" Click="rename_Click" Style="{StaticResource ChargedButton}"/>
+
+        <ListView x:Name="AccountList" HorizontalAlignment="Center" Height="500" Margin="-15,45,0,0" VerticalAlignment="Top" Width="350"/>
     </Grid>
 </Page>

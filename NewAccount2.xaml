@@ -7,10 +7,29 @@
       mc:Ignorable="d" 
       Title="NewAccount2" Height="610" Width="410" Background="LightGray">
 
+    <Page.Resources>
+        <Style TargetType="Button" x:Key="ChargedButton">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    
     <Grid>
         <TextBox x:Name="AccountName" HorizontalAlignment="Center" Height="32" Margin="0,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250"/>
-        <Button x:Name="Save" Content="Save" HorizontalAlignment="Center" Height="30" Margin="-80,0,0,50" VerticalAlignment="Bottom" Width="50" Click="SaveNewAccount"/>
-        <Button x:Name="Annuler" Content="Retour" HorizontalAlignment="Center" Height="30" Margin="80,0,0,50" VerticalAlignment="Bottom" Width="50" Click="Back"/>
+        <Button x:Name="Save" Content="Save" Margin="-80,0,0,50" Click="SaveNewAccount" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Annuler" Content="Retour" Margin="80,0,0,50" Click="Back" Style="{StaticResource ChargedButton}"/>
 
     </Grid>
 </Page>
