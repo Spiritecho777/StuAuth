@@ -118,7 +118,7 @@ namespace MFA
 
         private void Import_Click(object sender, RoutedEventArgs e)
         {
-            int i = 0;
+            /*int i = 0;
 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Fichiers texte (*.txt)|*.txt";
@@ -152,9 +152,12 @@ namespace MFA
                         }
                     }
                 }
-            }
-            NavigationService.GoBack();
-            menu.UpdateList();
+            }*/
+
+            main.ImportM(menu);
+
+            /*NavigationService.GoBack();
+            menu.UpdateList();*/
         }
     }
 }

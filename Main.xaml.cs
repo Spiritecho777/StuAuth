@@ -20,7 +20,7 @@ namespace MFA
 {
     public partial class Main : Page
     {
-        private MainWindow windows ;
+        private MainWindow windows;
         private List<string> AccountName = new List<string>();
         private List<string> OtpUri = new List<string>();
 
