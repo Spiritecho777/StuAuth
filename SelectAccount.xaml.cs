@@ -1,20 +1,7 @@
 ﻿using OtpNet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
 using System.Windows.Threading;
 
 namespace MFA
@@ -54,7 +41,12 @@ namespace MFA
 
             var otp = totp.ComputeTotp();
 
-            MDP.Content=otp;
+            MDP.Content = otp;
+
+            var timeRemaining = 30 - (DateTime.UtcNow.Second % 30);
+            TempsRestant.Content = timeRemaining;
+            
+
 
             //essai.Text = "https://accounts.google.com/v3/signin/challenge/totp?TL=AEzbmxwGvaQ1wRBBEC0Vp97gN32jSI2vDXYKLMfDmCwVykDkiEAdm-SYpAGrsSK6&checkConnection=youtube%3A290&checkedDomains=youtube&cid=2&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ddm=0&dsh=S-184504961%3A1711031620385582&flowEntry=ServiceLogin&flowName=GlifWebSignIn&ifkv=ARZ0qKKB_KD9zeTZykGcYkVJJH5KoiELQo0LKOw-1WP1k0LmaMvPqGp3dr1xnaJglm0o0ApabzHboQ&pstMsg=1&rip=1&service=mail&theme=mn";
 
@@ -70,9 +62,6 @@ namespace MFA
 
                 driver.Quit();
             }*/
-
-            var timeRemaining = 30 - (DateTime.UtcNow.Second % 30);
-            TempsRestant.Content = timeRemaining;
         }
 
         private void Back(object sender, RoutedEventArgs e)

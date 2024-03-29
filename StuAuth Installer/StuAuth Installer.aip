@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <DOCUMENT Type="Advanced Installer" CreateVersion="21.4" version="21.4" Modules="simple" RootPath="." Language="en" Id="{FE0381D5-D67A-4D48-BBBB-E64E67CB2B27}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
-    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent"/>
+    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPPRODUCTICON" Value="SFA.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="Stusoft"/>
     <ROW Property="ProductCode" Value="1033:{2446C172-7323-451F-86F7-E0FF1C91A0CC} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
@@ -27,15 +28,43 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
+    <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
+    <ROW Directory="StartMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="STARTM~1|StartMenuFolder" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="APPDIR" ComponentId="{65813068-65E1-4F9D-81D6-AD69087D9FBB}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.Core.dll" ComponentId="{944841C3-5BA7-4106-8DE8-19FFA0B7B4D4}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Core.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" ComponentId="{760D0493-3752-4F3D-A207-07FFA35D2D49}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.Sensors.dll" ComponentId="{D8DE784C-D0E1-4F10-8164-BBACD7F4A869}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Sensors.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.Shell.dll" ComponentId="{92CBB274-FB8F-4F02-96BF-637EEDF50BF4}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Shell.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.ShellExtensions.dll" ComponentId="{8A7D9853-B41B-49E7-99D5-DB2C32F590FD}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.ShellExtensions.dll"/>
+    <ROW Component="Otp.NET.dll" ComponentId="{FABE5989-3D22-4C1E-BBF4-D28057D3666E}" Directory_="APPDIR" Attributes="0" KeyPath="Otp.NET.dll"/>
     <ROW Component="ProductInformation" ComponentId="{1D032718-A959-4D39-AFFB-8621A93566A7}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{3A36D07A-A7B1-4A49-91FC-87BB1C1FB3A3}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="StuAuth.dll" ComponentId="{261A98F6-B54D-49FE-8E84-5AA895392656}" Directory_="APPDIR" Attributes="0" KeyPath="StuAuth.dll"/>
+    <ROW Component="StuAuth.exe" ComponentId="{4B243BA0-65BC-4BA5-BC17-EEFE40DA05FC}" Directory_="APPDIR" Attributes="256" KeyPath="StuAuth.exe"/>
+    <ROW Component="StuAuth.runtimeconfig.json" ComponentId="{90C19990-F3CE-4128-9772-6C57EB79EC47}" Directory_="APPDIR" Attributes="0" KeyPath="StuAuth.runtimeconfig.json" Type="0"/>
+    <ROW Component="ZXing.Windows.Compatibility.dll" ComponentId="{E0E2B3F0-D25A-4274-8367-9738041F3375}" Directory_="APPDIR" Attributes="0" KeyPath="ZXing.Windows.Compatibility.dll"/>
+    <ROW Component="zxing.dll" ComponentId="{F4A6C488-9A7E-4852-A7B4-A1196B8A9734}" Directory_="APPDIR" Attributes="0" KeyPath="zxing.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="Microsoft.WindowsAPICodePack.Sensors.dll" Component_="Microsoft.WindowsAPICodePack.Sensors.dll" FileName="MICROS~1.DLL|Microsoft.WindowsAPICodePack.Sensors.dll" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\Microsoft.WindowsAPICodePack.Sensors.dll" SelfReg="false"/>
+    <ROW File="Microsoft.WindowsAPICodePack.Shell.dll" Component_="Microsoft.WindowsAPICodePack.Shell.dll" FileName="MICROS~2.DLL|Microsoft.WindowsAPICodePack.Shell.dll" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\Microsoft.WindowsAPICodePack.Shell.dll" SelfReg="false"/>
+    <ROW File="Microsoft.WindowsAPICodePack.ShellExtensions.dll" Component_="Microsoft.WindowsAPICodePack.ShellExtensions.dll" FileName="MICROS~3.DLL|Microsoft.WindowsAPICodePack.ShellExtensions.dll" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\Microsoft.WindowsAPICodePack.ShellExtensions.dll" SelfReg="false"/>
+    <ROW File="Otp.NET.dll" Component_="Otp.NET.dll" FileName="OTPNET~1.DLL|Otp.NET.dll" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\Otp.NET.dll" SelfReg="false"/>
+    <ROW File="StuAuth.dll" Component_="StuAuth.dll" FileName="StuAuth.dll" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\StuAuth.dll" SelfReg="false"/>
+    <ROW File="StuAuth.exe" Component_="StuAuth.exe" FileName="StuAuth.exe" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\StuAuth.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="StuAuth.runtimeconfig.json" Component_="StuAuth.runtimeconfig.json" FileName="STUAUT~1.JSO|StuAuth.runtimeconfig.json" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\StuAuth.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="zxing.dll" Component_="zxing.dll" FileName="zxing.dll" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\zxing.dll" SelfReg="false"/>
+    <ROW File="ZXing.Windows.Compatibility.dll" Component_="ZXing.Windows.Compatibility.dll" FileName="ZXINGW~1.DLL|ZXing.Windows.Compatibility.dll" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\ZXing.Windows.Compatibility.dll" SelfReg="false"/>
+    <ROW File="Microsoft.WindowsAPICodePack.Core.dll" Component_="Microsoft.WindowsAPICodePack.Core.dll" FileName="MICROS~4.DLL|Microsoft.WindowsAPICodePack.Core.dll" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\Microsoft.WindowsAPICodePack.Core.dll" SelfReg="false"/>
+    <ROW File="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" Component_="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" FileName="MICROS~5.DLL|Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" Attributes="0" SourcePath="..\bin\Release\net8.0-windows\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -91,6 +120,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
     <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
@@ -110,6 +140,21 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
     <ROW Feature_="MainFeature" Component_="APPDIR"/>
     <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.Sensors.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.Shell.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.ShellExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Otp.NET.dll"/>
+    <ROW Feature_="MainFeature" Component_="StuAuth.dll"/>
+    <ROW Feature_="MainFeature" Component_="StuAuth.exe"/>
+    <ROW Feature_="MainFeature" Component_="StuAuth.runtimeconfig.json"/>
+    <ROW Feature_="MainFeature" Component_="zxing.dll"/>
+    <ROW Feature_="MainFeature" Component_="ZXing.Windows.Compatibility.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll"/>
+    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="SFA.exe" SourcePath="..\Icone\SFA.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
@@ -139,6 +184,11 @@
     <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
     <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="StuAuth" Directory_="SHORTCUTDIR" Name="StuAuth" Component_="StuAuth.exe" Target="[#StuAuth.exe]" Hotkey="0" Icon_="SFA.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+    <ROW Shortcut="StuAuth_1" Directory_="DesktopFolder" Name="StuAuth" Component_="StuAuth.exe" Target="[#StuAuth.exe]" Hotkey="0" Icon_="SFA.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+    <ROW Shortcut="StuAuth_2" Directory_="StartMenuFolder" Name="StuAuth" Component_="StuAuth.exe" Target="[#StuAuth.exe]" Hotkey="0" Icon_="SFA.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>

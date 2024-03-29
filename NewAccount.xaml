@@ -26,12 +26,12 @@
     </Page.Resources>
 
     <Grid>
-        <Button x:Name="Retour" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Margin="40,40,0,0" Width="30" Click="Back"/>
-        <Button x:Name="Import" Content="Import" HorizontalAlignment="Right" VerticalAlignment="Top" Height="30" Margin="0,40,40,0" Width="50" Click="Import_Click"/>
+        <Button x:Name="Retour" Content="Retour" Margin="0,40,330,0" Width="50" Click="Back" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Import" Content="Import" Margin="0,40,40,0" Width="50" Click="Import_Click" Style="{StaticResource ChargedButton}"/>
         
         <TextBox x:Name="SecretKey" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,430,40,0" Width="330"/>
-        
-        <Button x:Name="QRcapture" Content="QRcode" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="100,0,0,80"  Width="80" Click="Capture"/>
-        <Button x:Name="Valider" Content="Confirmer" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Margin="0,0,100,80" Width="80" Click="Confirm"/>
+
+        <Button x:Name="QRcapture" Content="QRcode" Margin="0,500,210,0"  Width="80" Click="Capture" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Valider" Content="Confirmer" Margin="0,500,100,0" Width="80" Click="Confirm" Style="{StaticResource ChargedButton}"/>
     </Grid>
 </Page>

@@ -6,7 +6,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Icone\SFA.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icone\CC.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icone\SFA.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Otp.NET" Version="1.3.0" />
@@ -15,6 +24,10 @@
     <PackageReference Include="WindowsAPICodePack" Version="7.0.4" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
     <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icone\CC.png" />
   </ItemGroup>
 
 </Project>

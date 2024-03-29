@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using OtpNet;
 using System.Windows.Markup;
+using System.Windows.Forms;
+using Button = System.Windows.Controls.Button;
+using ListViewItem = System.Windows.Controls.ListViewItem;
+using ZXing;
+using ZXing.Windows.Compatibility;
+using ZXing.Common;
 
 namespace MFA
 {
@@ -28,27 +35,6 @@ namespace MFA
         {
             InitializeComponent();
             windows = window;
-
-            /*string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-            string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
-
-            if (File.Exists(filePath))
-            {
-                string[] lignes = File.ReadAllLines(filePath);
-
-                foreach (string line in lignes) 
-                {
-                    string[] part = line.Split(';');
-
-                    if (part.Length == 2)
-                    {
-                        AccountName.Add(part[0]);
-                        OtpUri.Add(part[1]);
-                    }
-                }
-            }
-
-            ListAccount();*/
             UpdateList();
         }
 
@@ -190,6 +176,101 @@ namespace MFA
                         }
                     }
                     UpdateList();
+                }
+            }
+        }
+
+        private void Export_Click(object sender, RoutedEventArgs e)
+        {
+            ContextMenu contextMenu = new ContextMenu();
+
+            MenuItem menuItem1 = new MenuItem();
+            menuItem1.Header = "Exporter vers fichier texte";
+            menuItem1.Click += ExportToTexte;
+            contextMenu.Items.Add(menuItem1);
+
+            MenuItem menuItem2 = new MenuItem();
+            menuItem2.Header = "Exporter vers fichier QRCode";
+            menuItem2.Click += ExportToQRCode;
+            contextMenu.Items.Add(menuItem2);
+
+            Button? button = sender as Button;
+            if (button != null)
+            {
+                contextMenu.PlacementTarget = button;
+                contextMenu.IsOpen = true;
+            }
+        }
+
+        private void ExportToTexte(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Fichiers texte (*.txt)|*.txt";
+            sfd.Title = "Sélectionnez un fichier texte";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+                string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+                if (File.Exists(filePath))
+                {
+                    string[] lignes = File.ReadAllLines(filePath);
+
+                    foreach (string line in lignes)
+                    {
+                        string[] part = line.Split(';');
+                        using (StreamWriter sw = File.AppendText(sfd.FileName))
+                        {
+                            string exportline = part[1];
+                            sw.WriteLine(exportline);
+                        }
+                    }
+                }
+            }     
+        }
+
+        private void ExportToQRCode(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "";
+            sfd.Title = "Enregistrer les QR codes";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                string? saveDirectory = System.IO.Path.GetDirectoryName(sfd.FileName) ?? string.Empty;
+                string folderName = System.IO.Path.GetFileNameWithoutExtension(sfd.FileName);
+                string targetDirectory = System.IO.Path.Combine(saveDirectory, folderName);
+
+                Directory.CreateDirectory(targetDirectory);
+
+                string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+                string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+                if (File.Exists(filePath))
+                {
+                    string[] lines = File.ReadAllLines(filePath);
+
+                    foreach(string line in lines)
+                    {
+                        string[] part = line.Split(";");
+                        string accountName = part[0];
+                        string exportline = part[1];
+
+                        BarcodeWriter writer = new BarcodeWriter()
+                        {
+                            Format = BarcodeFormat.QR_CODE,
+                            Options = new EncodingOptions
+                            {
+                                Height = 300,
+                                Width = 300
+                            }
+                        };
+                        Bitmap qrCodeImage = writer.Write(exportline);
+
+                        string qrCodeFileName = System.IO.Path.Combine(targetDirectory, $"{accountName}.png");
+                        qrCodeImage.Save(qrCodeFileName);
+                    }
                 }
             }
         }

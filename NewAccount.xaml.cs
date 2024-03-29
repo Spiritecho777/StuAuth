@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.Drawing;
@@ -10,7 +9,6 @@ using Color = System.Drawing.Color;
 using Cursors = System.Windows.Forms.Cursors;
 using ZXing;
 using ZXing.Windows.Compatibility;
-using OtpNet;
 
 namespace MFA
 {
@@ -113,51 +111,13 @@ namespace MFA
 
         private void Confirm(object sender, RoutedEventArgs e)
         {
-
+            string otpauth = "otpauth://totp/?secret=" + SecretKey.Text + "&digits=6&period=30";
+            main.NewAccount(otpauth, menu);
         }
 
         private void Import_Click(object sender, RoutedEventArgs e)
         {
-            /*int i = 0;
-
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Fichiers texte (*.txt)|*.txt";
-            ofd.Title = "Sélectionnez un fichier texte";
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                string filePath= ofd.FileName;
-
-                using StreamReader reader = new StreamReader(filePath);
-                {
-
-                    string[] lignes = File.ReadAllLines(filePath);
-
-                    foreach (string line in lignes)
-                    {
-                        i++;
-
-                        string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-
-                        if (!Directory.Exists(appDirectory))
-                        {
-                            Directory.CreateDirectory(appDirectory);
-                        }
-
-                        string Savefile = System.IO.Path.Combine(appDirectory, "Account.dat");
-
-                        using (StreamWriter sw = File.AppendText(Savefile))
-                        {
-                            sw.WriteLine( i + ";" + line);
-                        }
-                    }
-                }
-            }*/
-
             main.ImportM(menu);
-
-            /*NavigationService.GoBack();
-            menu.UpdateList();*/
         }
     }
 }

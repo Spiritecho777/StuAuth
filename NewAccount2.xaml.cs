@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MFA
 {
@@ -42,12 +31,10 @@ namespace MFA
 
                 using (StreamWriter sw = File.AppendText(Savefile))
                 {
+                    string[] part = otpauth.Split('/');
+                    otpauth = part[0] + "/" + part[1] + "/" + part[2] + "/" + AccountName.Text + part[3];
                     sw.WriteLine(AccountName.Text + ";" + otpauth); 
                 }
-
-                //StreamWriter sw = new StreamWriter(Savefile);
-                //sw.WriteLine(AccountName.Text + ";" + otpauth);
-                //sw.Close();
 
                 NavigationService.GoBack();
                 NavigationService.GoBack();
