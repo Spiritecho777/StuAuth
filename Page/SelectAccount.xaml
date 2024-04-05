@@ -9,20 +9,20 @@
 
     <Page.Resources>
         <Style TargetType="Button" x:Key="ChargedButton">
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="HorizontalAlignment" Value="Right"/>
-        <Setter Property="VerticalAlignment" Value="Top"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -33,6 +33,6 @@
         <Button x:Name="Copy" Margin="0,500,50,0" Width="50" Height="50" Click="Copy_Click" Style="{StaticResource ChargedButton}">
             <Image Source="\Icone\CC.png" />
         </Button>
-        <TextBox x:Name="essai" HorizontalAlignment="Center" Height="36" Margin="-20,300,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="330"/>
+        <!--<TextBox x:Name="essai" HorizontalAlignment="Center" Height="36" Margin="-20,300,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="330"/>-->
     </Grid>
 </Page>

@@ -10,43 +10,33 @@
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.WindowsAPICodePack.Sensors.dll" Value="..\bin\Release\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.WindowsAPICodePack.Shell.dll" Value="..\bin\Release\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_Microsoft.WindowsAPICodePack.ShellExtensions.dll" Value="..\bin\Release\publish"/>
-    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Newtonsoft.Json.dll" Value="..\bin\Release\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_Otp.NET.dll" Value="..\bin\Release\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_StuAuth.deps.json" Value="..\bin\Release\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_StuAuth.dll" Value="..\bin\Release\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_StuAuth.exe" Value="..\bin\Release\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_StuAuth.runtimeconfig.json" Value="..\bin\Release\publish"/>
-    <ROW Property="AI_PROPPATH_DIR_PERBUILD_WebDriver.dll" Value="..\bin\Release\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_ZXing.Windows.Compatibility.dll" Value="..\bin\Release\publish"/>
-    <ROW Property="AI_PROPPATH_DIR_PERBUILD_seleniummanager" Value="..\bin\Release\publish\selenium-manager\linux"/>
-    <ROW Property="AI_PROPPATH_DIR_PERBUILD_seleniummanager.exe" Value="..\bin\Release\publish\selenium-manager\windows"/>
-    <ROW Property="AI_PROPPATH_DIR_PERBUILD_seleniummanager_1" Value="..\bin\Release\publish\selenium-manager\macos"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_zxing.dll" Value="..\bin\Release\publish"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.Core.dll" Value="Microsoft.WindowsAPICodePack.Core.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" Value="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.Sensors.dll" Value="Microsoft.WindowsAPICodePack.Sensors.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.Shell.dll" Value="Microsoft.WindowsAPICodePack.Shell.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.ShellExtensions.dll" Value="Microsoft.WindowsAPICodePack.ShellExtensions.dll"/>
-    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Newtonsoft.Json.dll" Value="Newtonsoft.Json.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Otp.NET.dll" Value="Otp.NET.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_StuAuth.deps.json" Value="StuAuth.deps.json"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_StuAuth.dll" Value="StuAuth.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_StuAuth.exe" Value="StuAuth.exe"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_StuAuth.runtimeconfig.json" Value="StuAuth.runtimeconfig.json"/>
-    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_WebDriver.dll" Value="WebDriver.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_ZXing.Windows.Compatibility.dll" Value="ZXing.Windows.Compatibility.dll"/>
-    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_seleniummanager" Value="selenium-manager"/>
-    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_seleniummanager.exe" Value="selenium-manager.exe"/>
-    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_seleniummanager_1" Value="selenium-manager"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_zxing.dll" Value="zxing.dll"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPPRODUCTICON" Value="StuAuth.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="Stusoft"/>
-    <ROW Property="ProductCode" Value="1033:{70A0F414-F8D0-4F28-8B19-C6EB736F162B} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{6101F25E-E908-45E8-A630-EE1620F0DEDF} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="StuAuth"/>
-    <ROW Property="ProductVersion" Value="1.1.0" Options="32"/>
+    <ROW Property="ProductVersion" Value="1.0.2" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{A8D2C2B3-3A7E-4BB0-93DC-2114DEB26D39}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -67,10 +57,7 @@
     <ROW Directory="StartMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="STARTM~1|StartMenuFolder" IsPseudoRoot="1"/>
     <ROW Directory="StuAuth_Dir" Directory_Parent="APPDIR" DefaultDir="StuAuth"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
-    <ROW Directory="linux_Dir" Directory_Parent="seleniummanager_Dir" DefaultDir="linux"/>
-    <ROW Directory="macos_Dir" Directory_Parent="seleniummanager_Dir" DefaultDir="macos"/>
     <ROW Directory="seleniummanager_Dir" Directory_Parent="StuAuth_Dir" DefaultDir="SELENI~1|selenium-manager"/>
-    <ROW Directory="windows_Dir" Directory_Parent="seleniummanager_Dir" DefaultDir="windows"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AI_PROPPATH_FILENAME_PERBUILD_StuAuth.exe" ComponentId="{7E896BCC-60FD-44CD-9D83-44908333DE7D}" Directory_="StuAuth_Dir" Attributes="256" KeyPath="StuAuth.exe"/>
@@ -79,9 +66,7 @@
     <ROW Component="SHORTCUTDIR" ComponentId="{0CF55339-30C3-4CDA-ABD9-F02BE8DD7357}" Directory_="SHORTCUTDIR" Attributes="0"/>
     <ROW Component="StuAuth_PrimaryOutput" ComponentId="{133231A0-A190-49C8-97A3-FB9A13290BC0}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="StuAuth.dll"/>
     <ROW Component="StuAuth_PublishOutput" ComponentId="{E023049E-0272-4FA9-AC14-AB60D5389AAF}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="ZXing.Windows.Compatibility.dll"/>
-    <ROW Component="StuAuth_PublishOutput_seleniummanager_linux" ComponentId="{3211DA1C-7CAB-488B-8BB8-43B20117EA7E}" Directory_="linux_Dir" Attributes="0" KeyPath="seleniummanager" Type="0"/>
-    <ROW Component="StuAuth_PublishOutput_seleniummanager_macos" ComponentId="{66A012D6-5C59-4612-8CE3-D60789A7BB02}" Directory_="macos_Dir" Attributes="0" KeyPath="seleniummanager_1" Type="0"/>
-    <ROW Component="StuAuth_PublishOutput_seleniummanager_windows" ComponentId="{05367803-2366-405F-896E-844D589935F1}" Directory_="windows_Dir" Attributes="0" KeyPath="seleniummanager.exe"/>
+    <ROW Component="seleniummanager" ComponentId="{A25DB153-2A97-4F4D-A432-8983BA4A541B}" Directory_="seleniummanager_Dir" Attributes="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
@@ -94,17 +79,12 @@
     <ROW File="Microsoft.WindowsAPICodePack.Sensors.dll" Component_="StuAuth_PublishOutput" FileName="MICROS~4.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.Sensors.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.WindowsAPICodePack.Sensors.dll&gt;" SelfReg="false"/>
     <ROW File="Microsoft.WindowsAPICodePack.Shell.dll" Component_="StuAuth_PublishOutput" FileName="MICROS~5.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.Shell.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.WindowsAPICodePack.Shell.dll&gt;" SelfReg="false"/>
     <ROW File="Microsoft.WindowsAPICodePack.ShellExtensions.dll" Component_="StuAuth_PublishOutput" FileName="MICROS~6.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.ShellExtensions.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Microsoft.WindowsAPICodePack.ShellExtensions.dll&gt;" SelfReg="false"/>
-    <ROW File="Newtonsoft.Json.dll" Component_="StuAuth_PublishOutput" FileName="NEWTON~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Newtonsoft.Json.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Newtonsoft.Json.dll&gt;" SelfReg="false"/>
     <ROW File="Otp.NET.dll" Component_="StuAuth_PublishOutput" FileName="OTPNET~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Otp.NET.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Otp.NET.dll&gt;" SelfReg="false"/>
     <ROW File="StuAuth.deps.json" Component_="StuAuth_PublishOutput" FileName="STUAUT~2.JSO|[|AI_PROPPATH_FILENAME_PERBUILD_StuAuth.deps.json]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_StuAuth.deps.json&gt;" SelfReg="false"/>
     <ROW File="StuAuth.exe" Component_="AI_PROPPATH_FILENAME_PERBUILD_StuAuth.exe" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_StuAuth.exe]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_StuAuth.exe&gt;" SelfReg="false" DigSign="true"/>
     <ROW File="StuAuth.runtimeconfig.json" Component_="StuAuth_PublishOutput" FileName="STUAUT~3.JSO|[|AI_PROPPATH_FILENAME_PERBUILD_StuAuth.runtimeconfig.json]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_StuAuth.runtimeconfig.json&gt;" SelfReg="false"/>
-    <ROW File="WebDriver.dll" Component_="StuAuth_PublishOutput" FileName="WEBDRI~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_WebDriver.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_WebDriver.dll&gt;" SelfReg="false"/>
     <ROW File="zxing.dll" Component_="StuAuth_PublishOutput" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_zxing.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_zxing.dll&gt;" SelfReg="false"/>
     <ROW File="ZXing.Windows.Compatibility.dll" Component_="StuAuth_PublishOutput" FileName="ZXINGW~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_ZXing.Windows.Compatibility.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_ZXing.Windows.Compatibility.dll&gt;" SelfReg="false"/>
-    <ROW File="seleniummanager" Component_="StuAuth_PublishOutput_seleniummanager_linux" FileName="SELENI~2|[|AI_PROPPATH_FILENAME_PERBUILD_seleniummanager]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_seleniummanager&gt;" SelfReg="false"/>
-    <ROW File="seleniummanager_1" Component_="StuAuth_PublishOutput_seleniummanager_macos" FileName="SELENI~2|[|AI_PROPPATH_FILENAME_PERBUILD_seleniummanager_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_seleniummanager_1&gt;" SelfReg="false"/>
-    <ROW File="seleniummanager.exe" Component_="StuAuth_PublishOutput_seleniummanager_windows" FileName="SELENI~2.EXE|[|AI_PROPPATH_FILENAME_PERBUILD_seleniummanager.exe]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_seleniummanager.exe&gt;" SelfReg="false" DigSign="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AppPathsComponent">
     <ROW Name="AI_APPPATH_PERBUILD_Microsoft.WindowsAPICodePack.Core.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.WindowsAPICodePack.Core.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.Core.dll]" Type="2" Content="0"/>
@@ -112,17 +92,12 @@
     <ROW Name="AI_APPPATH_PERBUILD_Microsoft.WindowsAPICodePack.Sensors.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.WindowsAPICodePack.Sensors.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.Sensors.dll]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_Microsoft.WindowsAPICodePack.Shell.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.WindowsAPICodePack.Shell.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.Shell.dll]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_Microsoft.WindowsAPICodePack.ShellExtensions.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Microsoft.WindowsAPICodePack.ShellExtensions.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Microsoft.WindowsAPICodePack.ShellExtensions.dll]" Type="2" Content="0"/>
-    <ROW Name="AI_APPPATH_PERBUILD_Newtonsoft.Json.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Newtonsoft.Json.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Newtonsoft.Json.dll]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_Otp.NET.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Otp.NET.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Otp.NET.dll]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_StuAuth.deps.json" Path="[|AI_PROPPATH_DIR_PERBUILD_StuAuth.deps.json]\[|AI_PROPPATH_FILENAME_PERBUILD_StuAuth.deps.json]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_StuAuth.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_StuAuth.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_StuAuth.dll]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_StuAuth.exe" Path="[|AI_PROPPATH_DIR_PERBUILD_StuAuth.exe]\[|AI_PROPPATH_FILENAME_PERBUILD_StuAuth.exe]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_StuAuth.runtimeconfig.json" Path="[|AI_PROPPATH_DIR_PERBUILD_StuAuth.runtimeconfig.json]\[|AI_PROPPATH_FILENAME_PERBUILD_StuAuth.runtimeconfig.json]" Type="2" Content="0"/>
-    <ROW Name="AI_APPPATH_PERBUILD_WebDriver.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_WebDriver.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_WebDriver.dll]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_ZXing.Windows.Compatibility.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_ZXing.Windows.Compatibility.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_ZXing.Windows.Compatibility.dll]" Type="2" Content="0"/>
-    <ROW Name="AI_APPPATH_PERBUILD_seleniummanager" Path="[|AI_PROPPATH_DIR_PERBUILD_seleniummanager]\[|AI_PROPPATH_FILENAME_PERBUILD_seleniummanager]" Type="2" Content="0"/>
-    <ROW Name="AI_APPPATH_PERBUILD_seleniummanager.exe" Path="[|AI_PROPPATH_DIR_PERBUILD_seleniummanager.exe]\[|AI_PROPPATH_FILENAME_PERBUILD_seleniummanager.exe]" Type="2" Content="0"/>
-    <ROW Name="AI_APPPATH_PERBUILD_seleniummanager_1" Path="[|AI_PROPPATH_DIR_PERBUILD_seleniummanager_1]\[|AI_PROPPATH_FILENAME_PERBUILD_seleniummanager_1]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_zxing.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_zxing.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_zxing.dll]" Type="2" Content="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
@@ -180,6 +155,7 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
     <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
+    <ROW Directory_="seleniummanager_Dir" Component_="seleniummanager" ManualDelete="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
     <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
@@ -201,9 +177,7 @@
     <ROW Feature_="MainFeature" Component_="ProductInformation"/>
     <ROW Feature_="MainFeature" Component_="StuAuth_PrimaryOutput"/>
     <ROW Feature_="MainFeature" Component_="StuAuth_PublishOutput"/>
-    <ROW Feature_="MainFeature" Component_="StuAuth_PublishOutput_seleniummanager_linux"/>
-    <ROW Feature_="MainFeature" Component_="StuAuth_PublishOutput_seleniummanager_macos"/>
-    <ROW Feature_="MainFeature" Component_="StuAuth_PublishOutput_seleniummanager_windows"/>
+    <ROW Feature_="MainFeature" Component_="seleniummanager"/>
     <ROW Feature_="MainFeature" Component_="AI_PROPPATH_FILENAME_PERBUILD_StuAuth.exe"/>
     <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
   </COMPONENT>
@@ -257,17 +231,12 @@
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="Microsoft.WindowsAPICodePack.Sensors.dll"/>
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="Microsoft.WindowsAPICodePack.Shell.dll"/>
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="Microsoft.WindowsAPICodePack.ShellExtensions.dll"/>
-    <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="Newtonsoft.Json.dll"/>
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="Otp.NET.dll"/>
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="StuAuth.deps.json"/>
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="StuAuth.dll"/>
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="StuAuth.exe"/>
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="StuAuth.runtimeconfig.json"/>
-    <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="WebDriver.dll"/>
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="zxing.dll"/>
     <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="ZXing.Windows.Compatibility.dll"/>
-    <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="seleniummanager"/>
-    <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="seleniummanager_1"/>
-    <ROW ProjectId="{707a68a3-3af9-4dde-ae35-24d85df92ad2}" ProjectName="StuAuth" OutputGroup="PublishOutput" OutputFile="seleniummanager.exe"/>
   </COMPONENT>
 </DOCUMENT>

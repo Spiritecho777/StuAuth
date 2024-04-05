@@ -12,7 +12,7 @@ namespace MFA
         private String OtpUri;
         private DispatcherTimer timer;
 
-        public SelectAccount(String Name,String Otp)
+        public SelectAccount(String Name, String Otp)
         {
             InitializeComponent();
             accountName = Name;
@@ -45,23 +45,18 @@ namespace MFA
 
             var timeRemaining = 30 - (DateTime.UtcNow.Second % 30);
             TempsRestant.Content = timeRemaining;
-            
 
 
-            //essai.Text = "https://accounts.google.com/v3/signin/challenge/totp?TL=AEzbmxwGvaQ1wRBBEC0Vp97gN32jSI2vDXYKLMfDmCwVykDkiEAdm-SYpAGrsSK6&checkConnection=youtube%3A290&checkedDomains=youtube&cid=2&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ddm=0&dsh=S-184504961%3A1711031620385582&flowEntry=ServiceLogin&flowName=GlifWebSignIn&ifkv=ARZ0qKKB_KD9zeTZykGcYkVJJH5KoiELQo0LKOw-1WP1k0LmaMvPqGp3dr1xnaJglm0o0ApabzHboQ&pstMsg=1&rip=1&service=mail&theme=mn";
 
-            /*if (!string.IsNullOrEmpty(essai.Text))
-            {
-                IWebDriver driver = new FirefoxDriver();
+            /*essai.Text = "https://edi-log.eu.itglue.com/";
 
-                driver.Navigate().GoToUrl(essai.Text);
-
-                IWebElement searchBox = driver.FindElement(By.CssSelector("input[type='text']"));
-
-                searchBox.SendKeys(MDP.Content.ToString());
-
-                driver.Quit();
-            }*/
+            string javascriptCode2 = @"
+                                var TFT = document.querySelectorAll('input[type=text]');
+                                if (TFT.length > 0) {
+                                    for (var i = 0; i < TFT.length; i++) {
+                                        TFT[i].value = arguments[0];
+                                    }
+                                }";*/
         }
 
         private void Back(object sender, RoutedEventArgs e)
@@ -69,7 +64,7 @@ namespace MFA
             NavigationService.GoBack();
         }
 
-        private void Copy_Click(object sender, RoutedEventArgs e) 
+        private void Copy_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetData(DataFormats.Text, (Object)MDP.Content);
         }
