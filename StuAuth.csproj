@@ -2,22 +2,26 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <TargetFramework>net8.0-windows8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Icone\StuAuth.ico</ApplicationIcon>
     <PackageIcon>StuAuth.jpg</PackageIcon>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <StartupObject></StartupObject>
+    <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <Optimize>False</Optimize>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

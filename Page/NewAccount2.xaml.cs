@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace MFA
 {
@@ -32,7 +33,7 @@ namespace MFA
                 using (StreamWriter sw = File.AppendText(Savefile))
                 {
                     string[] part = otpauth.Split('/');
-                    otpauth = part[0] + "/" + part[1] + "/" + part[2] + "/" + AccountName.Text + part[3];
+                    otpauth = part[0] + "/" + part[1] + "/" + part[2] + "/" + AccountName.Text + "/" + part[3];
                     sw.WriteLine(AccountName.Text + ";" + otpauth); 
                 }
 

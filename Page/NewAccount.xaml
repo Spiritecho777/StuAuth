@@ -28,7 +28,8 @@
     <Grid>
         <Button x:Name="Retour" Content="Retour" Margin="0,40,330,0" Width="50" Click="Back" Style="{StaticResource ChargedButton}"/>
         <Button x:Name="Import" Content="Import" Margin="0,40,40,0" Width="50" Click="Import_Click" Style="{StaticResource ChargedButton}"/>
-        
+
+        <Label Content="Clé Secrète [A-Za-z0-9]:" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,392,40,0" Width="330"/>
         <TextBox x:Name="SecretKey" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,430,40,0" Width="330"/>
 
         <Button x:Name="QRcapture" Content="QRcode" Margin="0,500,210,0"  Width="80" Click="Capture" Style="{StaticResource ChargedButton}"/>

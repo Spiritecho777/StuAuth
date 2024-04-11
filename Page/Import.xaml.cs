@@ -37,6 +37,14 @@ namespace StuAuth
                         string name = part[3];
                         part = name.Split("?");
                         name = part[0];
+                        if (name.Contains("%20"))
+                        {
+                            name = name.Replace("%20", " ");
+                        }
+                        if (name.Contains("%40"))
+                        {
+                            name = name.Replace("%40", "@");
+                        }
 
                         CheckBox? checkBox = new CheckBox();
                         checkBox.Content = name + ";" + line;

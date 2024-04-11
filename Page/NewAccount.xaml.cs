@@ -9,6 +9,8 @@ using Color = System.Drawing.Color;
 using Cursors = System.Windows.Forms.Cursors;
 using ZXing;
 using ZXing.Windows.Compatibility;
+using TextBox = System.Windows.Controls.TextBox;
+using System.Text;
 
 namespace MFA
 {
@@ -112,8 +114,17 @@ namespace MFA
 
         private void Confirm(object sender, RoutedEventArgs e)
         {
-            string otpauth = "otpauth://totp/?secret=" + SecretKey.Text + "&digits=6&period=30";
-            main.NewAccount(otpauth, menu);
+            string normalizeText = SecretKey.Text.Normalize(NormalizationForm.FormD);
+            if (SecretKey.Text == normalizeText && SecretKey.Text.All(char.IsLetterOrDigit))
+            {
+                string otpauth = "otpauth://totp/?secret=" + SecretKey.Text + "&digits=6&period=30";
+                main.NewAccount(otpauth, menu);
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("La clé que vous avez rentrez n'est pas correct");
+                SecretKey.Clear();
+            }
         }
 
         private void Back(object sender, RoutedEventArgs e)

@@ -179,6 +179,28 @@ namespace MFA
                                 part[0] = newName;
                                 lines[selectedIndex] = string.Join(";", part);
                             }
+                            string[] part1 = lines[selectedIndex].Split("/");
+                            if (part1.Length > 0)
+                            {
+                                string lastpart = part1[3];
+                                string[] part3 = lastpart.Split("?");
+                                if (part3.Length == 2)
+                                {
+                                    if (newName.Contains(" "))
+                                    {
+                                        newName = newName.Replace(" ", "%20");
+                                    }
+                                    if (newName.Contains("@"))
+                                    {
+                                        newName = newName.Replace("@", "%40");
+                                    }
+                                    part3[0] = newName;
+                                    lastpart = string.Join("?", part3);
+                                    part1[3] = lastpart;
+                                    lines[selectedIndex] = string.Join("/",part1);
+                                }
+                            }
+                            
 
                             File.WriteAllLines(filePath, lines);
                         }
