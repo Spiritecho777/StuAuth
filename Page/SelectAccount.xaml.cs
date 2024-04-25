@@ -1,4 +1,5 @@
 ﻿using OtpNet;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -64,7 +65,40 @@ namespace MFA
             NavigationService.GoBack();
         }
 
-        private void Copy_Click(object sender, RoutedEventArgs e)
+        public static string Base32Encode(byte[] data)
+        {
+            const string base32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+            StringBuilder result = new StringBuilder((data.Length * 8 + 4) / 5);
+
+            int buffer = data[0];
+            int next = 1;
+            int bitsLeft = 8;
+            while (bitsLeft > 0 || next < data.Length)
+            {
+                if (bitsLeft < 5)
+                {
+                    if (next < data.Length)
+                    {
+                        buffer <<= 8;
+                        buffer |= data[next++] & 0xFF;
+                        bitsLeft += 8;
+                    }
+                    else
+                    {
+                        int pad = 5 - bitsLeft;
+                        buffer <<= pad;
+                        bitsLeft += pad;
+                    }
+                }
+
+                int index = 0x1F & (buffer >> (bitsLeft - 5));
+                bitsLeft -= 5;
+                result.Append(base32Chars[index]);
+            }
+            return result.ToString();
+        }
+
+    private void Copy_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetData(DataFormats.Text, (Object)MDP.Content);
         }
