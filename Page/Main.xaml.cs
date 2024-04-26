@@ -1,21 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Drawing;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using OtpNet;
-using System.Windows.Markup;
 using System.Windows.Forms;
 using Button = System.Windows.Controls.Button;
 using ListViewItem = System.Windows.Controls.ListViewItem;
@@ -255,6 +242,16 @@ namespace MFA
                         using (StreamWriter sw = File.AppendText(sfd.FileName))
                         {
                             string exportline = part[1];
+                            
+                            string[] part2 = exportline.Split("/");
+                            string name = part2[3];
+                            string[] part3 = name.Split("?");
+                            name = part3[0];
+                            name = name.Replace(" ", "%20")
+                                        .Replace("@", "%40")
+                                        .Replace(":", "%3A");
+                            exportline = part2[0] + "/" + part2[1] + "/" + part2[2] + "/" + name + "?" + part3[1];
+
                             sw.WriteLine(exportline);
                         }
                     }
@@ -287,7 +284,18 @@ namespace MFA
                     {
                         string[] part = line.Split(";");
                         string accountName = part[0];
+
+                        if (accountName.Contains(":")) { accountName = accountName.Replace(":", " "); }
                         string exportline = part[1];
+
+                        string[] part2 = exportline.Split("/");
+                        string name = part2[3];
+                        string[] part3 = name.Split("?");
+                        name = part3[0];
+                        name = name.Replace(" ", "%20")
+                                    .Replace("@", "%40")
+                                    .Replace(":", "%3A");
+                        exportline = part2[0] + "/" + part2[1] + "/" + part2[2] + "/" + name + "?" + part3[1];
 
                         BarcodeWriter writer = new BarcodeWriter()
                         {

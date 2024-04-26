@@ -18,9 +18,9 @@ namespace MFA
             Page.NavigationService.Navigate(new NewAccount2(OtpAuth,menu));
         }
 
-        public void ImportM(Main menu)
+        public void ImportM(List<string> Account, Main menu)
         {
-            Page.NavigationService.Navigate(new Import(menu));
+            Page.NavigationService.Navigate(new Import(Account,menu));
         }
     }
 }

@@ -10,12 +10,21 @@ namespace StuAuth
     public partial class Import : Page
     {
         Main menu;
-        public Import(Main window)
+        List<string> Account = new List<string>();
+        public Import(List<string> AccountList, Main window)
         {
             InitializeComponent();
             menu = window;
 
-            Initialisation();
+            if (AccountList.Count != 0)
+            {
+                Account = AccountList;
+                ImportGoogle();
+            }
+            else
+            {
+                Initialisation();
+            }
         }
 
         private void Initialisation()
@@ -37,19 +46,40 @@ namespace StuAuth
                         string name = part[3];
                         part = name.Split("?");
                         name = part[0];
-                        if (name.Contains("%20"))
-                        {
-                            name = name.Replace("%20", " ");
-                        }
-                        if (name.Contains("%40"))
-                        {
-                            name = name.Replace("%40", "@");
-                        }
+                        name = name.Replace("%20", "")
+                                    .Replace("%40", "@")
+                                    .Replace("%3A", ":");
 
                         CheckBox? checkBox = new CheckBox();
                         checkBox.Content = name + ";" + line;
                         ListOtp.Items.Add(checkBox);
                     }
+                }
+            }
+        }
+
+        private void ImportGoogle()
+        {
+            foreach (string line in Account)
+            {
+                if (line.StartsWith("otpauth:"))
+                {
+                    string[] part = line.Split('/');
+                    string name = part[3];
+                    part = name.Split("?");
+                    name = part[0];
+                    if (name.Contains("%20"))
+                    {
+                        name = name.Replace("%20", " ");
+                    }
+                    if (name.Contains("%40"))
+                    {
+                        name = name.Replace("%40", "@");
+                    }
+
+                    CheckBox? checkBox = new CheckBox();
+                    checkBox.Content = name + ";" + line;
+                    ListOtp.Items.Add(checkBox);
                 }
             }
         }

@@ -9,8 +9,10 @@ using Color = System.Drawing.Color;
 using Cursors = System.Windows.Forms.Cursors;
 using ZXing;
 using ZXing.Windows.Compatibility;
-using TextBox = System.Windows.Controls.TextBox;
 using System.Text;
+using Google.Protobuf;
+using System.Web;
+using Migration;
 
 namespace MFA
 {
@@ -18,7 +20,8 @@ namespace MFA
     {
         private Point startPoint;
         private MainWindow main;
-        private Main menu;     
+        private Main menu;
+        private List<string> AccountList =new List<string>();
 
         public NewAccount(MainWindow main,Main menu)
         {
@@ -32,11 +35,37 @@ namespace MFA
             BarcodeReader reader = new BarcodeReader();
 
             Result result = reader.Decode(bitmap);
+
             if(result != null) 
             {
-                main.Visibility = Visibility.Visible;
-                main.NewAccount(result.Text.ToString(),menu);
-                return result.Text;
+                if (result.Text.Contains("migration"))
+                {
+                    string otpauth = result.Text;
+                    int dataIndex = otpauth.IndexOf("data=") + "data=".Length;
+                    string base64Data = otpauth.Substring(dataIndex);
+                    base64Data = HttpUtility.UrlDecode(base64Data);
+
+                    byte[] bytes = Convert.FromBase64String(base64Data);
+                    List<ByteString> SecretPayload = DecodeProtobufSecret(bytes);
+                    List<string> AccountPayload = DecodeProtobufAccount(bytes);
+                    for (int i = 0; i < SecretPayload.Count; i++)
+                    {
+                        string secret = Base32Encode(SecretPayload[i], false);
+                        string Account = AccountPayload[i];
+                        AccountList.Add("otpauth://totp/" + Account + "?secret=" + secret + "&digits=6&period=30");
+                    }
+
+                    main.Visibility = Visibility.Visible;
+                    main.ImportM(AccountList, menu);
+
+                    return otpauth;
+                }
+                else
+                {
+                    main.Visibility = Visibility.Visible;
+                    main.NewAccount(result.Text.ToString(), menu);
+                    return result.Text;
+                }
             }
             else
             {
@@ -46,10 +75,45 @@ namespace MFA
             }
         }
 
+        #region Bouton
+        private void Capture(object sender, RoutedEventArgs e)
+        {
+            Screen currentScreen = Screen.FromPoint(System.Windows.Forms.Control.MousePosition);
+            StartSelection(currentScreen);
+        }
+
+        private void Import_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> vide = new List<string>();
+            main.ImportM(vide,menu);
+        }
+
+        private void Confirm(object sender, RoutedEventArgs e)
+        {
+            string normalizeText = SecretKey.Text.Normalize(NormalizationForm.FormD);
+            if (SecretKey.Text == normalizeText && SecretKey.Text.All(char.IsLetterOrDigit))
+            {
+                string otpauth = "otpauth://totp/?secret=" + SecretKey.Text + "&digits=6&period=30";
+                main.NewAccount(otpauth, menu);
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("La clé que vous avez rentrez n'est pas correct");
+                SecretKey.Clear();
+            }
+        }
+
+        private void Back(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
+        #endregion
+
+        #region Méthode
         private void StartSelection(Screen screen)
         {
             main.Hide();
-            
+
             Rectangle screenBounds = screen.Bounds;
             using (Bitmap screenBitmap = new Bitmap(screenBounds.Width, screenBounds.Height))
             {
@@ -100,36 +164,84 @@ namespace MFA
             }
         }
 
-        #region Bouton
-        private void Capture(object sender, RoutedEventArgs e)
+        public dynamic DecodeProtobufSecret(byte[] payload)
         {
-            Screen currentScreen = Screen.FromPoint(System.Windows.Forms.Control.MousePosition);
-            StartSelection(currentScreen);
-        }
+            List<ByteString> secret = new List<ByteString>();
 
-        private void Import_Click(object sender, RoutedEventArgs e)
-        {
-            main.ImportM(menu);
-        }
-
-        private void Confirm(object sender, RoutedEventArgs e)
-        {
-            string normalizeText = SecretKey.Text.Normalize(NormalizationForm.FormD);
-            if (SecretKey.Text == normalizeText && SecretKey.Text.All(char.IsLetterOrDigit))
+            var parser = new MessageParser<Payload>(() => new Payload());
+            var message = parser.ParseFrom(payload);
+            if (message.OtpParameters.Count > 0)
             {
-                string otpauth = "otpauth://totp/?secret=" + SecretKey.Text + "&digits=6&period=30";
-                main.NewAccount(otpauth, menu);
+                for (int i = 0; i < message.OtpParameters.Count; i++)
+                {
+                    secret.Add(message.OtpParameters[i].Secret);
+                }
+                return secret;
             }
             else
             {
-                System.Windows.MessageBox.Show("La clé que vous avez rentrez n'est pas correct");
-                SecretKey.Clear();
+                return "Rien a migré";
             }
         }
 
-        private void Back(object sender, RoutedEventArgs e)
+        public dynamic DecodeProtobufAccount(byte[] payload)
         {
-            NavigationService.GoBack();
+            List<string> Account = new List<string>();
+
+            var parser = new MessageParser<Payload>(() => new Payload());
+            var message = parser.ParseFrom(payload);
+            if (message.OtpParameters.Count > 0)
+            {
+                for (int i = 0; i < message.OtpParameters.Count; i++)
+                {
+                    Account.Add(message.OtpParameters[i].Name);
+                }
+                return Account;
+            }
+            else
+            {
+                return "Rien a migré";
+            }
+        }
+
+        public static string Base32Encode(ByteString data, bool padding)
+        {
+            const string base32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+            StringBuilder result = new StringBuilder((data.Length * 8 + 4) / 5);
+
+            int buffer = data[0];
+            int next = 1;
+            int bitsLeft = 8;
+            while (bitsLeft > 0 || next < data.Length)
+            {
+                if (bitsLeft < 5)
+                {
+                    if (next < data.Length)
+                    {
+                        buffer <<= 8;
+                        buffer |= data[next++] & 0xFF;
+                        bitsLeft += 8;
+                    }
+                    else
+                    {
+                        int pad = 5 - bitsLeft;
+                        buffer <<= pad;
+                        bitsLeft += pad;
+                    }
+                }
+
+                int index = 0x1F & (buffer >> (bitsLeft - 5));
+                bitsLeft -= 5;
+                result.Append(base32Chars[index]);
+            }
+            if (padding)
+            {
+                while (result.Length % 8 != 0)
+                {
+                    result.Append("=");
+                }
+            }
+            return result.ToString();
         }
         #endregion
     }
