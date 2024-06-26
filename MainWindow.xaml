@@ -1,9 +1,9 @@
-﻿<Window x:Class="MFA.MainWindow"
+﻿<Window x:Class="StuAuth.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MFA"
+        xmlns:local="clr-namespace:StuAuth"
         mc:Ignorable="d"
         Title="StuAuth" Height="610" Width="410" Background="LightGray" ResizeMode="CanMinimize">
     <Grid>

@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 
-namespace MFA
+namespace StuAuth
 {
     public partial class SelectAccount : Page
     {

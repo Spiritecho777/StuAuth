@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 
 
-namespace MFA
+namespace StuAuth
 {
     public partial class NewAccount2 : Page
     {

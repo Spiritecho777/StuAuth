@@ -9,8 +9,11 @@ using ListViewItem = System.Windows.Controls.ListViewItem;
 using ZXing;
 using ZXing.Windows.Compatibility;
 using ZXing.Common;
+using Newtonsoft.Json;
+using System.Text;
+using StuAuth.Classe;
 
-namespace MFA
+namespace StuAuth
 {
     public partial class Main : Page
     {
@@ -18,11 +21,15 @@ namespace MFA
         private List<string> AccountName = new List<string>();
         private List<string> OtpUri = new List<string>();
 
+
         public Main(MainWindow window)
         {
             InitializeComponent();
             windows = window;
             UpdateList();
+
+
+            
         }
 
         #region Liste

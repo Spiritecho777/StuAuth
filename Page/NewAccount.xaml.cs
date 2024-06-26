@@ -14,7 +14,7 @@ using Google.Protobuf;
 using System.Web;
 using Migration;
 
-namespace MFA
+namespace StuAuth
 {
     public partial class NewAccount : Page
     {
