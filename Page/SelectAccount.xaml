@@ -33,6 +33,5 @@
         <Button x:Name="Copy" Margin="0,500,50,0" Width="50" Height="50" Click="Copy_Click" Style="{StaticResource ChargedButton}">
             <Image Source="\Icone\CC.png" />
         </Button>
-        <TextBox x:Name="essai" HorizontalAlignment="Center" Height="36" Margin="-20,300,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="330"/>
     </Grid>
 </Page>
