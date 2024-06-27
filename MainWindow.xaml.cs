@@ -12,21 +12,12 @@ namespace StuAuth
 {
     public partial class MainWindow : Window
     {
-        private HttpServer server;
+        
         public MainWindow()
         {
             InitializeComponent();
             Page.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             Page.Navigate(new Main(this));
-
-            server = new HttpServer(this);
-            server.Start();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            server.Stop();
         }
 
         public void NewAccount(string OtpAuth,Main menu)

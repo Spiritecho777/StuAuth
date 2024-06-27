@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace StuAuth.Classe
@@ -13,9 +14,10 @@ namespace StuAuth.Classe
     {
         private HttpListener listener;
         private Thread listenerThread;
-        private MainWindow mainPage;
+        private Main mainPage;
+        private CancellationTokenSource cancellationTokenSource;
 
-        public HttpServer(MainWindow mainPage)
+        public HttpServer(Main mainPage)
         {
             this.mainPage = mainPage;
         }
@@ -24,25 +26,40 @@ namespace StuAuth.Classe
         {
             listener = new HttpListener();
             listener.Prefixes.Add("http://localhost:19755/");
-            listenerThread = new Thread(new ThreadStart(StartListening));
+            cancellationTokenSource = new CancellationTokenSource();
+            listenerThread = new Thread(() => StartListening(cancellationTokenSource.Token));
             listenerThread.IsBackground = true;
             listenerThread.Start();
         }
 
-        private void StartListening()
+        private void StartListening(CancellationToken cancellationToken)
         {
             listener.Start();
-            while (true)
+            try
             {
-                HttpListenerContext context = listener.GetContext();
-                ProcessRequest(context);
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    if (mainPage.isServerRunning)
+                    {
+                        var context = listener.GetContext();
+                        ProcessRequest(context);
+                    }
+                }
+            }
+            catch (HttpListenerException) when (cancellationToken.IsCancellationRequested)
+            {
+                // Listener was stopped, exit the loop.
+            }
+            finally
+            {
+                listener.Close();
             }
         }
 
         private void ProcessRequest(HttpListenerContext context)
         {
             string responseString = string.Empty;
-            //System.Diagnostics.Debug.WriteLine(context.Request.Url.AbsolutePath);
+            System.Diagnostics.Debug.WriteLine(context.Request.Url.AbsolutePath);
             if (context.Request.Url.AbsolutePath == "/")
             {
                 responseString = GetAccounts();
@@ -81,8 +98,8 @@ namespace StuAuth.Classe
 
         public void Stop()
         {
+            cancellationTokenSource.Cancel();
             listener.Stop();
-            listenerThread.Abort();
-        }
+            listenerThread.Join();
     }
 }

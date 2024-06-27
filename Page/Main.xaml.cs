@@ -20,16 +20,14 @@ namespace StuAuth
         private MainWindow windows;
         private List<string> AccountName = new List<string>();
         private List<string> OtpUri = new List<string>();
-
+        private HttpServer server;
+        public bool isServerRunning = false;
 
         public Main(MainWindow window)
         {
             InitializeComponent();
             windows = window;
-            UpdateList();
-
-
-            
+            UpdateList();      
         }
 
         #region Liste
@@ -223,6 +221,24 @@ namespace StuAuth
             {
                 contextMenu.PlacementTarget = button;
                 contextMenu.IsOpen = true;
+            }
+        }
+
+        private void Serveur_Connect(object sender, RoutedEventArgs e)
+        {
+            if (!isServerRunning)
+            {
+                ServeurConnect.Background = new SolidColorBrush(Colors.Green);
+                server = new HttpServer(this);
+                server.Start();
+                isServerRunning = true;
+            }
+            else
+            {
+                server.Stop();
+                server = null;
+                ServeurConnect.Background = new SolidColorBrush(Colors.Red);
+                isServerRunning = false;
             }
         }
         #endregion
