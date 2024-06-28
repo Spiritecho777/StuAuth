@@ -45,19 +45,7 @@ namespace StuAuth
             MDP.Content = otp;
 
             var timeRemaining = 30 - (DateTime.UtcNow.Second % 30);
-            TempsRestant.Content = timeRemaining;
-
-
-
-            /*essai.Text = "https://edi-log.eu.itglue.com/";
-
-            string javascriptCode2 = @"
-                                var TFT = document.querySelectorAll('input[type=text]');
-                                if (TFT.length > 0) {
-                                    for (var i = 0; i < TFT.length; i++) {
-                                        TFT[i].value = arguments[0];
-                                    }
-                                }";*/
+            TempsRestant.Content = timeRemaining; 
         }
 
         private void Back(object sender, RoutedEventArgs e)
@@ -98,7 +86,7 @@ namespace StuAuth
             return result.ToString();
         }
 
-    private void Copy_Click(object sender, RoutedEventArgs e)
+        private void Copy_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetData(DataFormats.Text, (Object)MDP.Content);
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OtpNet;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -59,7 +60,7 @@ namespace StuAuth.Classe
         private void ProcessRequest(HttpListenerContext context)
         {
             string responseString = string.Empty;
-            System.Diagnostics.Debug.WriteLine(context.Request.Url.AbsolutePath);
+            //System.Diagnostics.Debug.WriteLine(context.Request.Url.AbsolutePath);
             if (context.Request.Url.AbsolutePath == "/")
             {
                 responseString = GetAccounts();
@@ -77,18 +78,18 @@ namespace StuAuth.Classe
             string appDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
             string filepath = Path.Combine(appDirectory, "Account.dat");
 
-            if (File.Exists(filepath)) 
+            if (File.Exists(filepath))
             {
                 string[] lines = File.ReadAllLines(filepath);
-                for (int i = 0; i < lines.Length;i++)
+                for (int i = 0; i < lines.Length; i++)
                 {
                     int index = lines[i].IndexOf(";");
                     if (index != -1)
                     {
-                        lines[i] = lines[i].Substring(index+1).Trim();
+                        lines[i] = lines[i].Substring(index + 1).Trim();
                     }
                 }
-                return string.Join("\n",lines);
+                return string.Join("\n", lines);
             }
             else
             {
@@ -101,5 +102,6 @@ namespace StuAuth.Classe
             cancellationTokenSource.Cancel();
             listener.Stop();
             listenerThread.Join();
+        }
     }
 }
