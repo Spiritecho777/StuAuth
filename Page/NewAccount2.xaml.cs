@@ -10,10 +10,12 @@ namespace StuAuth
     {
         private string otpauth;
         private Main Menu;
+        private string fName;
 
-        public NewAccount2(string OtpAuth, Main menu)
+        public NewAccount2(string OtpAuth, Main menu,string folderName)
         {
             InitializeComponent();
+            fName = folderName;
             otpauth = OtpAuth;
             Menu = menu;
         }
@@ -35,12 +37,12 @@ namespace StuAuth
                 {
                     string[] part = otpauth.Split('/');
                     otpauth = part[0] + "/" + part[1] + "/" + part[2] + "/" + AccountName.Text + "/" + part[3];
-                    sw.WriteLine(AccountName.Text + ";" + otpauth); 
+                    sw.WriteLine(fName + "\\" + AccountName.Text + ";" + otpauth); 
                 }
 
                 NavigationService.GoBack();
                 NavigationService.GoBack();
-                Menu.UpdateList();
+                Menu.UpdateFolderList();
             }
             else
             {

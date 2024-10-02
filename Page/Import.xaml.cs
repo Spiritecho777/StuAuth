@@ -123,7 +123,7 @@ namespace StuAuth
 
             NavigationService.GoBack();
             NavigationService.GoBack();
-            menu.UpdateList();
+            menu.UpdateFolderList();
         }
 
         private void Back_Click(object sender, EventArgs e)

@@ -20,9 +20,9 @@ namespace StuAuth
             Page.Navigate(new Main(this));
         }
 
-        public void NewAccount(string OtpAuth,Main menu)
+        public void NewAccount(string OtpAuth,Main menu,string folderName)
         {
-            Page.NavigationService.Navigate(new NewAccount2(OtpAuth,menu));
+            Page.NavigationService.Navigate(new NewAccount2(OtpAuth,menu,folderName));
         }
 
         public void ImportM(List<string> Account, Main menu)

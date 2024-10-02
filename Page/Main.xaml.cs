@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#region
+using System.IO;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,81 +13,65 @@ using ZXing.Common;
 using Newtonsoft.Json;
 using System.Text;
 using StuAuth.Classe;
+using System.Diagnostics;
+using System;
+#endregion
 
 namespace StuAuth
 {
     public partial class Main : Page
     {
+        #region Variable
         private MainWindow windows;
         private List<string> AccountName = new List<string>();
         private List<string> OtpUri = new List<string>();
         private HttpServer server;
         public bool isServerRunning = false;
+        
+        private List<int> accountsIndexMapping = new List<int>();
+        #endregion
 
         public Main(MainWindow window)
         {
             InitializeComponent();
             windows = window;
-            UpdateList();      
+            UpdateFolderList();      
         }
 
         #region Liste
-        private void ListAccount()
+        #region Dossier
+        private void ListFolder()
         {
             AccountList.Items.Clear();
 
-            for (int i = 0; i < AccountName.Count; i++)
+            var accountByFolder = AccountName
+                .Zip(OtpUri, (name, uri) => new { Name = name, Uri = uri })
+                .GroupBy(c => Path.GetDirectoryName(c.Name));
+
+            foreach (var folder in accountByFolder)
             {
                 Button button = new Button();
-                button.Content = AccountName[i];
-                button.Click += AccountView;
-
-                ListViewItem item = new ListViewItem();
-                item.Content = button;
+                button.Content = folder.Key ?? "No Folder";
                 button.Style = FindResource("CustomButton") as Style;
+                button.Click += OpenFolder;
 
-                AccountList.Items.Add(item);
+                AccountList.Items.Add(button);
             }
         }
 
-        private void AccountView(object sender, RoutedEventArgs e)
+        private void OpenFolder(object sender, RoutedEventArgs e)
         {
-            string AC;
-            string OU;
-
             Button? button = sender as Button;
 
             if (button != null)
             {
-                ListViewItem? item = FindAncestor<ListViewItem>(button);
-
-                if (item != null)
-                {
-                    int index=AccountList.Items.IndexOf(item);
-
-                    AC = AccountName[index];
-                    OU = OtpUri[index];
-                    button.Style = FindResource("CustomButton") as Style;
-                    windows.Page.Navigate(new SelectAccount(AC, OU));
-                }
+                string buttonName = button.Content.ToString();
+                FolderName.Content = buttonName;
+                UpdateAccountList(buttonName);
             }
         }
 
-        private T? FindAncestor<T>(DependencyObject current) where T : DependencyObject
-        {
-            do
-            {
-                if (current is T ancestor)
-                {
-                    return ancestor;
-                }
-                current = VisualTreeHelper.GetParent(current);
-            }
-            while (current != null);
-            return null;
-        }
-
-        public void UpdateList()
+        public void UpdateFolderList()
         {
             AccountName.Clear();
             OtpUri.Clear();
@@ -109,16 +94,126 @@ namespace StuAuth
                     }
                 }
             }
+            ListFolder();
+        }
+
+        #endregion
+
+        #region Compte
+        private void ListAccount()
+        {
+            AccountList.Items.Clear();
+
+            var accountByFolder = AccountName
+              .Zip(OtpUri, (name, uri) => new { Name = name, Uri = uri })
+              .GroupBy(c => Path.GetDirectoryName(c.Name));
+
+            foreach (var folder in accountByFolder)
+            {
+                foreach (var account in folder)
+                {
+                    Button button = new Button();
+                    button.Content = Path.GetFileName(account.Name);
+                    button.Click += AccountView;
+
+                    ListViewItem item = new ListViewItem();
+                    item.Content = button;
+                    button.Style = FindResource("CustomButton") as Style;
+
+                    AccountList.Items.Add(item);
+                }
+            }
+        }
+
+        private void AccountView(object sender, RoutedEventArgs e)
+        {
+            string AC;
+            string OU;
+
+            Button? button = sender as Button;
+
+            if (button != null)
+            {
+                ListViewItem? item = FindAccountAncestor<ListViewItem>(button);
+
+                if (item != null)
+                {
+                    int index=AccountList.Items.IndexOf(item);
+
+                    AC = AccountName[index];
+                    OU = OtpUri[index];
+                    button.Style = FindResource("CustomButton") as Style;
+                    windows.Page.Navigate(new SelectAccount(AC, OU));
+                }
+            }
+        }
+
+        private T? FindAccountAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            do
+            {
+                if (current is T ancestor)
+                {
+                    return ancestor;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+
+        public void UpdateAccountList(string folderName)
+        {
+            AccountName.Clear();
+            OtpUri.Clear();
+
+            string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+            string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+            if (File.Exists(filePath))
+            {
+                string[] lignes = File.ReadAllLines(filePath);
+
+                foreach (string line in lignes)
+                {
+                    string[] part = line.Split(';');
+                    string[] part2 = part[0].Split("\\");
+                    if (part.Length == 2)
+                    {
+                        if (part2[0] == folderName)
+                        {
+                            AccountName.Add(part[0]);
+                            OtpUri.Add(part[1]);
+                        }
+                    }
+                }
+            }
+
             ListAccount();
         }
         #endregion
+        #endregion
 
         #region Bouton
+        private void Back_Click(object sender, RoutedEventArgs e) 
+        {
+            FolderName.Content = "";
+            UpdateFolderList();
+        }
+
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             if (windows != null)
             {
-                windows.Page.Navigate(new NewAccount(windows, this));
+                string Folder = FolderName.Content.ToString();
+                if (!string.IsNullOrEmpty(Folder))
+                {
+                    windows.Page.Navigate(new NewAccount(windows, this, Folder));
+                }
+                else
+                {
+
+                }
             }
         }
 
@@ -129,18 +224,35 @@ namespace StuAuth
 
             if (File.Exists(filePath))
             {
-                int selectedIndex = AccountList.SelectedIndex;
-                if (selectedIndex >= 0) 
+                string Folder = FolderName.Content.ToString();
+                if (!string.IsNullOrEmpty(Folder))
                 {
-                    AccountName.RemoveAt(selectedIndex);
+                    var selectedItem = AccountList.SelectedItem as TreeViewItem;
 
-                    List<string> lines = File.ReadAllLines(filePath).ToList();
-                    lines.RemoveAt(selectedIndex);
+                    if (selectedItem != null)
+                    {
+                        string selectedAccountName = selectedItem.Header.ToString();
 
-                    File.WriteAllLines(filePath, lines);
+                        int selectedIndex = AccountName.IndexOf(selectedAccountName);
+
+                        if (selectedIndex >= 0)
+                        {
+                            AccountName.RemoveAt(selectedIndex);
+                            OtpUri.RemoveAt(selectedIndex);
+
+                            List<string> lines = File.ReadAllLines(filePath).ToList();
+                            lines.RemoveAt(selectedIndex);
+
+                            File.WriteAllLines(filePath, lines);
+                        }
+                    }
+                }
+                else
+                {
+
                 }
             }
-            UpdateList();
+            UpdateFolderList();
         }
 
         private void Help_Click(object sender, RoutedEventArgs e)
@@ -150,56 +262,72 @@ namespace StuAuth
 
         private void rename_Click(object sender, RoutedEventArgs e)
         {
-            if (AccountList.SelectedItem != null)
+            string Folder = FolderName.Content.ToString();
+            if (!string.IsNullOrEmpty(Folder))
             {
-                string newName = Microsoft.VisualBasic.Interaction.InputBox("Entrez le nouveau nom");
-
-                if (!string.IsNullOrEmpty(newName))
+                if (AccountList.SelectedItem != null)
                 {
-                    string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-                    string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+                    string oldName = (AccountList.SelectedItem as ListViewItem)?.Content.ToString();
+                    string newName = Microsoft.VisualBasic.Interaction.InputBox("Entrez le nouveau nom");
 
-                    if (File.Exists(filePath))
+                    if (!string.IsNullOrEmpty(newName))
                     {
-                        int selectedIndex = AccountList.SelectedIndex;
-                        if (selectedIndex >= 0)
-                        {
-                            List<string> lines = File.ReadAllLines(filePath).ToList();
-                            string[] part = lines[selectedIndex].Split(';');
-                            if (part.Length == 2)
-                            {
-                                part[0] = newName;
-                                lines[selectedIndex] = string.Join(";", part);
-                            }
-                            string[] part1 = lines[selectedIndex].Split("/");
-                            if (part1.Length > 0)
-                            {
-                                string lastpart = part1[3];
-                                string[] part3 = lastpart.Split("?");
-                                if (part3.Length == 2)
-                                {
-                                    if (newName.Contains(" "))
-                                    {
-                                        newName = newName.Replace(" ", "%20");
-                                    }
-                                    if (newName.Contains("@"))
-                                    {
-                                        newName = newName.Replace("@", "%40");
-                                    }
-                                    part3[0] = newName;
-                                    lastpart = string.Join("?", part3);
-                                    part1[3] = lastpart;
-                                    lines[selectedIndex] = string.Join("/",part1);
-                                }
-                            }
-                            
+                        string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+                        string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
 
-                            File.WriteAllLines(filePath, lines);
+                        if (File.Exists(filePath))
+                        {
+                            //int selectedIndex = AccountList.SelectedIndex;
+                            List<string> line = File.ReadAllLines(filePath).ToList();
+                            for (int i = 0; i < line.Count; i++)
+                            {
+
+
+                                /*if (selectedIndex >= 0)
+                                {
+                                List<string> lines = File.ReadAllLines(filePath).ToList();
+                                string[] part = lines[selectedIndex].Split(';');
+                                if (part.Length == 2)
+                                {
+                                    string[] part2 = part[0].Split("\\");
+                                    Debug.WriteLine(part2[1]);
+                                    part2[1] = newName;
+                                    Debug.WriteLine(part);
+                                    lines[selectedIndex] = string.Join(";", part);
+                                }
+                                string[] part1 = lines[selectedIndex].Split("/");
+                                if (part1.Length > 0)
+                                {
+                                    string lastpart = part1[3];
+                                    string[] part3 = lastpart.Split("?");
+                                    if (part3.Length == 2)
+                                    {
+                                        if (newName.Contains(" "))
+                                        {
+                                            newName = newName.Replace(" ", "%20");
+                                        }
+                                        if (newName.Contains("@"))
+                                        {
+                                            newName = newName.Replace("@", "%40");
+                                        }
+                                        part3[0] = newName;
+                                        lastpart = string.Join("?", part3);
+                                        part1[3] = lastpart;
+                                        lines[selectedIndex] = string.Join("/", part1);
+                                    }
+                                }
+                                File.WriteAllLines(filePath, lines);
+                            }*/
+                            }
                         }
                     }
-                    UpdateList();
                 }
             }
+            else
+            {
+
+            }
+            UpdateFolderList();
         }
 
         private void Export_Click(object sender, RoutedEventArgs e)

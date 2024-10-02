@@ -13,6 +13,7 @@ using System.Text;
 using Google.Protobuf;
 using System.Web;
 using Migration;
+using System.Windows.Forms.Design;
 
 namespace StuAuth
 {
@@ -22,10 +23,12 @@ namespace StuAuth
         private MainWindow main;
         private Main menu;
         private List<string> AccountList =new List<string>();
+        private string fName;
 
-        public NewAccount(MainWindow main,Main menu)
+        public NewAccount(MainWindow main,Main menu,string folderName)
         {
             InitializeComponent();
+            fName = folderName;
             this.main = main;
             this.menu = menu;
         }
@@ -63,7 +66,7 @@ namespace StuAuth
                 else
                 {
                     main.Visibility = Visibility.Visible;
-                    main.NewAccount(result.Text.ToString(), menu);
+                    main.NewAccount(result.Text.ToString(), menu, fName);
                     return result.Text;
                 }
             }
@@ -94,7 +97,7 @@ namespace StuAuth
             if (SecretKey.Text == normalizeText && SecretKey.Text.All(char.IsLetterOrDigit))
             {
                 string otpauth = "otpauth://totp/?secret=" + SecretKey.Text + "&digits=6&period=30";
-                main.NewAccount(otpauth, menu);
+                main.NewAccount(otpauth, menu,fName);
             }
             else
             {
