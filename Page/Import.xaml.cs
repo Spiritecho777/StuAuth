@@ -11,10 +11,12 @@ namespace StuAuth
     {
         Main menu;
         List<string> Account = new List<string>();
-        public Import(List<string> AccountList, Main window)
+        string fName;
+        public Import(List<string> AccountList, Main window, string folderName)
         {
             InitializeComponent();
             menu = window;
+            fName = folderName;
 
             if (AccountList.Count != 0)
             {
@@ -91,6 +93,7 @@ namespace StuAuth
                 if (checkBox.IsChecked == true)
                 {
                     string? line = checkBox.Content.ToString();
+                    line = $"{fName}\\{line}";
                     if (line != null)
                     {
                         string[] part = line.Split(';');

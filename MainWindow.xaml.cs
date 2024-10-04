@@ -25,9 +25,9 @@ namespace StuAuth
             Page.NavigationService.Navigate(new NewAccount2(OtpAuth,menu,folderName));
         }
 
-        public void ImportM(List<string> Account, Main menu)
+        public void ImportM(List<string> Account, Main menu, string folderName)
         {
-            Page.NavigationService.Navigate(new Import(Account,menu));
+            Page.NavigationService.Navigate(new Import(Account,menu,folderName));
         }
     }
 }

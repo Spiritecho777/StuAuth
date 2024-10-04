@@ -59,7 +59,7 @@ namespace StuAuth
                     }
 
                     main.Visibility = Visibility.Visible;
-                    main.ImportM(AccountList, menu);
+                    main.ImportM(AccountList, menu, fName);
 
                     return otpauth;
                 }
@@ -88,7 +88,7 @@ namespace StuAuth
         private void Import_Click(object sender, RoutedEventArgs e)
         {
             List<string> vide = new List<string>();
-            main.ImportM(vide,menu);
+            main.ImportM(vide,menu,fName);
         }
 
         private void Confirm(object sender, RoutedEventArgs e)

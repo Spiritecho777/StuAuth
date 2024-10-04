@@ -99,6 +99,7 @@ namespace StuAuth
                     }
                 }
             }
+            FolderName.Content = "";
             ListFolder();
         }
 
@@ -117,15 +118,18 @@ namespace StuAuth
             {
                 foreach (var account in folder)
                 {
-                    Button button = new Button();
-                    button.Content = Path.GetFileName(account.Name);
-                    button.Click += AccountView;
+                    if (Path.GetFileName(account.Name) != "")
+                    {
+                        Button button = new Button();
+                        button.Content = Path.GetFileName(account.Name);
+                        button.Click += AccountView;
 
-                    ListViewItem item = new ListViewItem();
-                    item.Content = button;
-                    button.Style = FindResource("CustomButton") as Style;
+                        ListViewItem item = new ListViewItem();
+                        item.Content = button;
+                        button.Style = FindResource("CustomButton") as Style;
 
-                    AccountList.Items.Add(item);
+                        AccountList.Items.Add(item);
+                    }
                 }
             }
         }
@@ -202,7 +206,6 @@ namespace StuAuth
         #region Bouton
         private void Back_Click(object sender, RoutedEventArgs e) 
         {
-            FolderName.Content = "";
             UpdateFolderList();
         }
 
@@ -217,7 +220,22 @@ namespace StuAuth
                 }
                 else //Dossier
                 {
+                    string FolderN = Microsoft.VisualBasic.Interaction.InputBox("Entrez le nom du dossier");
 
+                    if (!string.IsNullOrEmpty(FolderN))
+                    {
+                        string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+                        string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+                        if (File.Exists(filePath))
+                        {
+                            List<string> line = File.ReadAllLines(filePath).ToList();
+
+                            line.Add($"{FolderN}\\;");
+                            File.WriteAllLines(filePath, line);
+                        }
+                    }
+                    UpdateFolderList();
                 }
             }
         }
@@ -240,7 +258,7 @@ namespace StuAuth
                             string Name = accountButton.Content.ToString();
 
                             List<string> line = File.ReadAllLines(filePath).ToList();
-                            for (int i = 0; i < line.Count; i++)
+                            for (int i = line.Count - 1; i >= 0; i--)
                             {
                                 List<string> lines = File.ReadAllLines(filePath).ToList();
                                 string[] part = lines[i].Split(';');
@@ -261,7 +279,36 @@ namespace StuAuth
                 }
                 else //Dossier
                 {
+                    ListViewItem selectedItem = AccountList.SelectedItem as ListViewItem;
+                    if (selectedItem.Content is Button accountButton)
+                    {
+                        string Name = accountButton.Content.ToString();
 
+                        List<string> line = File.ReadAllLines(filePath).ToList();
+                        for (int i = 0; i < line.Count; i++)
+                        {
+                            List<string> lines = File.ReadAllLines(filePath).ToList();
+                            string[] part = lines[i].Split('\\');
+                            if (part.Length == 2)
+                            {
+                                if (part[0] == Name)
+                                {
+                                    if (part[1].Count() > 1)
+                                    {
+                                        System.Windows.MessageBox.Show("Il y a des compte de présent dans ce dossier");
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        List<string> line2 = File.ReadAllLines(filePath).ToList();
+                                        line2.RemoveAt(i);
+
+                                        File.WriteAllLines(filePath, line2);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             UpdateFolderList();
