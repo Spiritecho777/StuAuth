@@ -49,7 +49,7 @@
         <Button x:Name="A_propos" Content="?" Width="25" Margin="0,10,37,0" VerticalAlignment="Top" Click="Help_Click" Style="{StaticResource ChargedButton}"/>
 
         <Label x:Name="FolderName" Content="" FontSize="20" Margin="0,45,180,0" Width="200"/>
-        <Button x:Name="Back" Content="--" Click="Back_Click" FontSize="20" Margin="0,45,37,0" Width="50" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Back" Content="&#60;--" Click="Back_Click" FontSize="20" Margin="0,45,37,0" Width="50" Style="{StaticResource ChargedButton}"/>
         <ListView x:Name="AccountList" HorizontalAlignment="Center" Height="465" Margin="-15,80,0,0" VerticalAlignment="Top" Width="350"/>
     </Grid>
 </Page>

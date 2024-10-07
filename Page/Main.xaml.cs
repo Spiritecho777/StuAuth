@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System;
 using System.Windows.Shapes;
 using Path = System.IO.Path;
+using MessageBox = System.Windows.MessageBox;
 #endregion
 
 namespace StuAuth
@@ -88,16 +89,47 @@ namespace StuAuth
             {
                 string[] lignes = File.ReadAllLines(filePath);
 
+                Dictionary<string, int> occurrences = new Dictionary<string, int>();
+
+                foreach (string line in lignes)
+                {
+                    string[] part = line.Split(';');
+                    if (part.Length == 2)
+                    {
+                        string[] part1 = part[0].Split('\\');
+                        string key = part1[0];
+
+                        if (occurrences.ContainsKey(key))
+                        {
+                            occurrences[key]++;
+                        }
+                        else
+                        {
+                            occurrences[key] = 1;
+                        }
+                    }
+                }
+
+                List<string> lignesValides = new List<string>();
+
                 foreach (string line in lignes)
                 {
                     string[] part = line.Split(';');
 
                     if (part.Length == 2)
                     {
-                        AccountName.Add(part[0]);
-                        OtpUri.Add(part[1]);
+                        string[] part1 = part[0].Split('\\');
+                        string key = part1[0];
+                        if (part[1] != "" || occurrences[key] == 1)
+                        {
+                            AccountName.Add(part[0]);
+                            OtpUri.Add(part[1]);
+
+                            lignesValides.Add(line);
+                        }
                     }
                 }
+                File.WriteAllLines(filePath, lignesValides);
             }
             FolderName.Content = "";
             ListFolder();
@@ -227,12 +259,40 @@ namespace StuAuth
                         string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
                         string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
 
-                        if (File.Exists(filePath))
+                        if (Directory.Exists(appDirectory))
                         {
-                            List<string> line = File.ReadAllLines(filePath).ToList();
+                            if (File.Exists(filePath))
+                            {
+                                List<string> line = File.ReadAllLines(filePath).ToList();
 
-                            line.Add($"{FolderN}\\;");
-                            File.WriteAllLines(filePath, line);
+                                line.Add($"{FolderN}\\;");
+                                File.WriteAllLines(filePath, line);
+                            }
+                            else
+                            {
+                                List<string> line = new List<string>();
+
+                                line.Add($"{FolderN}\\;");
+                                File.WriteAllLines(filePath, line);
+                            }
+                        }
+                        else
+                        {
+                            Directory.CreateDirectory(appDirectory);
+                            if (File.Exists(filePath))
+                            {
+                                List<string> line = File.ReadAllLines(filePath).ToList();
+
+                                line.Add($"{FolderN}\\;");
+                                File.WriteAllLines(filePath, line);
+                            }
+                            else
+                            {
+                                List<string> line = new List<string>();
+
+                                line.Add($"{FolderN}\\;");
+                                File.WriteAllLines(filePath, line);
+                            }
                         }
                     }
                     UpdateFolderList();
@@ -467,26 +527,109 @@ namespace StuAuth
         #region Export
         private void ExportToTexte(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Fichiers texte (*.txt)|*.txt";
-            sfd.Title = "Sélectionnez un fichier texte";
+            bool isNotAllowed=false;
+            string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+            string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+            string[] lignes0 = File.ReadAllLines(filePath);
 
-            if (sfd.ShowDialog() == DialogResult.OK)
+            foreach (string line0 in lignes0)
             {
-                string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-                string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
-
-                if (File.Exists(filePath))
+                string[] part0 = line0.Split(';');
+                if (part0[1] == "")
                 {
-                    string[] lignes = File.ReadAllLines(filePath);
+                    MessageBox.Show("Il y a un dossier vide veuillez le supprimer avant l'export");
+                    isNotAllowed = true;
+                    break;
+                }
+            }
 
-                    foreach (string line in lignes)
+            if (!isNotAllowed)
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "Fichiers texte (*.txt)|*.txt";
+                sfd.Title = "Sélectionnez un fichier texte";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+
+
+                    if (File.Exists(filePath))
                     {
-                        string[] part = line.Split(';');
-                        using (StreamWriter sw = File.AppendText(sfd.FileName))
+                        string[] lignes = File.ReadAllLines(filePath);
+
+                        foreach (string line in lignes)
                         {
+                            string[] part = line.Split(';');
+                            using (StreamWriter sw = File.AppendText(sfd.FileName))
+                            {
+                                string exportline = part[1];
+
+                                string[] part2 = exportline.Split("/");
+                                string name = part2[3];
+                                string[] part3 = name.Split("?");
+                                name = part3[0];
+                                name = name.Replace(" ", "%20")
+                                            .Replace("@", "%40")
+                                            .Replace(":", "%3A");
+                                exportline = part2[0] + "/" + part2[1] + "/" + part2[2] + "/" + name + "?" + part3[1];
+
+                                sw.WriteLine(exportline);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ExportToQRCode(object sender, RoutedEventArgs e)
+        {
+            bool isNotAllowed = false;
+            string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+            string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+            string[] lignes0 = File.ReadAllLines(filePath);
+
+            foreach (string line0 in lignes0)
+            {
+                string[] part0 = line0.Split(';');
+                if (part0[1] == "")
+                {
+                    MessageBox.Show("Il y a un dossier vide veuillez le supprimer avant l'export");
+                    isNotAllowed = true;
+                    break;
+                }
+            }
+
+            if (!isNotAllowed)
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "";
+                sfd.Title = "Enregistrer les QR codes";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    string? saveDirectory = System.IO.Path.GetDirectoryName(sfd.FileName) ?? string.Empty;
+                    string folderName = System.IO.Path.GetFileNameWithoutExtension(sfd.FileName);
+                    string targetDirectory = System.IO.Path.Combine(saveDirectory, folderName);
+                    Debug.WriteLine(targetDirectory);
+                    Directory.CreateDirectory(targetDirectory);
+                    if (!Directory.Exists(targetDirectory))
+                    {
+                        MessageBox.Show($"Le répertoire {targetDirectory} n'a pas pu être créé.");
+                        return;
+                    }
+
+                    if (File.Exists(filePath))
+                    {
+                        string[] lines = File.ReadAllLines(filePath);
+
+                        foreach (string line in lines)
+                        {
+                            string[] part = line.Split(";");
+                            string accountName = part[0];
+
+                            if (accountName.Contains(":")) { accountName = accountName.Replace(":", " "); }
                             string exportline = part[1];
-                            
+
                             string[] part2 = exportline.Split("/");
                             string name = part2[3];
                             string[] part3 = name.Split("?");
@@ -496,64 +639,22 @@ namespace StuAuth
                                         .Replace(":", "%3A");
                             exportline = part2[0] + "/" + part2[1] + "/" + part2[2] + "/" + name + "?" + part3[1];
 
-                            sw.WriteLine(exportline);
-                        }
-                    }
-                }
-            }     
-        }
-
-        private void ExportToQRCode(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "";
-            sfd.Title = "Enregistrer les QR codes";
-
-            if (sfd.ShowDialog() == DialogResult.OK)
-            {
-                string? saveDirectory = System.IO.Path.GetDirectoryName(sfd.FileName) ?? string.Empty;
-                string folderName = System.IO.Path.GetFileNameWithoutExtension(sfd.FileName);
-                string targetDirectory = System.IO.Path.Combine(saveDirectory, folderName);
-
-                Directory.CreateDirectory(targetDirectory);
-
-                string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-                string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
-
-                if (File.Exists(filePath))
-                {
-                    string[] lines = File.ReadAllLines(filePath);
-
-                    foreach(string line in lines)
-                    {
-                        string[] part = line.Split(";");
-                        string accountName = part[0];
-
-                        if (accountName.Contains(":")) { accountName = accountName.Replace(":", " "); }
-                        string exportline = part[1];
-
-                        string[] part2 = exportline.Split("/");
-                        string name = part2[3];
-                        string[] part3 = name.Split("?");
-                        name = part3[0];
-                        name = name.Replace(" ", "%20")
-                                    .Replace("@", "%40")
-                                    .Replace(":", "%3A");
-                        exportline = part2[0] + "/" + part2[1] + "/" + part2[2] + "/" + name + "?" + part3[1];
-
-                        BarcodeWriter writer = new BarcodeWriter()
-                        {
-                            Format = BarcodeFormat.QR_CODE,
-                            Options = new EncodingOptions
+                            BarcodeWriter writer = new BarcodeWriter()
                             {
-                                Height = 300,
-                                Width = 300
-                            }
-                        };
-                        Bitmap qrCodeImage = writer.Write(exportline);
+                                Format = BarcodeFormat.QR_CODE,
+                                Options = new EncodingOptions
+                                {
+                                    Height = 300,
+                                    Width = 300
+                                }
+                            };
+                            Bitmap qrCodeImage = writer.Write(exportline);
+                            string[] part4 = accountName.Split("\\");
+                            accountName = part4[1];
 
-                        string qrCodeFileName = System.IO.Path.Combine(targetDirectory, $"{accountName}.png");
-                        qrCodeImage.Save(qrCodeFileName);
+                            string qrCodeFileName = System.IO.Path.Combine(targetDirectory, $"{accountName}.png");
+                            qrCodeImage.Save(qrCodeFileName);
+                        }
                     }
                 }
             }
