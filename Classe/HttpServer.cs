@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace StuAuth.Classe
 {
@@ -59,15 +60,27 @@ namespace StuAuth.Classe
 
         private void ProcessRequest(HttpListenerContext context)
         {
-            string responseString = string.Empty;
-            //System.Diagnostics.Debug.WriteLine(context.Request.Url.AbsolutePath);
+            string responseAccountString = string.Empty;
+            string responseFolderString = string.Empty;
+
             if (context.Request.Url.AbsolutePath == "/")
             {
-                responseString = GetAccounts();
+                responseAccountString = GetAccounts();
+                responseFolderString = GetFolder();
             }
-            else { responseString = "Requete Invalide"; }
+            else { responseAccountString = "Requete Invalide"; }
 
-            byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+            var responseObject = new
+            {
+                Accounts = responseAccountString,
+                Folder = responseFolderString
+            };
+
+            string jsonResponse = JsonSerializer.Serialize(responseObject);
+
+            byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
+
+            context.Response.ContentType = "application/json";
             context.Response.ContentLength64 = buffer.Length;
             context.Response.OutputStream.Write(buffer, 0, buffer.Length);
             context.Response.OutputStream.Close();
@@ -87,6 +100,30 @@ namespace StuAuth.Classe
                     if (index != -1)
                     {
                         lines[i] = lines[i].Substring(index + 1).Trim();
+                    }
+                }
+                return string.Join("\n", lines);
+            }
+            else
+            {
+                return "Pas de compte trouver";
+            }
+        }
+
+        private string GetFolder()
+        {
+            string appDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+            string filepath = Path.Combine(appDirectory, "Account.dat");
+
+            if (File.Exists(filepath))
+            {
+                string[] lines = File.ReadAllLines(filepath);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    int index = lines[i].IndexOf("\\");
+                    if (index != -1)
+                    {
+                        lines[i] = lines[i].Substring(0, index).Trim();
                     }
                 }
                 return string.Join("\n", lines);

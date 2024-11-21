@@ -662,4 +662,3 @@ namespace StuAuth
         #endregion
     }
 }
-
