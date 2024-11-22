@@ -522,9 +522,18 @@ namespace StuAuth
                 isServerRunning = false;
             }
         }
+
+        private void TimeSynchro(object sender, RoutedEventArgs e)
+        {
+            string startServiceCommand = "Start-Process powershell -ArgumentList 'net start w32time' -verb runas";
+            ExecuteCommand(startServiceCommand);
+
+            string command = "Start-Process powershell -ArgumentList 'w32tm /resync' -verb runas";  
+            ExecuteCommand(command);
+        }
         #endregion
 
-        #region Export
+        #region Méthode
         private void ExportToTexte(object sender, RoutedEventArgs e)
         {
             bool isNotAllowed=false;
@@ -659,6 +668,46 @@ namespace StuAuth
                 }
             }
         }
+
+        private void ExecuteCommand(string command)
+        {
+            try { 
+                Process process = new Process();
+                process.StartInfo.FileName = "powershell.exe";
+                process.StartInfo.Arguments = command;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+                process.Start();
+                process.WaitForExit();
+
+                string output = process.StandardOutput.ReadToEnd();
+                Debug.WriteLine(output);
+
+                if (process.ExitCode != 0)
+                {
+                    Debug.WriteLine("Synchronisation réussie");
+                }
+                else
+                {
+                    Debug.WriteLine("Synchronisation échoué");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+        }
         #endregion
     }
 }
+
+/*
+Bug sur les export
+Ajout d'un bouton pour mise a jour de l'heure du pc
+permettre la modification du chemin du fichier de compte
+chiffrement du fichier de compte
+Création d'une appli mobile
+*/
