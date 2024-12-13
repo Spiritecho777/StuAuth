@@ -525,11 +525,10 @@ namespace StuAuth
 
         private void TimeSynchro(object sender, RoutedEventArgs e)
         {
-            string startServiceCommand = "Start-Process powershell -ArgumentList 'net start w32time' -verb runas";
-            ExecuteCommand(startServiceCommand);
+            string startServiceCommand = "net start w32time";
+            string resyncCommand = "w32tm /resync";
 
-            string command = "Start-Process powershell -ArgumentList 'w32tm /resync' -verb runas";  
-            ExecuteCommand(command);
+            ExecuteCommand(startServiceCommand,resyncCommand);
         }
         #endregion
 
@@ -669,24 +668,26 @@ namespace StuAuth
             }
         }
 
-        private void ExecuteCommand(string command)
+        private void ExecuteCommand(string command, string command2)
         {
-            try { 
-                Process process = new Process();
-                process.StartInfo.FileName = "powershell.exe";
-                process.StartInfo.Arguments = command;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            try {
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "powershell.exe",
+                        Arguments = $"{command} ; {command2}",
+                        Verb = "runas",
+                        UseShellExecute = true,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    }
+                };
 
                 process.Start();
                 process.WaitForExit();
 
-                string output = process.StandardOutput.ReadToEnd();
-                Debug.WriteLine(output);
-
-                if (process.ExitCode != 0)
+                if (process.ExitCode == 0)
                 {
                     Debug.WriteLine("Synchronisation réussie");
                 }
@@ -706,7 +707,6 @@ namespace StuAuth
 
 /*
 Bug sur les export
-Ajout d'un bouton pour mise a jour de l'heure du pc
 permettre la modification du chemin du fichier de compte
 chiffrement du fichier de compte
 Création d'une appli mobile
