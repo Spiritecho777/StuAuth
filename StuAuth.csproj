@@ -33,6 +33,8 @@
 
   <ItemGroup>
     <None Remove="Icone\CC.png" />
+    <None Remove="Icone\synchro - Copie.png" />
+    <None Remove="Icone\synchro.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +52,7 @@
 
   <ItemGroup>
     <Resource Include="Icone\CC.png" />
+    <Resource Include="Icone\synchro.png" />
   </ItemGroup>
 
   <ItemGroup>
