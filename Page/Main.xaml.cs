@@ -30,6 +30,7 @@ namespace StuAuth
         private List<string> OtpUri = new List<string>();
         private HttpServer server;
         public bool isServerRunning = false;
+        public string name; 
         
         private List<int> accountsIndexMapping = new List<int>();
         #endregion
@@ -573,7 +574,17 @@ namespace StuAuth
                                 string exportline = part[1];
 
                                 string[] part2 = exportline.Split("/");
-                                string name = part2[3];
+                                int L = part2.Count();
+                                if (L > 4)
+                                {
+                                    string namebis = part2[L-1];
+                                    string[] part2bis= namebis.Split("?");
+                                    name = part2[L-2] + "?" + part2bis[1];
+                                }
+                                else
+                                {
+                                    name = part2[L - 1];
+                                }
                                 string[] part3 = name.Split("?");
                                 name = part3[0];
                                 name = name.Replace(" ", "%20")
@@ -639,7 +650,17 @@ namespace StuAuth
                             string exportline = part[1];
 
                             string[] part2 = exportline.Split("/");
-                            string name = part2[3];
+                            int L = part2.Count();
+                            if (L > 4)
+                            {
+                                string namebis = part2[L - 1];
+                                string[] part2bis = namebis.Split("?");
+                                name = part2[L - 2] + "?" + part2bis[1];
+                            }
+                            else
+                            {
+                                name = part2[L - 1];
+                            }
                             string[] part3 = name.Split("?");
                             name = part3[0];
                             name = name.Replace(" ", "%20")
@@ -706,7 +727,6 @@ namespace StuAuth
 }
 
 /*
-Bug sur les export
 permettre la modification du chemin du fichier de compte
 chiffrement du fichier de compte
 Création d'une appli mobile
