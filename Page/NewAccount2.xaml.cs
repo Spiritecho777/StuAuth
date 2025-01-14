@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using StuAuth.Classe;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -24,21 +25,11 @@ namespace StuAuth
         {
             if (!string.IsNullOrEmpty(AccountName.Text))
             {
-                string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-
-                if (!Directory.Exists(appDirectory))
-                {
-                    Directory.CreateDirectory(appDirectory);
-                }
-
-                string Savefile = System.IO.Path.Combine(appDirectory, "Account.dat");
-
-                using (StreamWriter sw = File.AppendText(Savefile))
-                {
-                    string[] part = otpauth.Split('/');
-                    otpauth = part[0] + "/" + part[1] + "/" + part[2] + "/" + AccountName.Text + "/" + part[3];
-                    sw.WriteLine(fName + "\\" + AccountName.Text + ";" + otpauth); 
-                }
+                string[] part = otpauth.Split('/');
+                otpauth = part[0] + "/" + part[1] + "/" + part[2] + "/" + AccountName.Text + "/" + part[3];
+                string line = fName + "\\" + AccountName.Text + ";" + otpauth;
+                AccountManager accountManager = new AccountManager();
+                accountManager.AddAccount(line);
 
                 NavigationService.GoBack();
                 NavigationService.GoBack();

@@ -1,4 +1,5 @@
 ﻿using MFA;
+using StuAuth.Classe;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -104,16 +105,8 @@ namespace StuAuth
                             {
                                 var uri = new Uri(part[1]);
 
-                                string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-                                if (!Directory.Exists(appDirectory))
-                                {
-                                    Directory.CreateDirectory(appDirectory);
-                                }
-                                string Savefile = System.IO.Path.Combine(appDirectory, "Account.dat");
-                                using (StreamWriter sw = File.AppendText(Savefile))
-                                {
-                                    sw.WriteLine(line);
-                                }
+                                AccountManager accountManager = new AccountManager();
+                                accountManager.AddAccount(line);
                             }
                             catch
                             {
