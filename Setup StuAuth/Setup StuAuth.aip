@@ -35,10 +35,10 @@
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPPRODUCTICON" Value="StuAuth.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="Stusoft"/>
-    <ROW Property="ProductCode" Value="1033:{37851F20-17B1-4142-BC70-68ACA1A921D8} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{D189242E-8B10-44B0-9B4B-C8DD6CD7079E} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="StuAuth"/>
-    <ROW Property="ProductVersion" Value="2.2.0" Options="32"/>
+    <ROW Property="ProductVersion" Value="2.3.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{A8D2C2B3-3A7E-4BB0-93DC-2114DEB26D39}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>

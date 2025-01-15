@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
+using System.IO;
 
 namespace MFA
 {
@@ -28,6 +29,32 @@ namespace MFA
             mutex.ReleaseMutex(); // Libère le mutex à la fermeture de l'application
             base.OnExit(e);
         }
-    }
 
+        #region Manipulation faite suite a la fermeture - crash du logiciel
+        public App()
+        {
+            this.Exit += OnAppExit; // Appelée lorsque l'application se termine proprement.
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit; // ProcessExit appelé même si l'application est tuée.
+        }
+
+        // Méthode appelée lorsque l'application se termine proprement
+        private void OnAppExit(object sender, ExitEventArgs e)
+        {
+            DeleteFile();
+        }
+
+        // Méthode appelée lorsque le processus est tué ou termine
+        private void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            DeleteFile();
+        }
+
+        private void DeleteFile()
+        {
+            string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
+            string filePath = System.IO.Path.Combine(appDirectory, "Account_decrypted.dat");
+            File.Delete(filePath);
+        }
+        #endregion
+    }
 }

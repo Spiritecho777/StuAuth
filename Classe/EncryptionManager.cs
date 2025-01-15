@@ -2,58 +2,91 @@
 using System.IO;
 using System.Text;
 using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace StuAuth.Classe
 {
-    public class EncryptionManager
+    public class EncryptionManager ()
     {
-        public void EncryptionToFile(string inputText, string outputFilePath)
+        private string Password = Properties.Settings.Default.KeyPass; // Changez ceci par une clé secrète sécurisée
+        private const int KeySize = 256; // Taille de la clé en bits
+        private const int Iterations = 100_000; // Nombre d'itérations pour dériver la clé
+
+        // Méthode pour dériver une clé AES à partir d'un mot de passe
+        private byte[] DeriveKey(string password, byte[] salt)
+        {
+            using (var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, salt, Iterations, HashAlgorithmName.SHA256))
+            {
+                return rfc2898DeriveBytes.GetBytes(KeySize / 8);
+            }
+        }
+
+        public void EncryptionToFile(string inputFilePath, string outputFilePath)
         {
             using (Aes aes = Aes.Create())
             {
-                // Génère une clé et un IV aléatoires
-                aes.GenerateKey();
+                // Génère un IV unique pour ce chiffrement
                 aes.GenerateIV();
+                byte[] salt = aes.IV;  // Utiliser l'IV comme "salt" pour dériver la clé
+
+                aes.Key = DeriveKey(Password, salt);  // Dériver la clé à partir du mot de passe et du salt
+
+                // Lire tout le contenu du fichier déchiffré en une seule chaîne
+                string inputText = File.ReadAllText(inputFilePath);
 
                 using (FileStream fileStream = new FileStream(outputFilePath, FileMode.Create))
                 {
-                    // Écrire l'IV dans le fichier pour pouvoir le réutiliser lors du déchiffrement
-                    fileStream.Write(aes.IV, 0, aes.IV.Length);
+                    // Stocke le salt (IV) au début du fichier chiffré
+                    fileStream.Write(salt, 0, salt.Length);
 
-                    // Crée un flux de chiffrement et chiffre les données
                     using (CryptoStream cryptoStream = new CryptoStream(fileStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
                     using (StreamWriter writer = new StreamWriter(cryptoStream))
                     {
+                        // Chiffre l'intégralité du contenu et l'écrit dans le fichier chiffré
                         writer.Write(inputText);
                     }
                 }
             }
         }
 
-        // Méthode de déchiffrement
         public void DecryptFromFile(string inputFilePath, string outputFilePath)
         {
             using (FileStream fileStream = new FileStream(inputFilePath, FileMode.Open))
             {
                 using (Aes aes = Aes.Create())
                 {
-                    // Lire l'IV du fichier (pour pouvoir déchiffrer correctement)
-                    byte[] iv = new byte[aes.BlockSize / 8]; // BlockSize divisé par 8 pour obtenir la taille en octets
-                    fileStream.Read(iv, 0, iv.Length);
-                    aes.IV = iv;
+                    // Lire le sel (IV) depuis le fichier
+                    byte[] salt = new byte[aes.BlockSize / 8];
+                    int bytesRead = fileStream.Read(salt, 0, salt.Length);
+                    if (bytesRead != salt.Length)
+                    {
+                        throw new CryptographicException("Impossible de lire le sel (IV) du fichier.");
+                    }
 
-                    // Génère une clé aléatoire pour déchiffrer
-                    aes.GenerateKey();
+                    aes.Key = DeriveKey(Password, salt);
+                    aes.IV = salt;
 
-                    // Crée un flux de déchiffrement et lit les données
+                    // Déchiffrer les données restantes
                     using (CryptoStream cryptoStream = new CryptoStream(fileStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
                     using (StreamReader reader = new StreamReader(cryptoStream))
                     {
                         string decryptedData = reader.ReadToEnd();
-                        File.WriteAllText(outputFilePath, decryptedData);
+
+                        // Supprimer le point-virgule (;) s'il est au début de la chaîne déchiffrée
+                        if (decryptedData.StartsWith(";"))
+                        {
+                            decryptedData = decryptedData.Substring(1);
+                        }
+
+                        // Ajouter les données déchiffrées au fichier
+                        using (StreamWriter writer = new StreamWriter(outputFilePath, false)) // false pour écraser, pas append
+                        {
+                            writer.WriteLine(decryptedData); // Écrit le contenu déchiffré sans le ';'
+                        }
                     }
                 }
             }
         }
+
     }
 }

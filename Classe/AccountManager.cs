@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Intrinsics.Arm;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 namespace StuAuth.Classe
 {
     public class AccountManager
@@ -11,7 +14,6 @@ namespace StuAuth.Classe
         private string appDirectory;
         private string filePath;
         private string filePathE;
-        private EncryptionManager encryptionManager = new EncryptionManager();
 
         public AccountManager()
         {
@@ -27,7 +29,8 @@ namespace StuAuth.Classe
 
             if (File.Exists(filePathE))
             {
-                //encryptionManager.DecryptFromFile(filePathE, filePath);
+                EncryptionManager encryptionManager = new EncryptionManager();
+                encryptionManager.DecryptFromFile(filePathE, filePath);
             }
             else
             {
@@ -37,14 +40,13 @@ namespace StuAuth.Classe
 
         private void CreateFile()
         {
-            // Créer le fichier vide s'il n'existe pas
             File.WriteAllText(filePathE, string.Empty);
         }
 
         private void Chiffrement()
         {
-            //encryptionManager.EncryptionToFile(filePath, filePathE);
-            //File.Delete(filePath);
+            EncryptionManager encryptionManager = new EncryptionManager();
+            encryptionManager.EncryptionToFile(filePath, filePathE);
         }
 
 
@@ -63,7 +65,6 @@ namespace StuAuth.Classe
             else
             {
                 // Le fichier n'existe pas, retour d'une liste vide ou gestion d'erreur
-                //return new List<string>();
                 CreateFile();
                 return File.ReadAllLines(filePath).ToList();
             }
@@ -145,7 +146,6 @@ namespace StuAuth.Classe
                     }
                 }
             }
-
             return accounts;
         }
         #endregion

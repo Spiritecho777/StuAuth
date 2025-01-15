@@ -33,8 +33,6 @@ namespace StuAuth
         private AccountManager accountManager = new AccountManager();
         public bool isServerRunning = false;
         public string name; 
-        
-        private List<int> accountsIndexMapping = new List<int>();
         #endregion
 
         public Main(MainWindow window)
@@ -216,6 +214,7 @@ namespace StuAuth
                 else //Dossier
                 {
                     string FolderN = Microsoft.VisualBasic.Interaction.InputBox("Entrez le nom du dossier");
+
                     accountManager.Add(FolderN);
                     UpdateFolderList();
                 }
@@ -338,7 +337,7 @@ namespace StuAuth
         {
             bool isNotAllowed=false;
             string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-            string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+            string filePath = System.IO.Path.Combine(appDirectory, "Account_decrypted.dat");
             string[] lignes0 = File.ReadAllLines(filePath);
 
             foreach (string line0 in lignes0)
@@ -404,7 +403,7 @@ namespace StuAuth
         {
             bool isNotAllowed = false;
             string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-            string filePath = System.IO.Path.Combine(appDirectory, "Account.dat");
+            string filePath = System.IO.Path.Combine(appDirectory, "Account_decrypted.dat");
             string[] lignes0 = File.ReadAllLines(filePath);
 
             foreach (string line0 in lignes0)
@@ -527,7 +526,5 @@ namespace StuAuth
 }
 
 /*
-permettre la modification du chemin du fichier de compte
-chiffrement du fichier de compte
 Création d'une appli mobile
 */

@@ -89,7 +89,7 @@ namespace StuAuth.Classe
         private string GetAccounts()
         {
             string appDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-            string filepath = Path.Combine(appDirectory, "Account.dat");
+            string filepath = Path.Combine(appDirectory, "Account_decrypted.dat");
 
             if (File.Exists(filepath))
             {
@@ -113,7 +113,7 @@ namespace StuAuth.Classe
         private string GetFolder()
         {
             string appDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
-            string filepath = Path.Combine(appDirectory, "Account.dat");
+            string filepath = Path.Combine(appDirectory, "Account_decrypted.dat");
 
             if (File.Exists(filepath))
             {
