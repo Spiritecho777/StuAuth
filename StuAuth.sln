@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuAuth", "StuAuth.csproj",
 EndProject
 Project("{840C416C-B8F3-42BC-B0DD-F6BB14C9F8CB}") = "Setup StuAuth", "Setup StuAuth\Setup StuAuth.aiproj", "{F3DD59A3-0803-4BE9-A7B6-8A82E73398BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StuAuthMobile", "..\StuAuthMobile\StuAuthMobile.csproj", "{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,15 @@ Global
 		{F3DD59A3-0803-4BE9-A7B6-8A82E73398BF}.DefaultBuild|Any CPU.Build.0 = DefaultBuild
 		{F3DD59A3-0803-4BE9-A7B6-8A82E73398BF}.Release|Any CPU.ActiveCfg = DefaultBuild
 		{F3DD59A3-0803-4BE9-A7B6-8A82E73398BF}.Release|Any CPU.Build.0 = DefaultBuild
+		{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
+		{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}.DefaultBuild|Any CPU.Deploy.0 = Debug|Any CPU
+		{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C2A3FAC-6DCB-4104-99B3-5E8E89E1858E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
