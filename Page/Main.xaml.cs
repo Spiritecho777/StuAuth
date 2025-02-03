@@ -524,7 +524,3 @@ namespace StuAuth
         #endregion
     }
 }
-
-/*
-Création d'une appli mobile
-*/
