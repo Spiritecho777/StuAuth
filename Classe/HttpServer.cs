@@ -24,10 +24,10 @@ namespace StuAuth.Classe
             this.mainPage = mainPage;
         }
 
-        public void Start()
+        public void Start(string IP)
         {
             listener = new HttpListener();
-            listener.Prefixes.Add("http://localhost:19755/");
+            listener.Prefixes.Add($"http://{IP}:19755/");
             cancellationTokenSource = new CancellationTokenSource();
             listenerThread = new Thread(() => StartListening(cancellationTokenSource.Token));
             listenerThread.IsBackground = true;

@@ -8,7 +8,7 @@ using CheckBox = System.Windows.Controls.CheckBox;
 
 namespace StuAuth
 {
-    public partial class Import : Page
+    public partial class Import : System.Windows.Controls.Page
     {
         Main menu;
         List<string> Account = new List<string>();

@@ -34,5 +34,29 @@ namespace StuAuth.Properties {
                 this["KeyPass"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string IPApplication {
+            get {
+                return ((string)(this["IPApplication"]));
+            }
+            set {
+                this["IPApplication"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string IPServeur {
+            get {
+                return ((string)(this["IPServeur"]));
+            }
+            set {
+                this["IPServeur"] = value;
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ using System.Windows.Forms.Design;
 
 namespace StuAuth
 {
-    public partial class NewAccount : Page
+    public partial class NewAccount : System.Windows.Controls.Page
     {
         private Point startPoint;
         private MainWindow main;

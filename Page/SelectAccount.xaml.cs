@@ -7,7 +7,7 @@ using System.Windows.Threading;
 
 namespace StuAuth
 {
-    public partial class SelectAccount : Page
+    public partial class SelectAccount : System.Windows.Controls.Page
     {
         private String accountName;
         private String OtpUri;

@@ -5,5 +5,11 @@
     <Setting Name="KeyPass" Type="System.String" Scope="User">
       <Value Profile="(Default)">79:gzV-yC37V5D7GQi65$B~Nh/)xj_Hpw[5</Value>
     </Setting>
+    <Setting Name="IPApplication" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="IPServeur" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

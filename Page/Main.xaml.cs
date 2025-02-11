@@ -19,11 +19,13 @@ using System.Windows.Shapes;
 using Path = System.IO.Path;
 using MessageBox = System.Windows.MessageBox;
 using System.Runtime.Intrinsics.Arm;
+using Microsoft.VisualBasic.Devices;
+using StuAuth.Page;
 #endregion
 
 namespace StuAuth
 {
-    public partial class Main : Page
+    public partial class Main : System.Windows.Controls.Page
     {
         #region Variable
         private MainWindow windows;
@@ -39,6 +41,7 @@ namespace StuAuth
         {
             InitializeComponent();
             windows = window;
+            server = new HttpServer(this);
             UpdateFolderList();
         }
 
@@ -307,7 +310,9 @@ namespace StuAuth
 
         private void Serveur_Connect(object sender, RoutedEventArgs e)
         {
-            if (!isServerRunning)
+            //ServeurConnect
+            windows.Page.Navigate(new NetworkParameters(this,server));
+            /*if (!isServerRunning)
             {
                 ServeurConnect.Background = new SolidColorBrush(Colors.Green);
                 server = new HttpServer(this);
@@ -320,7 +325,7 @@ namespace StuAuth
                 server = null;
                 ServeurConnect.Background = new SolidColorBrush(Colors.Red);
                 isServerRunning = false;
-            }
+            }*/
         }
 
         private void TimeSynchro(object sender, RoutedEventArgs e)

@@ -7,7 +7,7 @@ using System.Windows.Navigation;
 
 namespace StuAuth
 {
-    public partial class NewAccount2 : Page
+    public partial class NewAccount2 : System.Windows.Controls.Page
     {
         private string otpauth;
         private Main Menu;
