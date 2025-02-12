@@ -28,15 +28,14 @@
     
     <Grid>
         <Label Content="App" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-        <TextBox x:Name="SubApp" Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30"/>
-        <ComboBox x:Name="IPApp"  Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,65" SelectionChanged="RegisterIPA"/>
+        <TextBox x:Name="SubApp" Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30" KeyDown="AppNetworkChanged"/>
+        <ComboBox x:Name="IPApp"  Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,65" SelectionChanged="RegisterIPA" ItemsSource="{Binding listIPA}"/>
 
         <Label Content="Serveur" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,125"/>
-        <TextBox x:Name="SubServ" Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,150"/>
-        <ComboBox x:Name="IPServ" Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,185" SelectionChanged="RegisterIPS"/>
+        <Label x:Name="IPServ" Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,150"/>
 
-        <Button x:Name="Back" Content="Retour" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,310,0,0" Style="{StaticResource ChargedButton}" Click="Back_Click"/>
-        <Button x:Name="Synchro" Content="Synchronisation" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="105,275,0,0" Style="{StaticResource ChargedButton}" Click="Synchro_Click"/>
-        <Button x:Name="Serv" Content="Serveur" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="-105,275,0,0" Style="{StaticResource ChargedButton}" Click="Serveur"/>
+        <Button x:Name="Back" Content="Retour" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,240,0,0" Style="{StaticResource ChargedButton}" Click="Back_Click"/>
+        <Button x:Name="Synchro" Content="Synchronisation" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="105,205,0,0" Style="{StaticResource ChargedButton}" Click="Synchro_Click"/>
+        <Button x:Name="Serv" Content="Serveur" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="-105,205,0,0" Style="{StaticResource ChargedButton}" Click="Serveur"/>
     </Grid>
 </Page>

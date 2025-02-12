@@ -1,89 +1,58 @@
-﻿using OtpNet;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Text.Json;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace StuAuth.Classe
 {
     public class HttpServer
     {
-        private HttpListener listener;
-        private Thread listenerThread;
         private Main mainPage;
-        private CancellationTokenSource cancellationTokenSource;
+
+        private CancellationTokenSource cts;
+        private bool isServerRunning = false;
 
         public HttpServer(Main mainPage)
         {
             this.mainPage = mainPage;
         }
-
-        public void Start(string IP)
+        
+        public void Start(string ip)
         {
-            listener = new HttpListener();
-            listener.Prefixes.Add($"http://{IP}:19755/");
-            cancellationTokenSource = new CancellationTokenSource();
-            listenerThread = new Thread(() => StartListening(cancellationTokenSource.Token));
-            listenerThread.IsBackground = true;
-            listenerThread.Start();
-        }
+            cts = new CancellationTokenSource();
 
-        private void StartListening(CancellationToken cancellationToken)
-        {
-            listener.Start();
-            try
+            var builder = WebApplication.CreateBuilder();
+            builder.WebHost.UseUrls($"http://{ip}:19755/");
+
+            builder.Services.AddCors(options =>
             {
-                while (!cancellationToken.IsCancellationRequested)
+                options.AddPolicy("AllowAll",
+                    policy => policy.AllowAnyOrigin()
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
+
+            var app = builder.Build();
+
+            app.UseCors("AllowAll");
+
+            app.MapGet("/", async context =>
+            {
+                var responseObject = new
                 {
-                    if (mainPage.isServerRunning)
-                    {
-                        var context = listener.GetContext();
-                        ProcessRequest(context);
-                    }
-                }
-            }
-            catch (HttpListenerException) when (cancellationToken.IsCancellationRequested)
-            {
-                // Listener was stopped, exit the loop.
-            }
-            finally
-            {
-                listener.Close();
-            }
-        }
+                    Accounts = GetAccounts(),
+                    Folder = GetFolder()
+                };
+                string jsonResponse = JsonSerializer.Serialize(responseObject);
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(jsonResponse);
+            });
 
-        private void ProcessRequest(HttpListenerContext context)
-        {
-            string responseAccountString = string.Empty;
-            string responseFolderString = string.Empty;
-
-            if (context.Request.Url.AbsolutePath == "/")
-            {
-                responseAccountString = GetAccounts();
-                responseFolderString = GetFolder();
-            }
-            else { responseAccountString = "Requete Invalide"; }
-
-            var responseObject = new
-            {
-                Accounts = responseAccountString,
-                Folder = responseFolderString
-            };
-
-            string jsonResponse = JsonSerializer.Serialize(responseObject);
-
-            byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
-
-            context.Response.ContentType = "application/json";
-            context.Response.ContentLength64 = buffer.Length;
-            context.Response.OutputStream.Write(buffer, 0, buffer.Length);
-            context.Response.OutputStream.Close();
+            isServerRunning = true;
+            _ = app.RunAsync(cts.Token);
         }
 
         private string GetAccounts()
@@ -136,9 +105,9 @@ namespace StuAuth.Classe
 
         public void Stop()
         {
-            cancellationTokenSource.Cancel();
-            listener.Stop();
-            listenerThread.Join();
+            Console.WriteLine("Arrêt en cours...");
+            Task.Delay(1000).Wait();
+            cts.Cancel();
         }
     }
 }

@@ -46,17 +46,5 @@ namespace StuAuth.Properties {
                 this["IPApplication"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string IPServeur {
-            get {
-                return ((string)(this["IPServeur"]));
-            }
-            set {
-                this["IPServeur"] = value;
-            }
-        }
     }
 }

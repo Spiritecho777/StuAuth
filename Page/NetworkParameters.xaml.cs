@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace StuAuth.Page
 {
@@ -24,18 +25,20 @@ namespace StuAuth.Page
     {
         private Main main;
         private HttpServer server;
-        private List<string> listIPA = new List<string>();
-        private List<string> listIPS = new List<string>();
-        private bool IsIPA = false;
-        private bool IsIPS = false;
+        private ObservableCollection<string> listIPA = new ObservableCollection<string>();
         private string IPApplication = Properties.Settings.Default.IPApplication;
-        private string IPServeur = Properties.Settings.Default.IPServeur;
 
         public NetworkParameters(Main main,HttpServer server)
         {
             InitializeComponent();
             this.main = main;
             this.server = server;
+            IPApp.ItemsSource = listIPA;
+            IPApp.Text = IPApplication;
+
+            string ipAdress = GetLocalIPAddress();
+            IPServ.Content = ipAdress;
+
             if (!main.isServerRunning)
             {
                 Serv.Background = new SolidColorBrush(Colors.Red);
@@ -46,13 +49,21 @@ namespace StuAuth.Page
             }
         }
 
+        private string GetLocalIPAddress()
+        {
+            string hostName = Dns.GetHostName();
+            IPAddress[] addresses = Dns.GetHostAddresses(hostName);
+
+            return addresses.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString() ?? "IP introuvable";
+        }
+
         private void Serveur(object sender, EventArgs e)
         {
             if (!main.isServerRunning)
             {
                 main.ServeurConnect.Background = new SolidColorBrush(Colors.Green);
                 Serv.Background = new SolidColorBrush(Colors.Green);
-                server.Start(IPServ.Text);
+                server.Start(IPServ.Content.ToString());
                 main.isServerRunning = true;
                 NavigationService.GoBack();
             }
@@ -77,21 +88,28 @@ namespace StuAuth.Page
 
         }
 
+        private async void AppNetworkChanged(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (!string.IsNullOrEmpty(SubApp.Text) && IsValidIPAddress(SubApp.Text))
+                {
+                    listIPA.Clear();
+                    await ScanNetworkAsync(SubApp.Text);
+                }
+                else
+                {
+                    MessageBox.Show("Erreur", "Veuillez rentrer un réseau correct exemple: 192.168.1");
+                }
+            }
+        }
+
         private void RegisterIPA(object sender, EventArgs e)
         {
             if (IPApp.SelectedItem != null)
             {
                 IPApplication = IPApp.SelectedItem.ToString();
                 Properties.Settings.Default.IPApplication = IPApplication;
-                Properties.Settings.Default.Save();
-            }
-        }
-        private void RegisterIPS(object sender, EventArgs e)
-        {
-            if (IPServ.SelectedItem != null)
-            {
-                IPServeur = IPServ.SelectedItem.ToString();
-                Properties.Settings.Default.IPApplication = IPServeur;
                 Properties.Settings.Default.Save();
             }
         }
@@ -129,19 +147,10 @@ namespace StuAuth.Page
                     if (reply.Status == IPStatus.Success)
                     {
                         string hostName = GetHostName(ipAddress);
-
+                        Debug.WriteLine(ipAddress);
                         Dispatcher.Invoke(() =>
                         {
-                            if (IsIPA)
-                            {
-                                listIPA.Add(ipAddress);
-                                IsIPA = false;
-                            }
-                            if (IsIPS)
-                            {
-                                listIPS.Add(ipAddress);
-                                IsIPS = false;
-                            }
+                            listIPA.Add(ipAddress);                              
                         });
                     }
                 }
@@ -167,6 +176,3 @@ namespace StuAuth.Page
         #endregion
     }
 }
-
-
-//il faut terminer le copier coller avec la version smartphone
