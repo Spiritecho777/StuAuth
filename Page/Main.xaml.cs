@@ -310,22 +310,7 @@ namespace StuAuth
 
         private void Serveur_Connect(object sender, RoutedEventArgs e)
         {
-            //ServeurConnect
             windows.Page.Navigate(new NetworkParameters(this,server));
-            /*if (!isServerRunning)
-            {
-                ServeurConnect.Background = new SolidColorBrush(Colors.Green);
-                server = new HttpServer(this);
-                server.Start();
-                isServerRunning = true;
-            }
-            else
-            {
-                server.Stop();
-                server = null;
-                ServeurConnect.Background = new SolidColorBrush(Colors.Red);
-                isServerRunning = false;
-            }*/
         }
 
         private void TimeSynchro(object sender, RoutedEventArgs e)
