@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 
 namespace StuAuth.Page
 {
@@ -25,14 +27,16 @@ namespace StuAuth.Page
     {
         private Main main;
         private HttpServer server;
+        private AccountManager accountManager;
         private ObservableCollection<string> listIPA = new ObservableCollection<string>();
         private string IPApplication = Properties.Settings.Default.IPApplication;
 
-        public NetworkParameters(Main main,HttpServer server)
+        public NetworkParameters(Main main,HttpServer server, AccountManager accountManager)
         {
             InitializeComponent();
             this.main = main;
             this.server = server;
+            this.accountManager = accountManager;
             IPApp.ItemsSource = listIPA;
             IPApp.Text = IPApplication;
 
@@ -83,9 +87,73 @@ namespace StuAuth.Page
             NavigationService.GoBack();
         }
 
-        private void Synchro_Click(object sender, EventArgs e)
+        private async void Synchro_Click(object sender, EventArgs e)
         {
+            string answer = await DisplayActionSheet(
+            "Synchronisation",
+            "Annuler",
+            null,
+            "Importer"
+        );
 
+            if (answer == "Importer")
+            {
+                if (!string.IsNullOrWhiteSpace(IPApplication) && IsHostReachable(IPApplication))
+                {
+                    string response = await SendRequestAsync("/", "GET");
+
+                    try
+                    {
+                        Back.IsEnabled = false;
+                        Serv.IsEnabled = false;
+                        Synchro.IsEnabled = false;
+                        LoadingProgressBar.IsVisible = true;
+                        LoadingProgressBar.Progress = 0;
+
+                        var data = JsonSerializer.Deserialize<Dictionary<string, string>>(response);
+
+                        if (data == null || !data.ContainsKey("Accounts") || !data.ContainsKey("Folder"))
+                        {
+                            Console.WriteLine(" Erreur: Données manquantes.");
+                            return;
+                        }
+
+                        string[] accounts = data["Accounts"].Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] folders = data["Folder"].Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        string formattedAccounts;
+                        int totalAccounts = accounts.Length;
+
+                        for (int i = 0; i < totalAccounts; i++)
+                        {
+                            string folder = i < folders.Length ? folders[i].Trim() : "Uncategorized";
+                            string otpUri = accounts[i].Trim();
+
+                            string label = ExtractLabelFromOTP(otpUri);
+
+                            formattedAccounts = ($"{folder}\\{label};{otpUri}");
+                            await Task.Run(() => accountManager.AddAccount(formattedAccounts));
+
+                            LoadingProgressBar.Progress = (double)(i + 1) / totalAccounts;
+                        }
+                        
+                        await Task.Delay(7000);
+                        Synchro.IsEnabled = true;
+                        Serv.IsEnabled = true;
+                        Back.IsEnabled = true;
+                        LoadingProgressBar.IsVisible = false;
+                        NavigationService.GoBack();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Erreur de parsing JSON: " + ex.Message);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Erreur", "L'adresse IP n'est pas valide ou inaccessible.");
+                }
+            }
         }
 
         private async void AppNetworkChanged(object sender, KeyEventArgs e)
@@ -174,5 +242,51 @@ namespace StuAuth.Page
             }
         }
         #endregion
+
+        private async Task<string> SendRequestAsync(string endpoint, string method, string jsonData = null)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri($"http://{IPApplication}:19755/");
+
+                HttpResponseMessage response = null;
+
+                if (method == "GET")
+                {
+                    response = await client.GetAsync(endpoint);
+                }
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        static string ExtractLabelFromOTP(string otpUri)
+        {
+            var match = Regex.Match(otpUri, @"otpauth://totp/([^?]+)");
+            return match.Success ? match.Groups[1].Value : "Unknown";
+        }
+
+        private bool IsHostReachable(string ip)
+        {
+            try
+            {
+                using (var ping = new Ping())
+                {
+                    var reply = ping.Send(ip, 1000);
+                    return reply.Status == System.Net.NetworkInformation.IPStatus.Success;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

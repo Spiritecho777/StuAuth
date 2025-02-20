@@ -310,7 +310,7 @@ namespace StuAuth
 
         private void Serveur_Connect(object sender, RoutedEventArgs e)
         {
-            windows.Page.Navigate(new NetworkParameters(this,server));
+            windows.Page.Navigate(new NetworkParameters(this,server,accountManager));
         }
 
         private void TimeSynchro(object sender, RoutedEventArgs e)
