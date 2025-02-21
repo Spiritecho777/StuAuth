@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="21.4" version="21.7.1" Modules="simple" RootPath="." Language="en" Id="{C6856977-0A11-4743-8DB1-E8BC10D0B6EA}">
-  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
-    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
-  </COMPONENT>
+<DOCUMENT Type="Advanced Installer" CreateVersion="21.4" version="22.4" Modules="simple" RootPath="." Language="en" Id="{C6856977-0A11-4743-8DB1-E8BC10D0B6EA}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPPRODUCTICON" Value="StuAuth.exe" Type="8"/>
     <ROW Property="Manufacturer" Value="Stusoft"/>
-    <ROW Property="ProductCode" Value="1033:{FE5C2282-0D54-4911-85BA-99241C6446EA} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{A184B70B-9927-49F4-8D16-502400644B6F} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="StuAuth"/>
-    <ROW Property="ProductVersion" Value="2.4.0" Options="32"/>
+    <ROW Property="ProductVersion" Value="2.5.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{A8D2C2B3-3A7E-4BB0-93DC-2114DEB26D39}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -28,7 +25,9 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
     <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
+    <ROW Directory="StartMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="STARTM~1|StartMenuFolder" IsPseudoRoot="1"/>
     <ROW Directory="StuAuth_Dir" Directory_Parent="APPDIR" DefaultDir="StuAuth"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="browser_Dir" Directory_Parent="runtimes_Dir" DefaultDir="browser"/>
@@ -41,115 +40,113 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="APPDIR" ComponentId="{AA30120E-E922-4813-BC8E-EBE4E0E68E97}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="Google.Protobuf.dll" ComponentId="{6D05F5A6-DE3C-4BFB-98B5-ADAEF27D4511}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Google.Protobuf.dll_1"/>
-    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{98FE65E9-12CF-47B9-80EC-0D9FBBA98813}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{D69ED7F4-80D7-43F1-BE12-DFA50E021E4B}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{791EC289-0F00-44DB-91D2-9E22D6C644B0}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{F819F169-9DAD-45DC-AA9F-10FD6BF61235}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{38D81723-708A-490F-8716-E6B01131B8F0}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{454098B3-B6B9-4AB0-9848-EC800C117C64}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.UserSecrets.dll" ComponentId="{C67E6F93-7C90-40BB-B9D8-EFA7044F6BAB}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{D9D41AFD-0B49-474B-A195-8A17D4C2FF42}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
-    <ROW Component="Microsoft.Extensions.DependencyInjec_1_tion.Abstractions.dll" ComponentId="{3848E3D4-E9F3-4BD3-930D-196D69BAA93B}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.DependencyInjection.dll" ComponentId="{D4A76CA6-ED3D-4E8B-AE80-ECDAA0BE79A7}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.dll"/>
-    <ROW Component="Microsoft.Extensions.Diagnostics.Abstractions.dll" ComponentId="{1E573A3B-6625-4930-AC93-2FA7257B19A0}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Diagnostics.dll" ComponentId="{5B26789F-9273-41F4-87D8-C23383BCCDD0}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.dll"/>
-    <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{5E861B98-4F64-4FD9-BA34-E10F52456A06}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{991E9A8E-38CC-438B-A00B-83E1477FEC1D}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
-    <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{9AF6FA33-6A81-4573-8BCD-45E37221D8B2}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
-    <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{982B21FF-E177-44CC-A938-34170B821B94}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{923C233A-66E2-4433-85E0-82E210A26ED4}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{F404752F-E3FA-44F1-A385-17AAFCE05C2B}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{10C552C5-B530-4CA5-9136-B7985ABCFCD6}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Console.dll" ComponentId="{4DB7DE18-C395-4F47-90BD-C70C943EB6A6}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Console.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Debug.dll" ComponentId="{690A20C9-2F91-409C-849F-766A629B161D}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.EventLog.dll" ComponentId="{62677878-B1A0-4868-9FBA-F717C295D14B}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventLog.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.EventSource.dll" ComponentId="{EC9AD6D8-E331-47C8-9584-DBD23765A5C8}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventSource.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.dll" ComponentId="{4594B27E-DFFF-4A4E-98A8-CCCF6563C6E2}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll"/>
-    <ROW Component="Microsoft.Extensions.Options.ConfigurationExtensions.dll" ComponentId="{52DD0FBC-3DC4-426F-AB13-4797C7B9F1CC}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
-    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{91BF78CC-6340-4D17-ABFC-21E6F4673449}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
-    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{1C2E2E6C-A389-4869-B594-37719A8462B6}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
-    <ROW Component="Microsoft.WindowsAPICodePack.Core.dll" ComponentId="{2A2E3763-9450-4E8E-96B7-DB8F75AB34AA}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Core.dll_1"/>
-    <ROW Component="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" ComponentId="{1E57F6EF-2E40-466B-87CF-90AB3AB6CBC9}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Extende_1_dLinguisticServices.dll"/>
-    <ROW Component="Microsoft.WindowsAPICodePack.Sensors.dll" ComponentId="{99EFDAB0-DF59-428D-873F-CDEB48C550B1}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Sensors_1_.dll"/>
-    <ROW Component="Microsoft.WindowsAPICodePack.Shell.dll" ComponentId="{129E9D8B-86E6-4FC8-BF88-0A882AE56A56}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Shell.dll_1"/>
-    <ROW Component="Microsoft.WindowsAPICodePack.ShellExtensions.dll" ComponentId="{0883BE03-DE5F-4C52-9290-9D7F4EA11C5B}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.ShellEx_1_tensions.dll"/>
-    <ROW Component="Newtonsoft.Json.dll" ComponentId="{69D62F55-FE46-4587-9D34-784C9559ACAF}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
-    <ROW Component="Otp.NET.dll" ComponentId="{DC7B2DCE-37F4-49B0-8207-9CEFA6F84896}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Otp.NET.dll_1"/>
+    <ROW Component="Google.Protobuf.dll" ComponentId="{28EA4A42-3F49-489C-90C0-6FFC3FE4A8FB}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Google.Protobuf.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{50DB3288-DF3D-4160-BDDC-BB5E4DE9B89F}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{A667053B-89B3-42DA-A6EA-93726F6E527F}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{1F8ED498-45A9-474C-B4DA-A589438B765C}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{98A710A7-196A-4EF4-A5B9-A4254249A497}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{D5B8AB38-4EB6-4AF5-AA5E-50DCC37D33D4}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{AC993F3D-DA95-48B7-AD87-1776132D4BD8}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.UserSecrets.dll" ComponentId="{C107C27B-8560-4402-B1F9-20C6252630DA}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{1D4789C5-1C78-4155-8F53-F8E563EB7844}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjec_1_tion.dll" ComponentId="{D73BA4AE-D994-41FA-87F2-63EF4AEBB277}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{19135F0A-D577-4158-8AEF-2C18C50932F4}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Diagnostics.Abstractions.dll" ComponentId="{FAB204CA-2A1B-4415-8994-B45B82E0FB8A}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Diagnostics.dll" ComponentId="{3784629C-33F2-4C0C-A2C6-0AF4040DAE6F}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{A8391CF6-30C5-458F-955A-6873C2939A7D}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{60FABA00-889E-4D40-B895-DC6E5F5CCF46}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{EE57127F-5D90-4CDE-9D8C-8AF9E438CA7D}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{B4C5EFAF-AAE6-43EB-A981-38E2DD1F8E70}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{56E25CE3-B9DE-41D2-9169-B448A5857375}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{90443A26-FEBF-4D70-9973-16ADD0CF878C}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{97DC1AED-6E9E-4606-B459-D145F47F6FA6}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Console.dll" ComponentId="{B60AC450-50F1-46D0-A334-5F32C8FCF958}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Console.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Debug.dll" ComponentId="{D9936785-C833-4D5D-91E2-91FBEA9E243D}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventLog.dll" ComponentId="{4ECD0E79-5B6C-41EF-9768-6C63FB031468}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventLog.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventSource.dll" ComponentId="{BD13745F-95A6-442E-8E11-3851B2ACB34B}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventSource.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.dll" ComponentId="{A9A8F9CF-65E4-4287-82EB-3E2E87B3D31D}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.ConfigurationExtensions.dll" ComponentId="{13D7E3BF-44F8-4085-BE98-AAB058B3DC19}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{0801982A-D8F1-4B55-A064-2DC3D429AFA8}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
+    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{556582F3-58D1-441D-B923-C9CD40D49633}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.Core.dll" ComponentId="{EA045CFF-71BF-4E65-9AE6-0A12B909641B}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Core.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" ComponentId="{C7E60D85-CB5F-4AA6-9E55-EE2EAE93FD56}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.Sensors.dll" ComponentId="{DCFDDC8C-6A27-4798-9219-80CD96BF452A}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Sensors.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.Shell.dll" ComponentId="{CBC09246-9061-45B5-B9CB-7F9AF6AD8542}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.Shell.dll"/>
+    <ROW Component="Microsoft.WindowsAPICodePack.ShellExtensions.dll" ComponentId="{39C32D1B-7827-4200-9C43-19AC91041687}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Microsoft.WindowsAPICodePack.ShellExtensions.dll"/>
+    <ROW Component="Otp.NET.dll" ComponentId="{80F7DE0E-4E63-43EC-BFB8-B431DEBA1E65}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="Otp.NET.dll"/>
     <ROW Component="ProductInformation" ComponentId="{DB9215DF-A86F-448D-AA6B-6BEBD2C6483F}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="SHORTCUTDIR" ComponentId="{0D23A7EB-3ACB-4F32-BB95-62570CFB8398}" Directory_="SHORTCUTDIR" Attributes="0"/>
-    <ROW Component="StuAuth.deps.json" ComponentId="{29D4EC64-A93F-46ED-9A2E-EE0E68692D23}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="StuAuth.deps.json_1" Type="0"/>
-    <ROW Component="StuAuth.dll" ComponentId="{A5A699D3-58C5-4A17-8776-3FFA2088B09D}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="StuAuth.dll_1"/>
-    <ROW Component="StuAuth.exe" ComponentId="{7E8F3DA2-4045-4A6E-901C-1EB7693F72FE}" Directory_="StuAuth_Dir" Attributes="256" KeyPath="StuAuth.exe_1"/>
-    <ROW Component="System.Diagnostics.DiagnosticSource.dll" ComponentId="{0EFB1C60-4A18-4E3C-8B9F-FA777754788A}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Diagnostics.DiagnosticSource.dll"/>
-    <ROW Component="System.Diagnostics.EventLog.Messages.dll" ComponentId="{9668CE9C-8B81-48B7-B316-404B647A9A30}" Directory_="net8.0_1_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.Messages.dll"/>
-    <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{B5D91807-20BB-4964-A7E7-681311DABA8D}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
-    <ROW Component="System.Diagnostics.EventLog.dll_1" ComponentId="{C3B6F380-02AB-44E5-B29C-0C346524AC07}" Directory_="net8.0_1_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll_1"/>
-    <ROW Component="System.Drawing.Common.dll" ComponentId="{9D2F8C60-D414-4D1E-9B50-81E0C834A2D0}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll"/>
-    <ROW Component="System.IO.Pipelines.dll" ComponentId="{662BE2A1-EA1B-4606-A095-8DF41FC8C0EE}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.IO.Pipelines.dll"/>
-    <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{73BF8907-7DBE-4233-A274-7230FED6BA91}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
-    <ROW Component="System.Text.Encodings.Web.dll_1" ComponentId="{1C7BA0DF-F81D-46BF-A603-E3517F6F6B48}" Directory_="net8.0_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll_1"/>
-    <ROW Component="System.Text.Json.dll" ComponentId="{818FE991-56FD-4644-8C88-8A7931018350}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Text.Json.dll"/>
-    <ROW Component="ZXing.Windows.Compatibility.dll" ComponentId="{7E00AFF4-71E3-4256-82A6-B3FC58FE10D7}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="ZXing.Windows.Compatibility.dll_1"/>
-    <ROW Component="zxing.dll" ComponentId="{8B348A46-8271-4A12-B78E-27A2470F1F14}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="zxing.dll_1"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{17E3D2F9-33E2-4187-B77C-2EE758811C84}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="StuAuth.deps.json" ComponentId="{986EC6CB-6895-4A8B-979B-0F5BFFA44160}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="StuAuth.deps.json" Type="0"/>
+    <ROW Component="StuAuth.dll" ComponentId="{3988D4C3-E67D-483E-8CAD-77A15F95CC74}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="StuAuth.dll"/>
+    <ROW Component="StuAuth.exe" ComponentId="{1B90C099-CEEF-4EC5-A65E-AF0AA71448CF}" Directory_="StuAuth_Dir" Attributes="256" KeyPath="StuAuth.exe"/>
+    <ROW Component="System.Diagnostics.DiagnosticSource.dll" ComponentId="{3CD397B2-E4C7-4FD2-B74F-CE7F81AAE86C}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Diagnostics.DiagnosticSource.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.Messages.dll" ComponentId="{88B41C1C-ADB1-4D6B-9D59-9AE6F68A8BE6}" Directory_="net8.0_1_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.Messages.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{94417829-ABF2-4283-9B98-58A45F298A2B}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.dll_1" ComponentId="{3F9F9BEA-9748-4F7D-AE5F-DAF4A807B2A1}" Directory_="net8.0_1_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll_1"/>
+    <ROW Component="System.Drawing.Common.dll" ComponentId="{796A67F4-B96A-432B-9568-626FD37491D0}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll"/>
+    <ROW Component="System.IO.Pipelines.dll" ComponentId="{B2D60CF4-FBC3-43A5-BC6F-983794F45C20}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.IO.Pipelines.dll"/>
+    <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{6B30D352-AA17-4F39-BF33-D17F98BEC569}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
+    <ROW Component="System.Text.Encodings.Web.dll_1" ComponentId="{36BF01B1-923A-492F-828E-63400A4C4DA2}" Directory_="net8.0_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll_1"/>
+    <ROW Component="System.Text.Json.dll" ComponentId="{70C39EA1-97A1-4DB4-AC40-2FBEFC4FE5FA}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="System.Text.Json.dll"/>
+    <ROW Component="ZXing.Windows.Compatibility.dll" ComponentId="{F398F358-7FD7-4E2E-9E7E-DD917E691B48}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="ZXing.Windows.Compatibility.dll"/>
+    <ROW Component="zxing.dll" ComponentId="{7D60BF27-5C86-43F7-A320-0F3C64114212}" Directory_="StuAuth_Dir" Attributes="0" KeyPath="zxing.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
-    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInjection.dll" FileName="MICROS~1.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Diagnostics.Abstractions.dll" Component_="Microsoft.Extensions.Diagnostics.Abstractions.dll" FileName="MICROS~7.DLL|Microsoft.Extensions.Diagnostics.Abstractions.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Diagnostics.dll" Component_="Microsoft.Extensions.Diagnostics.dll" FileName="MICROS~8.DLL|Microsoft.Extensions.Diagnostics.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Diagnostics.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.FileProviders.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll" FileName="MICROS~9.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.FileProviders.Physical.dll" Component_="Microsoft.Extensions.FileProviders.Physical.dll" FileName="MICRO~10.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.FileSystemGlobbing.dll" Component_="Microsoft.Extensions.FileSystemGlobbing.dll" FileName="MICRO~11.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Hosting.Abstractions.dll" Component_="Microsoft.Extensions.Hosting.Abstractions.dll" FileName="MICRO~12.DLL|Microsoft.Extensions.Hosting.Abstractions.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Hosting.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Hosting.dll" Component_="Microsoft.Extensions.Hosting.dll" FileName="MICRO~13.DLL|Microsoft.Extensions.Hosting.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Hosting.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Abstractions.dll" Component_="Microsoft.Extensions.Logging.Abstractions.dll" FileName="MICRO~14.DLL|Microsoft.Extensions.Logging.Abstractions.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Logging.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Configuration.dll" Component_="Microsoft.Extensions.Logging.Configuration.dll" FileName="MICRO~15.DLL|Microsoft.Extensions.Logging.Configuration.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Logging.Configuration.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Console.dll" Component_="Microsoft.Extensions.Logging.Console.dll" FileName="MICRO~16.DLL|Microsoft.Extensions.Logging.Console.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Logging.Console.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Debug.dll" Component_="Microsoft.Extensions.Logging.Debug.dll" FileName="MICRO~17.DLL|Microsoft.Extensions.Logging.Debug.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Logging.Debug.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.dll" Component_="Microsoft.Extensions.Logging.dll" FileName="MICRO~18.DLL|Microsoft.Extensions.Logging.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Logging.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.EventLog.dll" Component_="Microsoft.Extensions.Logging.EventLog.dll" FileName="MICRO~19.DLL|Microsoft.Extensions.Logging.EventLog.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Logging.EventLog.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.EventSource.dll" Component_="Microsoft.Extensions.Logging.EventSource.dll" FileName="MICRO~20.DLL|Microsoft.Extensions.Logging.EventSource.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Logging.EventSource.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll" FileName="MICRO~21.DLL|Microsoft.Extensions.Options.ConfigurationExtensions.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Options.dll" Component_="Microsoft.Extensions.Options.dll" FileName="MICRO~22.DLL|Microsoft.Extensions.Options.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Options.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Microsoft.Extensions.Primitives.dll" FileName="MICRO~23.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
-    <ROW File="Microsoft.WindowsAPICodePack.Core.dll_1" Component_="Microsoft.WindowsAPICodePack.Core.dll" FileName="MICRO~24.DLL|Microsoft.WindowsAPICodePack.Core.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.WindowsAPICodePack.Core.dll" SelfReg="false"/>
-    <ROW File="Microsoft.WindowsAPICodePack.Extende_1_dLinguisticServices.dll" Component_="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" FileName="MICRO~25.DLL|Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" SelfReg="false"/>
-    <ROW File="Microsoft.WindowsAPICodePack.Sensors_1_.dll" Component_="Microsoft.WindowsAPICodePack.Sensors.dll" FileName="MICRO~26.DLL|Microsoft.WindowsAPICodePack.Sensors.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.WindowsAPICodePack.Sensors.dll" SelfReg="false"/>
-    <ROW File="Microsoft.WindowsAPICodePack.Shell.dll_1" Component_="Microsoft.WindowsAPICodePack.Shell.dll" FileName="MICRO~27.DLL|Microsoft.WindowsAPICodePack.Shell.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.WindowsAPICodePack.Shell.dll" SelfReg="false"/>
-    <ROW File="Microsoft.WindowsAPICodePack.ShellEx_1_tensions.dll" Component_="Microsoft.WindowsAPICodePack.ShellExtensions.dll" FileName="MICRO~28.DLL|Microsoft.WindowsAPICodePack.ShellExtensions.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.WindowsAPICodePack.ShellExtensions.dll" SelfReg="false"/>
-    <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Newtonsoft.Json.dll" SelfReg="false"/>
-    <ROW File="Otp.NET.dll_1" Component_="Otp.NET.dll" FileName="OTPNET~1.DLL|Otp.NET.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Otp.NET.dll" SelfReg="false"/>
-    <ROW File="StuAuth.deps.json_1" Component_="StuAuth.deps.json" FileName="STUAUT~1.JSO|StuAuth.deps.json" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\StuAuth.deps.json" SelfReg="false"/>
-    <ROW File="StuAuth.dll_1" Component_="StuAuth.dll" FileName="StuAuth.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\StuAuth.dll" SelfReg="false"/>
-    <ROW File="StuAuth.dll.config" Component_="StuAuth.deps.json" FileName="STUAUT~1.CON|StuAuth.dll.config" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\StuAuth.dll.config" SelfReg="false"/>
-    <ROW File="StuAuth.exe_1" Component_="StuAuth.exe" FileName="StuAuth.exe" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\StuAuth.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="StuAuth.pdb" Component_="StuAuth.exe" FileName="StuAuth.pdb" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\StuAuth.pdb" SelfReg="false"/>
-    <ROW File="StuAuth.runtimeconfig.json_1" Component_="StuAuth.deps.json" FileName="STUAUT~4.JSO|StuAuth.runtimeconfig.json" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\StuAuth.runtimeconfig.json" SelfReg="false"/>
-    <ROW File="System.Diagnostics.DiagnosticSource.dll" Component_="System.Diagnostics.DiagnosticSource.dll" FileName="SYSTEM~1.DLL|System.Diagnostics.DiagnosticSource.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\System.Diagnostics.DiagnosticSource.dll" SelfReg="false"/>
-    <ROW File="System.Diagnostics.EventLog.dll" Component_="System.Diagnostics.EventLog.dll" FileName="SYSTEM~2.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\System.Diagnostics.EventLog.dll" SelfReg="false"/>
-    <ROW File="System.Drawing.Common.dll" Component_="System.Drawing.Common.dll" FileName="SYSTEM~3.DLL|System.Drawing.Common.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\System.Drawing.Common.dll" SelfReg="false"/>
-    <ROW File="System.IO.Pipelines.dll" Component_="System.IO.Pipelines.dll" FileName="SYSTEM~4.DLL|System.IO.Pipelines.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\System.IO.Pipelines.dll" SelfReg="false"/>
-    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTEM~5.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\System.Text.Encodings.Web.dll" SelfReg="false"/>
-    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~6.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\System.Text.Json.dll" SelfReg="false"/>
-    <ROW File="zxing.dll_1" Component_="zxing.dll" FileName="zxing.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\zxing.dll" SelfReg="false"/>
-    <ROW File="ZXing.Windows.Compatibility.dll_1" Component_="ZXing.Windows.Compatibility.dll" FileName="ZXINGW~1.DLL|ZXing.Windows.Compatibility.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\ZXing.Windows.Compatibility.dll" SelfReg="false"/>
-    <ROW File="Google.Protobuf.dll_1" Component_="Google.Protobuf.dll" FileName="GOOGLE~1.DLL|Google.Protobuf.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Google.Protobuf.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICRO~29.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICRO~30.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.CommandLine.dll" Component_="Microsoft.Extensions.Configuration.CommandLine.dll" FileName="MICRO~31.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICRO~32.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" FileName="MICRO~33.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll" FileName="MICRO~34.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.Json.dll" Component_="Microsoft.Extensions.Configuration.Json.dll" FileName="MICRO~35.DLL|Microsoft.Extensions.Configuration.Json.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.UserSecrets.dll" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll" FileName="MICRO~36.DLL|Microsoft.Extensions.Configuration.UserSecrets.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.Configuration.UserSecrets.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjec_1_tion.Abstractions.dll" FileName="MICRO~37.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
-    <ROW File="System.Text.Encodings.Web.dll_1" Component_="System.Text.Encodings.Web.dll_1" FileName="SYSTEM~1.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll" SelfReg="false"/>
-    <ROW File="System.Diagnostics.EventLog.dll_1" Component_="System.Diagnostics.EventLog.dll_1" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll" SelfReg="false"/>
-    <ROW File="System.Diagnostics.EventLog.Messages.dll" Component_="System.Diagnostics.EventLog.Messages.dll" FileName="SYSTEM~2.DLL|System.Diagnostics.EventLog.Messages.dll" Attributes="0" SourcePath="..\bin\Debug\net8.0-windows8.0\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.Messages.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.dll" Component_="System.Diagnostics.EventLog.dll" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\bin\Release\publish\System.Diagnostics.EventLog.dll" SelfReg="false"/>
+    <ROW File="System.Drawing.Common.dll" Component_="System.Drawing.Common.dll" FileName="SYSTEM~2.DLL|System.Drawing.Common.dll" Attributes="0" SourcePath="..\bin\Release\publish\System.Drawing.Common.dll" SelfReg="false"/>
+    <ROW File="System.IO.Pipelines.dll" Component_="System.IO.Pipelines.dll" FileName="SYSTEM~3.DLL|System.IO.Pipelines.dll" Attributes="0" SourcePath="..\bin\Release\publish\System.IO.Pipelines.dll" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTEM~4.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\bin\Release\publish\System.Text.Encodings.Web.dll" SelfReg="false"/>
+    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~5.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\bin\Release\publish\System.Text.Json.dll" SelfReg="false"/>
+    <ROW File="zxing.dll" Component_="zxing.dll" FileName="zxing.dll" Attributes="0" SourcePath="..\bin\Release\publish\zxing.dll" SelfReg="false"/>
+    <ROW File="ZXing.Windows.Compatibility.dll" Component_="ZXing.Windows.Compatibility.dll" FileName="ZXINGW~1.DLL|ZXing.Windows.Compatibility.dll" Attributes="0" SourcePath="..\bin\Release\publish\ZXing.Windows.Compatibility.dll" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll_1" Component_="System.Text.Encodings.Web.dll_1" FileName="SYSTEM~1.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\bin\Release\publish\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.dll_1" Component_="System.Diagnostics.EventLog.dll_1" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\bin\Release\publish\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.Messages.dll" Component_="System.Diagnostics.EventLog.Messages.dll" FileName="SYSTEM~2.DLL|System.Diagnostics.EventLog.Messages.dll" Attributes="0" SourcePath="..\bin\Release\publish\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.Messages.dll" SelfReg="false"/>
+    <ROW File="Google.Protobuf.dll" Component_="Google.Protobuf.dll" FileName="GOOGLE~1.DLL|Google.Protobuf.dll" Attributes="0" SourcePath="..\bin\Release\publish\Google.Protobuf.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICROS~1.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICROS~2.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.CommandLine.dll" Component_="Microsoft.Extensions.Configuration.CommandLine.dll" FileName="MICROS~3.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" FileName="MICROS~5.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll" FileName="MICROS~6.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Json.dll" Component_="Microsoft.Extensions.Configuration.Json.dll" FileName="MICROS~7.DLL|Microsoft.Extensions.Configuration.Json.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.UserSecrets.dll" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll" FileName="MICROS~8.DLL|Microsoft.Extensions.Configuration.UserSecrets.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Configuration.UserSecrets.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll" FileName="MICROS~9.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInjec_1_tion.dll" FileName="MICRO~10.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Diagnostics.Abstractions.dll" Component_="Microsoft.Extensions.Diagnostics.Abstractions.dll" FileName="MICRO~11.DLL|Microsoft.Extensions.Diagnostics.Abstractions.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Diagnostics.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Diagnostics.dll" Component_="Microsoft.Extensions.Diagnostics.dll" FileName="MICRO~12.DLL|Microsoft.Extensions.Diagnostics.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Diagnostics.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll" FileName="MICRO~13.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Physical.dll" Component_="Microsoft.Extensions.FileProviders.Physical.dll" FileName="MICRO~14.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileSystemGlobbing.dll" Component_="Microsoft.Extensions.FileSystemGlobbing.dll" FileName="MICRO~15.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.Abstractions.dll" Component_="Microsoft.Extensions.Hosting.Abstractions.dll" FileName="MICRO~16.DLL|Microsoft.Extensions.Hosting.Abstractions.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Hosting.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.dll" Component_="Microsoft.Extensions.Hosting.dll" FileName="MICRO~17.DLL|Microsoft.Extensions.Hosting.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Hosting.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Abstractions.dll" Component_="Microsoft.Extensions.Logging.Abstractions.dll" FileName="MICRO~18.DLL|Microsoft.Extensions.Logging.Abstractions.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Logging.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Configuration.dll" Component_="Microsoft.Extensions.Logging.Configuration.dll" FileName="MICRO~19.DLL|Microsoft.Extensions.Logging.Configuration.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Logging.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Console.dll" Component_="Microsoft.Extensions.Logging.Console.dll" FileName="MICRO~20.DLL|Microsoft.Extensions.Logging.Console.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Logging.Console.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Debug.dll" Component_="Microsoft.Extensions.Logging.Debug.dll" FileName="MICRO~21.DLL|Microsoft.Extensions.Logging.Debug.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Logging.Debug.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.dll" Component_="Microsoft.Extensions.Logging.dll" FileName="MICRO~22.DLL|Microsoft.Extensions.Logging.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Logging.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventLog.dll" Component_="Microsoft.Extensions.Logging.EventLog.dll" FileName="MICRO~23.DLL|Microsoft.Extensions.Logging.EventLog.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Logging.EventLog.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventSource.dll" Component_="Microsoft.Extensions.Logging.EventSource.dll" FileName="MICRO~24.DLL|Microsoft.Extensions.Logging.EventSource.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Logging.EventSource.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll" FileName="MICRO~25.DLL|Microsoft.Extensions.Options.ConfigurationExtensions.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Options.ConfigurationExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.dll" Component_="Microsoft.Extensions.Options.dll" FileName="MICRO~26.DLL|Microsoft.Extensions.Options.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Options.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Microsoft.Extensions.Primitives.dll" FileName="MICRO~27.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
+    <ROW File="Microsoft.WindowsAPICodePack.Core.dll" Component_="Microsoft.WindowsAPICodePack.Core.dll" FileName="MICRO~28.DLL|Microsoft.WindowsAPICodePack.Core.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.WindowsAPICodePack.Core.dll" SelfReg="false"/>
+    <ROW File="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" Component_="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" FileName="MICRO~29.DLL|Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll" SelfReg="false"/>
+    <ROW File="Microsoft.WindowsAPICodePack.Sensors.dll" Component_="Microsoft.WindowsAPICodePack.Sensors.dll" FileName="MICRO~30.DLL|Microsoft.WindowsAPICodePack.Sensors.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.WindowsAPICodePack.Sensors.dll" SelfReg="false"/>
+    <ROW File="Microsoft.WindowsAPICodePack.Shell.dll" Component_="Microsoft.WindowsAPICodePack.Shell.dll" FileName="MICRO~31.DLL|Microsoft.WindowsAPICodePack.Shell.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.WindowsAPICodePack.Shell.dll" SelfReg="false"/>
+    <ROW File="Microsoft.WindowsAPICodePack.ShellExtensions.dll" Component_="Microsoft.WindowsAPICodePack.ShellExtensions.dll" FileName="MICRO~32.DLL|Microsoft.WindowsAPICodePack.ShellExtensions.dll" Attributes="0" SourcePath="..\bin\Release\publish\Microsoft.WindowsAPICodePack.ShellExtensions.dll" SelfReg="false"/>
+    <ROW File="Otp.NET.dll" Component_="Otp.NET.dll" FileName="OTPNET~1.DLL|Otp.NET.dll" Attributes="0" SourcePath="..\bin\Release\publish\Otp.NET.dll" SelfReg="false"/>
+    <ROW File="StuAuth.deps.json" Component_="StuAuth.deps.json" FileName="STUAUT~1.JSO|StuAuth.deps.json" Attributes="0" SourcePath="..\bin\Release\publish\StuAuth.deps.json" SelfReg="false"/>
+    <ROW File="StuAuth.dll" Component_="StuAuth.dll" FileName="StuAuth.dll" Attributes="0" SourcePath="..\bin\Release\publish\StuAuth.dll" SelfReg="false"/>
+    <ROW File="StuAuth.dll.config" Component_="StuAuth.deps.json" FileName="STUAUT~1.CON|StuAuth.dll.config" Attributes="0" SourcePath="..\bin\Release\publish\StuAuth.dll.config" SelfReg="false"/>
+    <ROW File="StuAuth.exe" Component_="StuAuth.exe" FileName="StuAuth.exe" Attributes="0" SourcePath="..\bin\Release\publish\StuAuth.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="StuAuth.pdb" Component_="StuAuth.exe" FileName="StuAuth.pdb" Attributes="0" SourcePath="..\bin\Release\publish\StuAuth.pdb" SelfReg="false"/>
+    <ROW File="StuAuth.runtimeconfig.json" Component_="StuAuth.deps.json" FileName="STUAUT~2.JSO|StuAuth.runtimeconfig.json" Attributes="0" SourcePath="..\bin\Release\publish\StuAuth.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="System.Diagnostics.DiagnosticSource.dll" Component_="System.Diagnostics.DiagnosticSource.dll" FileName="SYSTEM~6.DLL|System.Diagnostics.DiagnosticSource.dll" Attributes="0" SourcePath="..\bin\Release\publish\System.Diagnostics.DiagnosticSource.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -225,7 +222,27 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
     <ROW Feature_="MainFeature" Component_="APPDIR"/>
     <ROW Feature_="MainFeature" Component_="ProductInformation"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInjection.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Drawing.Common.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.IO.Pipelines.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="zxing.dll"/>
+    <ROW Feature_="MainFeature" Component_="ZXing.Windows.Compatibility.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.Messages.dll"/>
+    <ROW Feature_="MainFeature" Component_="Google.Protobuf.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.CommandLine.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInjec_1_tion.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.Abstractions.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
@@ -248,33 +265,12 @@
     <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.Sensors.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.Shell.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.WindowsAPICodePack.ShellExtensions.dll"/>
-    <ROW Feature_="MainFeature" Component_="Newtonsoft.Json.dll"/>
     <ROW Feature_="MainFeature" Component_="Otp.NET.dll"/>
     <ROW Feature_="MainFeature" Component_="StuAuth.deps.json"/>
     <ROW Feature_="MainFeature" Component_="StuAuth.dll"/>
     <ROW Feature_="MainFeature" Component_="StuAuth.exe"/>
     <ROW Feature_="MainFeature" Component_="System.Diagnostics.DiagnosticSource.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Drawing.Common.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.IO.Pipelines.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Text.Json.dll"/>
-    <ROW Feature_="MainFeature" Component_="zxing.dll"/>
-    <ROW Feature_="MainFeature" Component_="ZXing.Windows.Compatibility.dll"/>
-    <ROW Feature_="MainFeature" Component_="Google.Protobuf.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Abstractions.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Binder.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.CommandLine.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Json.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInjec_1_tion.Abstractions.dll"/>
     <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
-    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll_1"/>
-    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll_1"/>
-    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.Messages.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="StuAuth.exe" SourcePath="..\Icone\StuAuth.ico" Index="0"/>
@@ -309,7 +305,9 @@
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="StuAuth" Directory_="SHORTCUTDIR" Name="StuAuth" Component_="StuAuth.exe" Target="[#StuAuth.exe_1]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="StuAuth_Dir"/>
+    <ROW Shortcut="StuAuth" Directory_="SHORTCUTDIR" Name="StuAuth" Component_="StuAuth.exe" Target="[#StuAuth.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="StuAuth_Dir"/>
+    <ROW Shortcut="StuAuth1" Directory_="StartMenuFolder" Name="StuAuth" Component_="StuAuth.exe" Target="[#StuAuth.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="StuAuth_Dir"/>
+    <ROW Shortcut="StuAuth1_1" Directory_="DesktopFolder" Name="StuAuth" Component_="StuAuth.exe" Target="[#StuAuth.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="StuAuth_Dir"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>

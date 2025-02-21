@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Navigation;
 using StuAuth;
-using Newtonsoft.Json;
 using System.Text;
 using System.ComponentModel;
 using StuAuth.Classe;

@@ -1,23 +1,13 @@
 ﻿using StuAuth.Classe;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 
@@ -53,14 +43,17 @@ namespace StuAuth.Page
             }
         }
 
-        private string GetLocalIPAddress()
+        private void RegisterIPA(object sender, EventArgs e)
         {
-            string hostName = Dns.GetHostName();
-            IPAddress[] addresses = Dns.GetHostAddresses(hostName);
-
-            return addresses.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString() ?? "IP introuvable";
+            if (IPApp.SelectedItem != null)
+            {
+                IPApplication = IPApp.SelectedItem.ToString();
+                Properties.Settings.Default.IPApplication = IPApplication;
+                Properties.Settings.Default.Save();
+            }
         }
 
+        #region Control
         private void Serveur(object sender, EventArgs e)
         {
             if (!main.isServerRunning)
@@ -89,14 +82,14 @@ namespace StuAuth.Page
 
         private async void Synchro_Click(object sender, EventArgs e)
         {
-            string answer = await DisplayActionSheet(
+            MessageBoxResult answer = MessageBox.Show(
+            "Voulez-vous importer les données ?",
             "Synchronisation",
-            "Annuler",
-            null,
-            "Importer"
+            MessageBoxButton.YesNoCancel,
+            MessageBoxImage.Question
         );
 
-            if (answer == "Importer")
+            if (answer == MessageBoxResult.Yes)
             {
                 if (!string.IsNullOrWhiteSpace(IPApplication) && IsHostReachable(IPApplication))
                 {
@@ -107,8 +100,8 @@ namespace StuAuth.Page
                         Back.IsEnabled = false;
                         Serv.IsEnabled = false;
                         Synchro.IsEnabled = false;
-                        LoadingProgressBar.IsVisible = true;
-                        LoadingProgressBar.Progress = 0;
+                        LoadingProgressBar.Visibility = Visibility.Visible;
+                        LoadingProgressBar.Value = 0;
 
                         var data = JsonSerializer.Deserialize<Dictionary<string, string>>(response);
 
@@ -134,14 +127,18 @@ namespace StuAuth.Page
                             formattedAccounts = ($"{folder}\\{label};{otpUri}");
                             await Task.Run(() => accountManager.AddAccount(formattedAccounts));
 
-                            LoadingProgressBar.Progress = (double)(i + 1) / totalAccounts;
+                            Dispatcher.Invoke(() =>
+                            {
+                                LoadingProgressBar.Value = ((double)(i + 1) / totalAccounts) * 100;
+                            });
+                            await Task.Delay(100);
                         }
                         
-                        await Task.Delay(7000);
+                        await Task.Delay(1000);
                         Synchro.IsEnabled = true;
                         Serv.IsEnabled = true;
                         Back.IsEnabled = true;
-                        LoadingProgressBar.IsVisible = false;
+                        LoadingProgressBar.Visibility = Visibility.Hidden;
                         NavigationService.GoBack();
                     }
                     catch (Exception ex)
@@ -171,18 +168,18 @@ namespace StuAuth.Page
                 }
             }
         }
+        #endregion
 
-        private void RegisterIPA(object sender, EventArgs e)
+        #region Reseau
+        private string GetLocalIPAddress()
         {
-            if (IPApp.SelectedItem != null)
-            {
-                IPApplication = IPApp.SelectedItem.ToString();
-                Properties.Settings.Default.IPApplication = IPApplication;
-                Properties.Settings.Default.Save();
-            }
+            string hostName = Dns.GetHostName();
+            IPAddress[] addresses = Dns.GetHostAddresses(hostName);
+
+            return addresses.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString() ?? "IP introuvable";
         }
 
-        #region Scan reseau
+
         private bool IsValidIPAddress(string ipAddress)
         {
             string pattern = @"^(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\."
@@ -202,30 +199,14 @@ namespace StuAuth.Page
             }
 
             await Task.WhenAll(tasks);
-        }
 
-        private async Task PingHost(string ipAddress)
-        {
-            try
+            List<string> arpDevices = GetAllConnectedDevices(subnet);
+            foreach (string ip in arpDevices)
             {
-                using (Ping ping = new Ping())
+                if(!listIPA.Contains(ip))
                 {
-                    PingReply reply = await ping.SendPingAsync(ipAddress, 500);
-
-                    if (reply.Status == IPStatus.Success)
-                    {
-                        string hostName = GetHostName(ipAddress);
-                        Debug.WriteLine(ipAddress);
-                        Dispatcher.Invoke(() =>
-                        {
-                            listIPA.Add(ipAddress);                              
-                        });
-                    }
+                    listIPA.Add(ip);
                 }
-            }
-            catch
-            {
-                Debug.WriteLine($"Erreur lors du ping de {ipAddress}");
             }
         }
 
@@ -241,7 +222,67 @@ namespace StuAuth.Page
                 return "Nom d'hôte introuvable";
             }
         }
-        #endregion
+
+        private async Task PingHost(string ipAddress)
+        {
+            try
+            {
+                using (Ping ping = new Ping())
+                {
+                    PingReply reply = await ping.SendPingAsync(ipAddress, 500);
+
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        string hostName = GetHostName(ipAddress);
+                        Dispatcher.Invoke(() =>
+                        {
+                            listIPA.Add(ipAddress);
+                        });
+                    }
+                }
+            }
+            catch
+            {
+                Debug.WriteLine($"Erreur lors du ping de {ipAddress}");
+            }
+        }
+        
+        private List<string> GetAllConnectedDevices(string subnet)
+        {
+            List<string> devices = new List<string>();
+
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "arp";
+                p.StartInfo.Arguments = "-a";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+
+                string output = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();
+
+                string pattern = @"(\d+\.\d+\.\d+\.\d+)\s+([a-fA-F0-9:-]+)";
+                foreach (Match match in Regex.Matches(output, pattern))
+                {
+                    string ip = match.Groups[1].Value;
+
+                    if (ip.StartsWith(subnet + "."))
+                    {
+                        devices.Add(ip);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Erreur lors de la récupération des appareils via ARP : " + ex.Message);
+            }
+
+            return devices;
+        }
+
 
         private async Task<string> SendRequestAsync(string endpoint, string method, string jsonData = null)
         {
@@ -270,7 +311,7 @@ namespace StuAuth.Page
         static string ExtractLabelFromOTP(string otpUri)
         {
             var match = Regex.Match(otpUri, @"otpauth://totp/([^?]+)");
-            return match.Success ? match.Groups[1].Value : "Unknown";
+            return match.Success ? match.Groups[1].Value.Replace("/", "") : "Unknown";
         }
 
         private bool IsHostReachable(string ip)
@@ -288,5 +329,6 @@ namespace StuAuth.Page
                 return false;
             }
         }
+        #endregion
     }
 }

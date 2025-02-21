@@ -10,16 +10,10 @@ using ListViewItem = System.Windows.Controls.ListViewItem;
 using ZXing;
 using ZXing.Windows.Compatibility;
 using ZXing.Common;
-using Newtonsoft.Json;
-using System.Text;
 using StuAuth.Classe;
 using System.Diagnostics;
-using System;
-using System.Windows.Shapes;
 using Path = System.IO.Path;
 using MessageBox = System.Windows.MessageBox;
-using System.Runtime.Intrinsics.Arm;
-using Microsoft.VisualBasic.Devices;
 using StuAuth.Page;
 #endregion
 
