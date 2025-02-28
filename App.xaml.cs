@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows;
 using System.IO;
+using System.Diagnostics;
 
 namespace MFA
 {
@@ -53,7 +54,23 @@ namespace MFA
         {
             string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
             string filePath = System.IO.Path.Combine(appDirectory, "Account_decrypted.dat");
-            File.Delete(filePath);
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            string filePath2 = System.IO.Path.Combine(appDirectory, "Account.dat");
+
+            if (File.Exists(filePath2))
+            {
+                long fileSize = new FileInfo(filePath2).Length;
+
+                if (fileSize == 0 && File.Exists(filePath2))
+                {
+                    File.Delete(filePath2);
+                }
+            }
         }
         #endregion
     }

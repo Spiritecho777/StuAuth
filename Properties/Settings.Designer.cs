@@ -25,7 +25,7 @@ namespace StuAuth.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("79:gzV-yC37V5D7GQi65$B~Nh/)xj_Hpw[5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string KeyPass {
             get {
                 return ((string)(this["KeyPass"]));
