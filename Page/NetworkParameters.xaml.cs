@@ -87,68 +87,76 @@ namespace StuAuth.Page
             "Synchronisation",
             MessageBoxButton.YesNoCancel,
             MessageBoxImage.Question
-        );
-
+            );
             if (answer == MessageBoxResult.Yes)
             {
                 if (!string.IsNullOrWhiteSpace(IPApplication) && IsHostReachable(IPApplication))
                 {
                     string response = await SendRequestAsync("/", "GET");
-
-                    try
+                    if (response != null)
                     {
-                        Back.IsEnabled = false;
-                        Serv.IsEnabled = false;
-                        Synchro.IsEnabled = false;
-                        LoadingProgressBar.Visibility = Visibility.Visible;
-                        LoadingProgressBar.Value = 0;
-
-                        var data = JsonSerializer.Deserialize<Dictionary<string, string>>(response);
-
-                        if (data == null || !data.ContainsKey("Accounts") || !data.ContainsKey("Folder"))
+                        try
                         {
-                            Console.WriteLine(" Erreur: Données manquantes.");
-                            return;
-                        }
+                            Back.IsEnabled = false;
+                            Serv.IsEnabled = false;
+                            Synchro.IsEnabled = false;
+                            LoadingProgressBar.Visibility = Visibility.Visible;
+                            LoadingProgressBar.Value = 0;
 
-                        string[] accounts = data["Accounts"].Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                        string[] folders = data["Folder"].Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                            var data = JsonSerializer.Deserialize<Dictionary<string, string>>(response);
 
-                        string formattedAccounts;
-                        int totalAccounts = accounts.Length;
-
-                        for (int i = 0; i < totalAccounts; i++)
-                        {
-                            string folder = i < folders.Length ? folders[i].Trim() : "Uncategorized";
-                            string otpUri = accounts[i].Trim();
-
-                            string label = ExtractLabelFromOTP(otpUri);
-
-                            formattedAccounts = ($"{folder}\\{label};{otpUri}");
-                            await Task.Run(() => accountManager.AddAccount(formattedAccounts));
-
-                            Dispatcher.Invoke(() =>
+                            if (data == null || !data.ContainsKey("Accounts") || !data.ContainsKey("Folder"))
                             {
-                                LoadingProgressBar.Value = ((double)(i + 1) / totalAccounts) * 100;
-                            });
-                            await Task.Delay(100);
+                                Console.WriteLine(" Erreur: Données manquantes.");
+                                return;
+                            }
+
+                            string[] accounts = data["Accounts"].Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                            string[] folders = data["Folder"].Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                            string formattedAccounts;
+                            int totalAccounts = accounts.Length;
+
+                            List<string> comptesExistants = accountManager.GetAllOtpUri();
+
+                            for (int i = 0; i < totalAccounts; i++)
+                            {
+                                string folder = i < folders.Length ? folders[i].Trim() : "Uncategorized";
+                                string otpUri = accounts[i].Trim();
+
+                                bool alreadyExists = comptesExistants.Any(ligne => otpUri.Contains(ligne));
+
+                                if (!alreadyExists)
+                                {
+                                    string label = ExtractLabelFromOTP(otpUri);
+                                    formattedAccounts = ($"{folder}\\{label};{otpUri}");
+
+                                    await Task.Run(() => accountManager.AddAccount(formattedAccounts));
+                                } 
+
+                                Dispatcher.Invoke(() =>
+                                {
+                                    LoadingProgressBar.Value = ((double)(i + 1) / totalAccounts) * 100;
+                                });
+                                await Task.Delay(100);
+                            }
+
+                            await Task.Delay(1000);
+                            Synchro.IsEnabled = true;
+                            Serv.IsEnabled = true;
+                            Back.IsEnabled = true;
+                            LoadingProgressBar.Visibility = Visibility.Hidden;
+                            NavigationService.GoBack();
                         }
-                        
-                        await Task.Delay(1000);
-                        Synchro.IsEnabled = true;
-                        Serv.IsEnabled = true;
-                        Back.IsEnabled = true;
-                        LoadingProgressBar.Visibility = Visibility.Hidden;
-                        NavigationService.GoBack();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine("Erreur de parsing JSON: " + ex.Message);
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine("Erreur de parsing JSON: " + ex.Message);
+                        }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Erreur", "L'adresse IP n'est pas valide ou inaccessible.");
+                    MessageBox.Show("L'adresse IP n'est pas valide ou inaccessible.", "Erreur");
                 }
             }
         }
@@ -164,7 +172,7 @@ namespace StuAuth.Page
                 }
                 else
                 {
-                    MessageBox.Show("Erreur", "Veuillez rentrer un réseau correct exemple: 192.168.1");
+                    MessageBox.Show("Veuillez rentrer un réseau correct exemple: 192.168.1", "Erreur");
                 }
             }
         }
@@ -178,7 +186,6 @@ namespace StuAuth.Page
 
             return addresses.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString() ?? "IP introuvable";
         }
-
 
         private bool IsValidIPAddress(string ipAddress)
         {
@@ -283,26 +290,43 @@ namespace StuAuth.Page
             return devices;
         }
 
-
         private async Task<string> SendRequestAsync(string endpoint, string method, string jsonData = null)
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri($"http://{IPApplication}:19755/");
-
-                HttpResponseMessage response = null;
-
-                if (method == "GET")
+                try
                 {
-                    response = await client.GetAsync(endpoint);
+                    client.BaseAddress = new Uri($"http://{IPApplication}:19755/");
+
+                    HttpResponseMessage response = null;
+
+                    if (method == "GET")
+                    {
+                        response = await client.GetAsync(endpoint);
+                    }
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
-
-                if (response.IsSuccessStatusCode)
+                catch (HttpRequestException ex)
                 {
-                    return await response.Content.ReadAsStringAsync();
+                    MessageBox.Show("Le serveur n'est pas démarrer.", "Erreur");
+                    return null;
                 }
-                else
+                catch (TaskCanceledException ex)
                 {
+                    MessageBox.Show($"Requête expirée : {ex.Message}");
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erreur inattendue : {ex.Message}");
                     return null;
                 }
             }

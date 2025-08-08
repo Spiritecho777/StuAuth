@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Intrinsics.Arm;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Shapes;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 namespace StuAuth.Classe
@@ -148,6 +150,32 @@ namespace StuAuth.Classe
             }
             return accounts;
         }
+
+        public List<string> GetAllOtpUri()
+        {
+            var otps = new List<string>();
+
+            if (FileExists())
+            {
+                var lines = ReadLines();
+
+                foreach (var line in lines)
+                {
+                    string[] parts = line.Split(';');
+                    if (parts.Length == 2)
+                    {
+                        string otpUri = parts[1];
+
+                        var match = Regex.Match(otpUri, @"secret=([^&]+)");
+                        if (match.Success)
+                        {
+                            otps.Add(match.Groups[1].Value);
+                        }
+                    }
+                }
+            }
+            return otps;
+        }
         #endregion
 
         #region Manipulations de données
@@ -194,7 +222,7 @@ namespace StuAuth.Classe
             Chiffrement();
         }
 
-        public bool DeleteFolderOrAccount(string name, bool isFolder)
+        public bool DeleteFolderOrAccount(string name, bool isFolder, bool force = false)
         {
             if (!FileExists()) return false;
 
@@ -211,10 +239,13 @@ namespace StuAuth.Classe
                     string[] folderParts = parts[0].Split('\\');
                     if (folderParts[0] == name)
                     {
-                        if (!string.IsNullOrEmpty(parts[1]))
+                        bool hasAccount = !string.IsNullOrEmpty(parts[1]);
+
+                        if (hasAccount && !force)
                         {
-                            throw new InvalidOperationException("Le dossier contient des comptes et ne peut pas être supprimé.");
+                            return false;
                         }
+
                         lines.RemoveAt(i);
                         itemDeleted = true;
                     }

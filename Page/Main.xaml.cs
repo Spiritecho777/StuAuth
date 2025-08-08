@@ -236,10 +236,32 @@ namespace StuAuth
                     }
                     else
                     {
-                        if (accountManager.DeleteFolderOrAccount(name, isFolder: true))
+                        bool deleted = accountManager.DeleteFolderOrAccount(name, isFolder: true, force: false);
+
+                        if (!deleted)
+                        {
+                            var confirm = MessageBox.Show($"Le dossier '{name}' contient des comptes. Voulez-vous le supprimer ainsi que tous ses comptes ?",
+                                "Confirmation de suppression",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Warning
+                            );
+
+                            if (confirm == MessageBoxResult.Yes)
+                            {
+                                if (accountManager.DeleteFolderOrAccount(name, isFolder: true, force: true))
+                                {
+                                    MessageBox.Show($"Le dossier '{name}' et tous ses comptes ont été supprimés.");
+                                }
+                            }
+                        }
+                        else
                         {
                             MessageBox.Show($"Le dossier '{name}' a été supprimé avec succès.");
                         }
+                        /*if (accountManager.DeleteFolderOrAccount(name, isFolder: true))
+                        {
+                            MessageBox.Show($"Le dossier '{name}' a été supprimé avec succès.");
+                        }*/
                     }
 
                     UpdateFolderList();
