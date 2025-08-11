@@ -117,4 +117,122 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmer</value>
+  </data>
+  <data name="ErrorExport" xml:space="preserve">
+    <value>Il y a un dossier vide veuillez le supprimer avant l'export</value>
+  </data>
+  <data name="ErrorExportQR" xml:space="preserve">
+    <value>Le répertoire {0} n'a pas pu être créé.</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ExportQR" xml:space="preserve">
+    <value>Enregistrer les QR codes</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+    <comment>Import</comment>
+  </data>
+  <data name="IntAdd" xml:space="preserve">
+    <value>Entrez le nom du dossier</value>
+  </data>
+  <data name="IntAppVersion" xml:space="preserve">
+    <value>Numéro de version actuel : </value>
+  </data>
+  <data name="IntDeleteAccount" xml:space="preserve">
+    <value>Le compte {0} a été supprimé avec succès.</value>
+  </data>
+  <data name="IntDeleteFolder1" xml:space="preserve">
+    <value>Le dossier {0} contient des comptes. Voulez-vous le supprimer ainsi que tous ses comptes ?</value>
+  </data>
+  <data name="IntDeleteFolder2" xml:space="preserve">
+    <value>Confirmation de suppression</value>
+  </data>
+  <data name="IntDeleteFolder3" xml:space="preserve">
+    <value>Le dossier {0} et tous ses comptes ont été supprimés.</value>
+  </data>
+  <data name="IntDeleteFolder4" xml:space="preserve">
+    <value>Le dossier {0} a été supprimé avec succès.</value>
+  </data>
+  <data name="IntExport1" xml:space="preserve">
+    <value>Exporter vers fichier texte</value>
+  </data>
+  <data name="IntExport2" xml:space="preserve">
+    <value>Exporter vers fichier QRCode</value>
+  </data>
+  <data name="Txt1" xml:space="preserve">
+    <value>Fichiers texte (*.txt)|*.txt</value>
+  </data>
+  <data name="Txt2" xml:space="preserve">
+    <value>Sélectionnez un fichier texte</value>
+  </data>
+  <data name="ErrorIntImport" xml:space="preserve">
+    <value>Il y a une erreur dans votre fichier d'export veuillez vérifier et recommencer</value>
+  </data>
+  <data name="IntRename" xml:space="preserve">
+    <value>Entrez le nouveau nom</value>
+  </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>QRCode</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Renommée</value>
+  </data>
+  <data name="Secret Key" xml:space="preserve">
+    <value>Clé Secrète</value>
+  </data>
+  <data name="Server" xml:space="preserve">
+    <value>Serveur</value>
+  </data>
+  <data name="Synchronization" xml:space="preserve">
+    <value>Synchronisation</value>
+  </data>
+  <data name="TTDelete" xml:space="preserve">
+    <value>Clique droit sur le compte que vous souhaitez supprimer</value>
+  </data>
+  <data name="TTHorloge" xml:space="preserve">
+    <value>Synchronisation de l'horloge</value>
+  </data>
+  <data name="TTRename" xml:space="preserve">
+    <value>Clique droit sur le compte que vous souhaitez renommer</value>
+  </data>
+  <data name="TTServer" xml:space="preserve">
+    <value>Connection pour l'extension web et import/export</value>
+  </data>
+  <data name="IntNewAccount1" xml:space="preserve">
+    <value>Pas de QR code trouver</value>
+  </data>
+  <data name="IntNewAccount2" xml:space="preserve">
+    <value>La clé que vous avez rentrez n'est pas correct</value>
+  </data>
+  <data name="IntNewAccountP2" xml:space="preserve">
+    <value>Veuillez entrez un nom de compte</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="IntNP1" xml:space="preserve">
+    <value>Voulez-vous importer les données ?</value>
+  </data>
+  <data name="IntNP2" xml:space="preserve">
+    <value>L'adresse IP n'est pas valide ou inaccessible.</value>
+  </data>
+  <data name="IntNP3" xml:space="preserve">
+    <value>Veuillez rentrer un réseau correct exemple: 192.168.1</value>
+  </data>
+  <data name="IntNP4" xml:space="preserve">
+    <value>Le serveur n'est pas démarrer.</value>
+  </data>
 </root>

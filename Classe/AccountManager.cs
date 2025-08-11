@@ -36,13 +36,20 @@ namespace StuAuth.Classe
             }
             else
             {
+                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.KeyPass))
+                {
+                    Properties.Settings.Default.KeyPass = Guid.NewGuid().ToString();
+                    Properties.Settings.Default.Save();
+                }
                 CreateFile();
+                Chiffrement();
             }
         }
 
         private void CreateFile()
         {
             File.WriteAllText(filePathE, string.Empty);
+            File.WriteAllText(filePath, string.Empty);
         }
 
         private void Chiffrement()

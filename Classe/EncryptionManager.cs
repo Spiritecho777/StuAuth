@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace StuAuth.Classe
 {
@@ -11,7 +12,7 @@ namespace StuAuth.Classe
         private string Password = Properties.Settings.Default.KeyPass; // Changez ceci par une clé secrète sécurisée
         private const int KeySize = 256; // Taille de la clé en bits
         private const int Iterations = 100_000; // Nombre d'itérations pour dériver la clé
-
+        
         // Méthode pour dériver une clé AES à partir d'un mot de passe
         private byte[] DeriveKey(string password, byte[] salt)
         {
@@ -51,42 +52,59 @@ namespace StuAuth.Classe
 
         public void DecryptFromFile(string inputFilePath, string outputFilePath)
         {
-            using (FileStream fileStream = new FileStream(inputFilePath, FileMode.Open))
+            try
             {
-                using (Aes aes = Aes.Create())
+                Debug.WriteLine(Password);
+                using (FileStream fileStream = new FileStream(inputFilePath, FileMode.Open))
                 {
-                    // Lire le sel (IV) depuis le fichier
-                    byte[] salt = new byte[aes.BlockSize / 8];
-                    int bytesRead = fileStream.Read(salt, 0, salt.Length);
-                    if (bytesRead != salt.Length)
+                    using (Aes aes = Aes.Create())
                     {
-                        throw new CryptographicException("Impossible de lire le sel (IV) du fichier.");
-                    }
-
-                    aes.Key = DeriveKey(Password, salt);
-                    aes.IV = salt;
-
-                    // Déchiffrer les données restantes
-                    using (CryptoStream cryptoStream = new CryptoStream(fileStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
-                    using (StreamReader reader = new StreamReader(cryptoStream))
-                    {
-                        string decryptedData = reader.ReadToEnd();
-
-                        // Supprimer le point-virgule (;) s'il est au début de la chaîne déchiffrée
-                        if (decryptedData.StartsWith(";"))
+                        // Lire le sel (IV) depuis le fichier
+                        byte[] salt = new byte[aes.BlockSize / 8];
+                        int bytesRead = fileStream.Read(salt, 0, salt.Length);
+                        if (bytesRead != salt.Length)
                         {
-                            decryptedData = decryptedData.Substring(1);
+                            throw new CryptographicException("Impossible de lire le sel (IV) du fichier.");
                         }
 
-                        // Ajouter les données déchiffrées au fichier
-                        using (StreamWriter writer = new StreamWriter(outputFilePath, false)) // false pour écraser, pas append
+                        aes.Key = DeriveKey(Password, salt);
+                        aes.IV = salt;
+
+                        // Déchiffrer les données restantes
+                        using (CryptoStream cryptoStream = new CryptoStream(fileStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                        using (StreamReader reader = new StreamReader(cryptoStream))
                         {
-                            writer.WriteLine(decryptedData); // Écrit le contenu déchiffré sans le ';'
+                            string decryptedData = reader.ReadToEnd();
+
+                            // Supprimer le point-virgule (;) s'il est au début de la chaîne déchiffrée
+                            if (decryptedData.StartsWith(";"))
+                            {
+                                decryptedData = decryptedData.Substring(1);
+                            }
+
+                            // Ajouter les données déchiffrées au fichier
+                            using (StreamWriter writer = new StreamWriter(outputFilePath, false)) // false pour écraser, pas append
+                            {
+                                writer.WriteLine(decryptedData); // Écrit le contenu déchiffré sans le ';'
+                            }
                         }
                     }
                 }
             }
-        }
+            catch (CryptographicException ex)
+            {
+                System.Windows.MessageBox.Show(
+                    "Erreur : Le fichier de données n'est pas lisible sur cette machine.\n" +
+                    "Il peut être corrompu ou la clé est incorrecte.\n\n" +
+                    "L'application va maintenant se fermer.",
+                    "Erreur de décryption",
+                    System.Windows.MessageBoxButton.OK,
+                    System.Windows.MessageBoxImage.Error);
 
+                System.Windows.Application.Current.Shutdown();
+
+                Debug.WriteLine("Erreur de décryption : " + ex.Message);
+            }
+        }
     }
 }

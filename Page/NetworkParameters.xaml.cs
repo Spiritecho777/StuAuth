@@ -1,15 +1,16 @@
 ﻿using StuAuth.Classe;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Net.NetworkInformation;
 using System.Net;
+using System.Net.Http;
+using System.Net.NetworkInformation;
+using System.Resources;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
-using System.Collections.ObjectModel;
-using System.Net.Http;
 
 namespace StuAuth.Page
 {
@@ -83,6 +84,7 @@ namespace StuAuth.Page
         private async void Synchro_Click(object sender, EventArgs e)
         {
             MessageBoxResult answer = MessageBox.Show(
+            
             "Voulez-vous importer les données ?",
             "Synchronisation",
             MessageBoxButton.YesNoCancel,
@@ -321,12 +323,12 @@ namespace StuAuth.Page
                 }
                 catch (TaskCanceledException ex)
                 {
-                    MessageBox.Show($"Requête expirée : {ex.Message}");
+                    Console.WriteLine($"Requête expirée : {ex.Message}");
                     return null;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Erreur inattendue : {ex.Message}");
+                    Console.WriteLine($"Erreur inattendue : {ex.Message}");
                     return null;
                 }
             }
