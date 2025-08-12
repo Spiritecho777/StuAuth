@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:StuAuth"
+      xmlns:lang="clr-namespace:StuAuth.Classe"
       mc:Ignorable="d" 
       Title="SelectAccount" Height="610" Width="410" Background="LightGray">
 
@@ -29,7 +30,7 @@
         <Label x:Name="MDP" HorizontalContentAlignment="Center"  HorizontalAlignment="Center" FontSize="50" Height="80" Margin="0,-100,0,0" VerticalAlignment="Center" Width="200"/>
         <Label x:Name="AccountName" HorizontalAlignment="Left" FontSize="20" Height="45" Margin="20,-280,0,0" VerticalAlignment="Center" Width="280"/>
         <Label x:Name="TempsRestant" HorizontalAlignment="Center" FontSize="20" Height="45" Margin="0,50,0,0" VerticalAlignment="Center" Width="35"/>
-        <Button x:Name="back" Content="Retour" Margin="0,30,340,0" Width="50" Click="Back" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="back" Content="{lang:Loc Back}" Margin="0,30,340,0" Width="50" Click="Back" Style="{StaticResource ChargedButton}"/>
         <Button x:Name="Copy" Margin="0,500,50,0" Width="50" Height="50" Click="Copy_Click" Style="{StaticResource ChargedButton}">
             <Image Source="\Icone\CC.png" />
         </Button>

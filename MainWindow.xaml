@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StuAuth"
+        xmlns:lang="clr-namespace:StuAuth.Classe"
         mc:Ignorable="d"
         Title="StuAuth" Height="610" Width="410" Background="LightGray" ResizeMode="CanMinimize">
     <Grid>

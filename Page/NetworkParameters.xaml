@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:StuAuth.Page"
+      xmlns:lang="clr-namespace:StuAuth.Classe"
       mc:Ignorable="d" 
       Title="NetworkParameters"
       Height="610" Width="410" Background="LightGray">
@@ -31,12 +32,12 @@
         <TextBox x:Name="SubApp" Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30" KeyDown="AppNetworkChanged"/>
         <ComboBox x:Name="IPApp"  Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,65" SelectionChanged="RegisterIPA" ItemsSource="{Binding listIPA}"/>
 
-        <Label Content="Serveur" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,125"/>
+        <Label Content="{lang:Loc Server}" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,125"/>
         <Label x:Name="IPServ" Width="385" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,150"/>
 
-        <Button x:Name="Back" Content="Retour" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,240,0,0" Style="{StaticResource ChargedButton}" Click="Back_Click"/>
-        <Button x:Name="Synchro" Content="Synchronisation" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="105,205,0,0" Style="{StaticResource ChargedButton}" Click="Synchro_Click"/>
-        <Button x:Name="Serv" Content="Serveur" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="-105,205,0,0" Style="{StaticResource ChargedButton}" Click="Serveur"/>
+        <Button x:Name="Back" Content="{lang:Loc Back}" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,240,0,0" Style="{StaticResource ChargedButton}" Click="Back_Click"/>
+        <Button x:Name="Synchro" Content="{lang:Loc Synchronization}" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="105,205,0,0" Style="{StaticResource ChargedButton}" Click="Synchro_Click"/>
+        <Button x:Name="Serv" Content="{lang:Loc Server}" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="-105,205,0,0" Style="{StaticResource ChargedButton}" Click="Serveur"/>
 
         <ProgressBar x:Name="LoadingProgressBar" Visibility="Hidden"  Width="385" HorizontalAlignment="Left" Margin="5,0,0,0" Height="13"/>
     </Grid>

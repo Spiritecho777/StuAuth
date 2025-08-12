@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:StuAuth"
+      xmlns:lang="clr-namespace:StuAuth.Classe"
       mc:Ignorable="d" 
       Title="NewAccount2" Height="610" Width="410" Background="LightGray">
 
@@ -27,7 +28,7 @@
     
     <Grid>
         <TextBox x:Name="AccountName" HorizontalAlignment="Center" Height="32" Margin="0,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="350"/>
-        <Button x:Name="Save" Content="Enregistrer" Margin="-80,0,0,50" Width="70" Click="SaveNewAccount" Style="{StaticResource ChargedButton}"/>
-        <Button x:Name="Annuler" Content="Retour" Margin="80,0,0,50" Width="50" Click="Back" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Save" Content="{lang:Loc Register}" Margin="-80,0,0,50" Width="70" Click="SaveNewAccount" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Annuler" Content="{lang:Loc Back}" Margin="80,0,0,50" Width="50" Click="Back" Style="{StaticResource ChargedButton}"/>
     </Grid>
 </Page>

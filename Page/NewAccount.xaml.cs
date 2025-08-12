@@ -1,19 +1,20 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
+﻿using Google.Protobuf;
+using Migration;
+using StuAuth.Classe;
 using System.Drawing;
+using System.Text;
+using System.Web;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
-using Point = System.Drawing.Point;
-using Rectangle = System.Drawing.Rectangle;
-using Color = System.Drawing.Color;
-using Cursors = System.Windows.Forms.Cursors;
+using System.Windows.Forms.Design;
+using System.Windows.Navigation;
 using ZXing;
 using ZXing.Windows.Compatibility;
-using System.Text;
-using Google.Protobuf;
-using System.Web;
-using Migration;
-using System.Windows.Forms.Design;
+using Color = System.Drawing.Color;
+using Cursors = System.Windows.Forms.Cursors;
+using Point = System.Drawing.Point;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace StuAuth
 {
@@ -35,6 +36,7 @@ namespace StuAuth
 
         private string DecodeQRCode(Bitmap bitmap)
         {
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
             BarcodeReader reader = new BarcodeReader();
 
             Result result = reader.Decode(bitmap);
@@ -73,7 +75,7 @@ namespace StuAuth
             else
             {
                 main.Visibility = Visibility.Visible;
-                System.Windows.MessageBox.Show("Pas de QR code trouver");
+                System.Windows.MessageBox.Show(loc["IntNewAccount1"]);
                 return "Pas de QR code trouver";
             }
         }
@@ -93,6 +95,7 @@ namespace StuAuth
 
         private void Confirm(object sender, RoutedEventArgs e)
         {
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
             string normalizeText = SecretKey.Text.Normalize(NormalizationForm.FormD);
             if (SecretKey.Text == normalizeText && SecretKey.Text.All(char.IsLetterOrDigit))
             {
@@ -101,7 +104,7 @@ namespace StuAuth
             }
             else
             {
-                System.Windows.MessageBox.Show("La clé que vous avez rentrez n'est pas correct");
+                System.Windows.MessageBox.Show(loc["IntNewAccount2"]);
                 SecretKey.Clear();
             }
         }

@@ -1,7 +1,7 @@
-﻿using MFA;
-using StuAuth.Classe;
+﻿using StuAuth.Classe;
 using System.IO;
 using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Navigation;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -13,6 +13,7 @@ namespace StuAuth
         Main menu;
         List<string> Account = new List<string>();
         string fName;
+
         public Import(List<string> AccountList, Main window, string folderName)
         {
             InitializeComponent();
@@ -32,9 +33,11 @@ namespace StuAuth
 
         private void Initialisation()
         {
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
+
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Fichiers texte (*.txt)|*.txt";
-            ofd.Title = "Sélectionnez un fichier texte";
+            ofd.Filter = loc["Txt1"];
+            ofd.Title = loc["Txt2"];
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -110,7 +113,8 @@ namespace StuAuth
                             }
                             catch
                             {
-                                System.Windows.MessageBox.Show("Il y a une erreur dans votre fichier d'export veuillez vérifier et recommencer");
+                                var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
+                                System.Windows.MessageBox.Show(loc["ErrorIntImpor"]);
                             }
                         }
                     }

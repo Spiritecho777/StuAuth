@@ -117,4 +117,130 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ErrorExport" xml:space="preserve">
+    <value>There is an empty folder, please delete it before exporting.</value>
+  </data>
+  <data name="ErrorExportQR" xml:space="preserve">
+    <value>The directory {0} could not be created.</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ExportQR" xml:space="preserve">
+    <value>Save QR codes</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="IntAdd" xml:space="preserve">
+    <value>Enter the folder name</value>
+  </data>
+  <data name="IntAppVersion" xml:space="preserve">
+    <value>Current version number: </value>
+  </data>
+  <data name="IntDeleteAccount" xml:space="preserve">
+    <value>Account {0} has been successfully deleted.</value>
+  </data>
+  <data name="IntDeleteFolder1" xml:space="preserve">
+    <value>The folder {0} contains accounts. Do you want to delete it and all its accounts?</value>
+  </data>
+  <data name="IntDeleteFolder2" xml:space="preserve">
+    <value>Deletion confirmation</value>
+  </data>
+  <data name="IntDeleteFolder3" xml:space="preserve">
+    <value>The folder {0} and all its accounts have been deleted.</value>
+  </data>
+  <data name="IntDeleteFolder4" xml:space="preserve">
+    <value>The folder {0} has been successfully deleted.</value>
+  </data>
+  <data name="IntExport1" xml:space="preserve">
+    <value>Export to text file</value>
+  </data>
+  <data name="IntExport2" xml:space="preserve">
+    <value>Export to QRCode file</value>
+  </data>
+  <data name="Txt1" xml:space="preserve">
+    <value>Text files (*.txt)|*.txt</value>
+  </data>
+  <data name="Txt2" xml:space="preserve">
+    <value>Select a text file</value>
+  </data>
+  <data name="ErrorIntImport" xml:space="preserve">
+    <value>There is an error in your export file, please check and try again.</value>
+  </data>
+  <data name="IntRename" xml:space="preserve">
+    <value>Enter the new name</value>
+  </data>
+  <data name="QRCode" xml:space="preserve">
+    <value>QRCode</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Secret Key" xml:space="preserve">
+    <value>Secret Key</value>
+  </data>
+  <data name="Server" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="Synchronization" xml:space="preserve">
+    <value>Synchronization</value>
+  </data>
+  <data name="TTDelete" xml:space="preserve">
+    <value>Right click on the account you want to delete</value>
+  </data>
+  <data name="TTHorloge" xml:space="preserve">
+    <value>Clock synchronization</value>
+  </data>
+  <data name="TTRename" xml:space="preserve">
+    <value>Right click on the account you want to rename</value>
+  </data>
+  <data name="TTServer" xml:space="preserve">
+    <value>Connection for web extension and import/export</value>
+  </data>
+  <data name="IntNewAccount1" xml:space="preserve">
+    <value>No QR code found</value>
+  </data>
+  <data name="IntNewAccount2" xml:space="preserve">
+    <value>The key you entered is not correct.</value>
+  </data>
+  <data name="IntNewAccountP2" xml:space="preserve">
+    <value>Please enter an account name</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="IntNP1" xml:space="preserve">
+    <value>Do you want to import the data?</value>
+  </data>
+  <data name="IntNP2" xml:space="preserve">
+    <value>The IP address is invalid or unreachable.</value>
+  </data>
+  <data name="IntNP3" xml:space="preserve">
+    <value>Please enter a correct network example: 192.168.1</value>
+  </data>
+  <data name="IntNP4" xml:space="preserve">
+    <value>The server is not started.</value>
+  </data>
+  <data name="App1" xml:space="preserve">
+    <value>The application is already running.</value>
+  </data>
+  <data name="Encryption1" xml:space="preserve">
+    <value>Error: The data file is not readable on this machine. It may be corrupted or the key is incorrect. The application will now close.</value>
+  </data>
+  <data name="Encryption2" xml:space="preserve">
+    <value>Decryption error</value>
+  </data>
 </root>

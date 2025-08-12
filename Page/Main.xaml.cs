@@ -1,20 +1,21 @@
 ﻿#region
-using System.IO;
+using StuAuth.Classe;
+using StuAuth.Page;
+using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Forms;
+using System.Windows.Media;
+using ZXing;
+using ZXing.Common;
+using ZXing.Windows.Compatibility;
 using Button = System.Windows.Controls.Button;
 using ListViewItem = System.Windows.Controls.ListViewItem;
-using ZXing;
-using ZXing.Windows.Compatibility;
-using ZXing.Common;
-using StuAuth.Classe;
-using System.Diagnostics;
-using Path = System.IO.Path;
 using MessageBox = System.Windows.MessageBox;
-using StuAuth.Page;
+using Path = System.IO.Path;
 #endregion
 
 namespace StuAuth
@@ -34,6 +35,19 @@ namespace StuAuth
         public Main(MainWindow window)
         {
             InitializeComponent();
+            //Choix de la langue
+            switch (Properties.Settings.Default.LangCode)
+            {
+                case "en":
+                    Language.SelectedIndex = 0;
+                    break;
+                case "fr":
+                    Language.SelectedIndex = 1;
+                    break;
+                default:
+                    Language.SelectedIndex = 0;
+                    break;
+            }
             windows = window;
             server = new HttpServer(this);
             UpdateFolderList();
@@ -201,6 +215,7 @@ namespace StuAuth
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
             if (windows != null) //Compte
             {
                 string Folder = FolderName.Content.ToString();
@@ -210,7 +225,7 @@ namespace StuAuth
                 }
                 else //Dossier
                 {
-                    string FolderN = Microsoft.VisualBasic.Interaction.InputBox("Entrez le nom du dossier");
+                    string FolderN = Microsoft.VisualBasic.Interaction.InputBox(loc["IntAdd"]);
 
                     accountManager.Add(FolderN);
                     UpdateFolderList();
@@ -220,6 +235,7 @@ namespace StuAuth
 
         private void Del_Click(object sender, RoutedEventArgs e)
         {
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
             string folder = FolderName.Content?.ToString();
             if (AccountList.SelectedItem is ListViewItem selectedItem && selectedItem.Content is Button accountButton)
             {
@@ -231,7 +247,7 @@ namespace StuAuth
                     {
                         if (accountManager.DeleteFolderOrAccount(name, isFolder: false))
                         {
-                            MessageBox.Show($"Le compte '{name}' a été supprimé avec succès.");
+                            MessageBox.Show(loc["IntDeleteAccount",name]);
                         }
                     }
                     else
@@ -240,8 +256,8 @@ namespace StuAuth
 
                         if (!deleted)
                         {
-                            var confirm = MessageBox.Show($"Le dossier '{name}' contient des comptes. Voulez-vous le supprimer ainsi que tous ses comptes ?",
-                                "Confirmation de suppression",
+                            var confirm = MessageBox.Show(loc["IntDeleteFolder1",name],
+                                loc["IntDeleteFolder2"],
                                 MessageBoxButton.YesNo,
                                 MessageBoxImage.Warning
                             );
@@ -250,18 +266,14 @@ namespace StuAuth
                             {
                                 if (accountManager.DeleteFolderOrAccount(name, isFolder: true, force: true))
                                 {
-                                    MessageBox.Show($"Le dossier '{name}' et tous ses comptes ont été supprimés.");
+                                    MessageBox.Show(loc["IntDeleteFolder3",name]);
                                 }
                             }
                         }
                         else
                         {
-                            MessageBox.Show($"Le dossier '{name}' a été supprimé avec succès.");
+                            MessageBox.Show(loc["IntDeleteFolder4", name]);
                         }
-                        /*if (accountManager.DeleteFolderOrAccount(name, isFolder: true))
-                        {
-                            MessageBox.Show($"Le dossier '{name}' a été supprimé avec succès.");
-                        }*/
                     }
 
                     UpdateFolderList();
@@ -275,16 +287,18 @@ namespace StuAuth
 
         private void Help_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("Numero de version actuel : " + System.Windows.Forms.Application.ProductVersion);
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
+            System.Windows.MessageBox.Show(loc["IntAppVersion"] + System.Windows.Forms.Application.ProductVersion);
         }
 
         private void rename_Click(object sender, RoutedEventArgs e)
         {
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
             string folder = FolderName.Content?.ToString();
             if (AccountList.SelectedItem is ListViewItem selectedItem && selectedItem.Content is Button accountButton)
             {
                 string oldName = accountButton.Content.ToString();
-                string newName = Microsoft.VisualBasic.Interaction.InputBox("Entrez le nouveau nom");
+                string newName = Microsoft.VisualBasic.Interaction.InputBox(loc["IntRename"]);
 
                 if (!string.IsNullOrEmpty(newName))
                 {
@@ -304,15 +318,16 @@ namespace StuAuth
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
             ContextMenu contextMenu = new ContextMenu();
 
             MenuItem menuItem1 = new MenuItem();
-            menuItem1.Header = "Exporter vers fichier texte";
+            menuItem1.Header = loc["IntExport1"];
             menuItem1.Click += ExportToTexte;
             contextMenu.Items.Add(menuItem1);
 
             MenuItem menuItem2 = new MenuItem();
-            menuItem2.Header = "Exporter vers fichier QRCode";
+            menuItem2.Header = loc["IntExport2"];
             menuItem2.Click += ExportToQRCode;
             contextMenu.Items.Add(menuItem2);
 
@@ -336,11 +351,26 @@ namespace StuAuth
 
             ExecuteCommand(startServiceCommand,resyncCommand);
         }
+
+        private void LanguageSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Language.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string langCode = selectedItem.Tag.ToString();
+
+                var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
+                loc.Culture = new CultureInfo(langCode);
+
+                Properties.Settings.Default.LangCode = langCode;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
 
         #region Méthode
         private void ExportToTexte(object sender, RoutedEventArgs e)
         {
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
             bool isNotAllowed=false;
             string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
             string filePath = System.IO.Path.Combine(appDirectory, "Account_decrypted.dat");
@@ -351,7 +381,7 @@ namespace StuAuth
                 string[] part0 = line0.Split(';');
                 if (part0[1] == "")
                 {
-                    MessageBox.Show("Il y a un dossier vide veuillez le supprimer avant l'export");
+                    MessageBox.Show(loc["ErrorExport"]);
                     isNotAllowed = true;
                     break;
                 }
@@ -360,8 +390,8 @@ namespace StuAuth
             if (!isNotAllowed)
             {
                 SaveFileDialog sfd = new SaveFileDialog();
-                sfd.Filter = "Fichiers texte (*.txt)|*.txt";
-                sfd.Title = "Sélectionnez un fichier texte";
+                sfd.Filter = loc["Txt1"];
+                sfd.Title = loc["Txt2"];
 
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
@@ -407,6 +437,7 @@ namespace StuAuth
 
         private void ExportToQRCode(object sender, RoutedEventArgs e)
         {
+            var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
             bool isNotAllowed = false;
             string appDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StuAuthData");
             string filePath = System.IO.Path.Combine(appDirectory, "Account_decrypted.dat");
@@ -417,7 +448,7 @@ namespace StuAuth
                 string[] part0 = line0.Split(';');
                 if (part0[1] == "")
                 {
-                    MessageBox.Show("Il y a un dossier vide veuillez le supprimer avant l'export");
+                    MessageBox.Show(loc["ErrorExport"]);
                     isNotAllowed = true;
                     break;
                 }
@@ -427,7 +458,7 @@ namespace StuAuth
             {
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = "";
-                sfd.Title = "Enregistrer les QR codes";
+                sfd.Title = loc["ExportQR"];
 
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
@@ -438,7 +469,7 @@ namespace StuAuth
                     Directory.CreateDirectory(targetDirectory);
                     if (!Directory.Exists(targetDirectory))
                     {
-                        MessageBox.Show($"Le répertoire {targetDirectory} n'a pas pu être créé.");
+                        MessageBox.Show(loc["ErrorExportQR"],targetDirectory);
                         return;
                     }
 

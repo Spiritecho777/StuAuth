@@ -83,10 +83,9 @@ namespace StuAuth.Page
 
         private async void Synchro_Click(object sender, EventArgs e)
         {
-            MessageBoxResult answer = MessageBox.Show(
-            
-            "Voulez-vous importer les données ?",
-            "Synchronisation",
+            var loc = (Loc)Application.Current.Resources["Loc"];
+            MessageBoxResult answer = MessageBox.Show(loc["IntNP1"],
+            loc["Synchronization"],
             MessageBoxButton.YesNoCancel,
             MessageBoxImage.Question
             );
@@ -158,13 +157,14 @@ namespace StuAuth.Page
                 }
                 else
                 {
-                    MessageBox.Show("L'adresse IP n'est pas valide ou inaccessible.", "Erreur");
+                    MessageBox.Show(loc["IntNP2"], loc["Error"]);
                 }
             }
         }
 
         private async void AppNetworkChanged(object sender, KeyEventArgs e)
         {
+            var loc = (Loc)Application.Current.Resources["Loc"];
             if (e.Key == Key.Enter)
             {
                 if (!string.IsNullOrEmpty(SubApp.Text) && IsValidIPAddress(SubApp.Text))
@@ -174,7 +174,7 @@ namespace StuAuth.Page
                 }
                 else
                 {
-                    MessageBox.Show("Veuillez rentrer un réseau correct exemple: 192.168.1", "Erreur");
+                    MessageBox.Show(loc["IntNP3"], loc["Error"]);
                 }
             }
         }
@@ -294,6 +294,7 @@ namespace StuAuth.Page
 
         private async Task<string> SendRequestAsync(string endpoint, string method, string jsonData = null)
         {
+            var loc = (Loc)Application.Current.Resources["Loc"];
             using (var client = new HttpClient())
             {
                 try
@@ -318,7 +319,7 @@ namespace StuAuth.Page
                 }
                 catch (HttpRequestException ex)
                 {
-                    MessageBox.Show("Le serveur n'est pas démarrer.", "Erreur");
+                    MessageBox.Show(loc["IntNP4"], loc["Error"]);
                     return null;
                 }
                 catch (TaskCanceledException ex)

@@ -1,10 +1,14 @@
-﻿using System.Configuration;
+﻿using StuAuth.Properties;
+using StuAuth.Classe;
+using System.Configuration;
+using System.Collections;
 using System.Data;
-using System.Windows;
-using System.IO;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Windows;
 
-namespace MFA
+namespace StuAuth
 {
     public partial class App : Application
     {
@@ -13,16 +17,22 @@ namespace MFA
         protected override void OnStartup(StartupEventArgs e)
         {
             bool isNewInstance;
+            var loc2 = (Loc)Application.Current.Resources["Loc"];
             mutex = new Mutex(true, "YourUniqueMutexName", out isNewInstance);
 
             if (!isNewInstance)
             {
-                MessageBox.Show("L'application est déjà en cours d'exécution.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(loc2["App1"], "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 Application.Current.Shutdown(); // Ferme l'application si une autre instance est déjà en cours
                 return;
             }
 
             base.OnStartup(e);
+
+            string savedLang = Settings.Default.LangCode;
+
+            var loc = (Loc)Application.Current.Resources["Loc"];
+            loc.Culture = new CultureInfo(savedLang);
         }
 
         protected override void OnExit(ExitEventArgs e)

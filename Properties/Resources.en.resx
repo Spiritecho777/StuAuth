@@ -140,13 +140,12 @@
   </data>
   <data name="Import" xml:space="preserve">
     <value>Import</value>
-    <comment>Import</comment>
   </data>
   <data name="IntAdd" xml:space="preserve">
     <value>Enter the folder name</value>
   </data>
   <data name="IntAppVersion" xml:space="preserve">
-    <value>Current version number:</value>
+    <value>Current version number: </value>
   </data>
   <data name="IntDeleteAccount" xml:space="preserve">
     <value>Account {0} has been successfully deleted.</value>
@@ -191,7 +190,7 @@
     <value>Rename</value>
   </data>
   <data name="Secret Key" xml:space="preserve">
-    <value>Secret Key</value>
+    <value>Secret Key [A-Za-z0-9]:</value>
   </data>
   <data name="Server" xml:space="preserve">
     <value>Server</value>
@@ -234,5 +233,14 @@
   </data>
   <data name="IntNP4" xml:space="preserve">
     <value>The server is not started.</value>
+  </data>
+  <data name="App1" xml:space="preserve">
+    <value>The application is already running.</value>
+  </data>
+  <data name="Encryption1" xml:space="preserve">
+    <value>Error: The data file is not readable on this machine. It may be corrupted or the key is incorrect. The application will now close.</value>
+  </data>
+  <data name="Encryption2" xml:space="preserve">
+    <value>Decryption error</value>
   </data>
 </root>

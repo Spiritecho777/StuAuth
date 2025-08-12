@@ -59,5 +59,383 @@ namespace StuAuth.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The application is already running..
+        /// </summary>
+        internal static string App1 {
+            get {
+                return ResourceManager.GetString("App1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Back.
+        /// </summary>
+        internal static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Confirm.
+        /// </summary>
+        internal static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Error: The data file is not readable on this machine. It may be corrupted or the key is incorrect. The application will now close..
+        /// </summary>
+        internal static string Encryption1 {
+            get {
+                return ResourceManager.GetString("Encryption1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Decryption error.
+        /// </summary>
+        internal static string Encryption2 {
+            get {
+                return ResourceManager.GetString("Encryption2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Error.
+        /// </summary>
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à There is an empty folder, please delete it before exporting..
+        /// </summary>
+        internal static string ErrorExport {
+            get {
+                return ResourceManager.GetString("ErrorExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The directory {0} could not be created..
+        /// </summary>
+        internal static string ErrorExportQR {
+            get {
+                return ResourceManager.GetString("ErrorExportQR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à There is an error in your export file, please check and try again..
+        /// </summary>
+        internal static string ErrorIntImport {
+            get {
+                return ResourceManager.GetString("ErrorIntImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Export.
+        /// </summary>
+        internal static string Export {
+            get {
+                return ResourceManager.GetString("Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Save QR codes.
+        /// </summary>
+        internal static string ExportQR {
+            get {
+                return ResourceManager.GetString("ExportQR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Import.
+        /// </summary>
+        internal static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Enter the folder name.
+        /// </summary>
+        internal static string IntAdd {
+            get {
+                return ResourceManager.GetString("IntAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Current version number: .
+        /// </summary>
+        internal static string IntAppVersion {
+            get {
+                return ResourceManager.GetString("IntAppVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Account {0} has been successfully deleted..
+        /// </summary>
+        internal static string IntDeleteAccount {
+            get {
+                return ResourceManager.GetString("IntDeleteAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The folder {0} contains accounts. Do you want to delete it and all its accounts?.
+        /// </summary>
+        internal static string IntDeleteFolder1 {
+            get {
+                return ResourceManager.GetString("IntDeleteFolder1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Deletion confirmation.
+        /// </summary>
+        internal static string IntDeleteFolder2 {
+            get {
+                return ResourceManager.GetString("IntDeleteFolder2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The folder {0} and all its accounts have been deleted..
+        /// </summary>
+        internal static string IntDeleteFolder3 {
+            get {
+                return ResourceManager.GetString("IntDeleteFolder3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The folder {0} has been successfully deleted..
+        /// </summary>
+        internal static string IntDeleteFolder4 {
+            get {
+                return ResourceManager.GetString("IntDeleteFolder4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Export to text file.
+        /// </summary>
+        internal static string IntExport1 {
+            get {
+                return ResourceManager.GetString("IntExport1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Export to QRCode file.
+        /// </summary>
+        internal static string IntExport2 {
+            get {
+                return ResourceManager.GetString("IntExport2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à No QR code found.
+        /// </summary>
+        internal static string IntNewAccount1 {
+            get {
+                return ResourceManager.GetString("IntNewAccount1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The key you entered is not correct..
+        /// </summary>
+        internal static string IntNewAccount2 {
+            get {
+                return ResourceManager.GetString("IntNewAccount2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Please enter an account name.
+        /// </summary>
+        internal static string IntNewAccountP2 {
+            get {
+                return ResourceManager.GetString("IntNewAccountP2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Do you want to import the data?.
+        /// </summary>
+        internal static string IntNP1 {
+            get {
+                return ResourceManager.GetString("IntNP1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The IP address is invalid or unreachable..
+        /// </summary>
+        internal static string IntNP2 {
+            get {
+                return ResourceManager.GetString("IntNP2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Please enter a correct network example: 192.168.1.
+        /// </summary>
+        internal static string IntNP3 {
+            get {
+                return ResourceManager.GetString("IntNP3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The server is not started..
+        /// </summary>
+        internal static string IntNP4 {
+            get {
+                return ResourceManager.GetString("IntNP4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Enter the new name.
+        /// </summary>
+        internal static string IntRename {
+            get {
+                return ResourceManager.GetString("IntRename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à QRCode.
+        /// </summary>
+        internal static string QRCode {
+            get {
+                return ResourceManager.GetString("QRCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Register.
+        /// </summary>
+        internal static string Register {
+            get {
+                return ResourceManager.GetString("Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Rename.
+        /// </summary>
+        internal static string Rename {
+            get {
+                return ResourceManager.GetString("Rename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Secret Key.
+        /// </summary>
+        internal static string Secret_Key {
+            get {
+                return ResourceManager.GetString("Secret Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Server.
+        /// </summary>
+        internal static string Server {
+            get {
+                return ResourceManager.GetString("Server", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Synchronization.
+        /// </summary>
+        internal static string Synchronization {
+            get {
+                return ResourceManager.GetString("Synchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Right click on the account you want to delete.
+        /// </summary>
+        internal static string TTDelete {
+            get {
+                return ResourceManager.GetString("TTDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Clock synchronization.
+        /// </summary>
+        internal static string TTHorloge {
+            get {
+                return ResourceManager.GetString("TTHorloge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Right click on the account you want to rename.
+        /// </summary>
+        internal static string TTRename {
+            get {
+                return ResourceManager.GetString("TTRename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Connection for web extension and import/export.
+        /// </summary>
+        internal static string TTServer {
+            get {
+                return ResourceManager.GetString("TTServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Text files (*.txt)|*.txt.
+        /// </summary>
+        internal static string Txt1 {
+            get {
+                return ResourceManager.GetString("Txt1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Select a text file.
+        /// </summary>
+        internal static string Txt2 {
+            get {
+                return ResourceManager.GetString("Txt2", resourceCulture);
+            }
+        }
     }
 }

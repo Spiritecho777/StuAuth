@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:StuAuth"
+      xmlns:lang="clr-namespace:StuAuth.Classe"
       mc:Ignorable="d" 
       Title="Import" Height="610" Width="410" Background="LightGray">
 
@@ -27,7 +28,7 @@
 
     <Grid>
         <ListView x:Name="ListOtp" Height="500" Width="360" VerticalAlignment="Top" Margin="0,10,15,0" SelectionMode="Single"/>
-        <Button x:Name="Confirm" Content="Confirmer" Margin="0,0,40,60" Width="70" Click="Confirm_Click" Style="{StaticResource ChargedButton}"/>
-        <Button x:Name="Back" Content="Retour"  Margin="0,0,310,60" Width="70" Click="Back_Click" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Confirm" Content="{lang:Loc Confirm}" Margin="0,0,40,60" Width="70" Click="Confirm_Click" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Back" Content="{lang:Loc Back}"  Margin="0,0,310,60" Width="70" Click="Back_Click" Style="{StaticResource ChargedButton}"/>
     </Grid>
 </Page>

@@ -4,6 +4,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Windows;
 
 namespace StuAuth.Classe
 {
@@ -93,11 +94,10 @@ namespace StuAuth.Classe
             }
             catch (CryptographicException ex)
             {
+                var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
                 System.Windows.MessageBox.Show(
-                    "Erreur : Le fichier de données n'est pas lisible sur cette machine.\n" +
-                    "Il peut être corrompu ou la clé est incorrecte.\n\n" +
-                    "L'application va maintenant se fermer.",
-                    "Erreur de décryption",
+                    loc["Encryption1"],
+                    loc["Encryption2"],
                     System.Windows.MessageBoxButton.OK,
                     System.Windows.MessageBoxImage.Error);
 

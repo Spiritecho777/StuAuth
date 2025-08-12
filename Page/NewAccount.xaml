@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:StuAuth"
+      xmlns:lang="clr-namespace:StuAuth.Classe"
       mc:Ignorable="d" 
       Title="NewAccount" Height="610" Width="410" Background="LightGray">
 
@@ -26,13 +27,13 @@
     </Page.Resources>
 
     <Grid>
-        <Button x:Name="Retour" Content="Retour" Margin="0,40,330,0" Width="50" Click="Back" Style="{StaticResource ChargedButton}"/>
-        <Button x:Name="Import" Content="Import" Margin="0,40,40,0" Width="50" Click="Import_Click" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Retour" Content="{lang:Loc Back}" Margin="0,40,330,0" Width="50" Click="Back" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Import" Content="{lang:Loc Import}" Margin="0,40,40,0" Width="50" Click="Import_Click" Style="{StaticResource ChargedButton}"/>
 
-        <Label Content="Clé Secrète [A-Za-z0-9]:" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,392,40,0" Width="330"/>
+        <Label Content="{lang:Loc Secret Key}" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,392,40,0" Width="330"/>
         <TextBox x:Name="SecretKey" HorizontalAlignment="Right" VerticalAlignment="Top" Height="35" Margin="0,430,40,0" Width="330"/>
 
-        <Button x:Name="QRcapture" Content="QRcode" Margin="0,500,210,0"  Width="80" Click="Capture" Style="{StaticResource ChargedButton}"/>
-        <Button x:Name="Valider" Content="Confirmer" Margin="0,500,100,0" Width="80" Click="Confirm" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="QRcapture" Content="{lang:Loc QRCode}" Margin="0,500,210,0"  Width="80" Click="Capture" Style="{StaticResource ChargedButton}"/>
+        <Button x:Name="Valider" Content="{lang:Loc Confirm}" Margin="0,500,100,0" Width="80" Click="Confirm" Style="{StaticResource ChargedButton}"/>
     </Grid>
 </Page>

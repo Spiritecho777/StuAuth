@@ -23,6 +23,7 @@ namespace StuAuth
 
         private void SaveNewAccount(object sender, EventArgs e) 
         {
+            var loc = (Loc)Application.Current.Resources["Loc"];
             if (!string.IsNullOrEmpty(AccountName.Text))
             {
                 string[] part = otpauth.Split('/');
@@ -37,7 +38,7 @@ namespace StuAuth
             }
             else
             {
-                MessageBox.Show("Veuillez entrez un nom de compte");
+                MessageBox.Show(loc["IntNewAccountP2"]);
             }
         }
 

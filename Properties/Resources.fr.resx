@@ -140,7 +140,6 @@
   </data>
   <data name="Import" xml:space="preserve">
     <value>Import</value>
-    <comment>Import</comment>
   </data>
   <data name="IntAdd" xml:space="preserve">
     <value>Entrez le nom du dossier</value>
@@ -191,7 +190,7 @@
     <value>Renommée</value>
   </data>
   <data name="Secret Key" xml:space="preserve">
-    <value>Clé Secrète</value>
+    <value>Clé Secrète [A-Za-z0-9]:</value>
   </data>
   <data name="Server" xml:space="preserve">
     <value>Serveur</value>
@@ -234,5 +233,14 @@
   </data>
   <data name="IntNP4" xml:space="preserve">
     <value>Le serveur n'est pas démarrer.</value>
+  </data>
+  <data name="App1" xml:space="preserve">
+    <value>L'application est déjà en cours d'exécution.</value>
+  </data>
+  <data name="Encryption1" xml:space="preserve">
+    <value>Erreur : Le fichier de données n'est pas lisible sur cette machine. Il peut être corrompu ou la clé est incorrecte. L'application va maintenant se fermer.</value>
+  </data>
+  <data name="Encryption2" xml:space="preserve">
+    <value>Erreur de décryption</value>
   </data>
 </root>
