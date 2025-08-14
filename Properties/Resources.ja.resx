@@ -118,138 +118,138 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Back" xml:space="preserve">
-    <value>Retour</value>
+    <value>戻る</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Annuler</value>
+    <value>キャンセル</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Confirmer</value>
+    <value>確認する</value>
   </data>
   <data name="ErrorExport" xml:space="preserve">
-    <value>Il y a un dossier vide veuillez le supprimer avant l'export</value>
+    <value>空のフォルダがあります。エクスポートする前に削除してください。</value>
   </data>
   <data name="ErrorExportQR" xml:space="preserve">
-    <value>Le répertoire {0} n'a pas pu être créé.</value>
+    <value>ディレクトリ {0} を作成できませんでした。</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Export</value>
+    <value>輸出</value>
   </data>
   <data name="ExportQR" xml:space="preserve">
-    <value>Enregistrer les QR codes</value>
+    <value>QRコードを保存する</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Import</value>
+    <value>輸入</value>
   </data>
   <data name="IntAdd" xml:space="preserve">
-    <value>Entrez le nom du dossier</value>
+    <value>フォルダ名を入力してください</value>
   </data>
   <data name="IntAppVersion" xml:space="preserve">
-    <value>Numéro de version actuel : </value>
+    <value>現在のバージョン番号: </value>
   </data>
   <data name="IntDeleteAccount" xml:space="preserve">
-    <value>Le compte {0} a été supprimé avec succès.</value>
+    <value>アカウント {0} は正常に削除されました。</value>
   </data>
   <data name="IntDeleteFolder1" xml:space="preserve">
-    <value>Le dossier {0} contient des comptes. Voulez-vous le supprimer ainsi que tous ses comptes ?</value>
+    <value>フォルダ {0} にはアカウントが含まれています。フォルダとすべてのアカウントを削除しますか?</value>
   </data>
   <data name="IntDeleteFolder2" xml:space="preserve">
-    <value>Confirmation de suppression</value>
+    <value>削除確認</value>
   </data>
   <data name="IntDeleteFolder3" xml:space="preserve">
-    <value>Le dossier {0} et tous ses comptes ont été supprimés.</value>
+    <value>フォルダー {0} とそのすべてのアカウントが削除されました。</value>
   </data>
   <data name="IntDeleteFolder4" xml:space="preserve">
-    <value>Le dossier {0} a été supprimé avec succès.</value>
+    <value>フォルダー {0} は正常に削除されました。</value>
   </data>
   <data name="IntExport1" xml:space="preserve">
-    <value>Exporter vers fichier texte</value>
+    <value>テキストファイルにエクスポート</value>
   </data>
   <data name="IntExport2" xml:space="preserve">
-    <value>Exporter vers fichier QRCode</value>
+    <value>QRコードファイルにエクスポート</value>
   </data>
   <data name="Txt1" xml:space="preserve">
-    <value>Fichiers texte (*.txt)|*.txt</value>
+    <value>テキストファイル (*.txt)|*.txt</value>
   </data>
   <data name="Txt2" xml:space="preserve">
-    <value>Sélectionnez un fichier texte</value>
+    <value>テキストファイルを選択してください</value>
   </data>
   <data name="ErrorIntImport" xml:space="preserve">
-    <value>Il y a une erreur dans votre fichier d'export veuillez vérifier et recommencer</value>
+    <value>エクスポート ファイルにエラーがあります。確認してもう一度お試しください。</value>
   </data>
   <data name="IntRename" xml:space="preserve">
-    <value>Entrez le nouveau nom</value>
+    <value>新しい名前を入力してください</value>
   </data>
   <data name="QRCode" xml:space="preserve">
-    <value>QRCode</value>
+    <value>QRコード</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Enregistrer</value>
+    <value>保存</value>
   </data>
   <data name="Rename" xml:space="preserve">
-    <value>Renommée</value>
+    <value>名声</value>
   </data>
   <data name="Secret Key" xml:space="preserve">
-    <value>Clé Secrète [A-Za-z0-9]:</value>
+    <value>秘密鍵[A-Za-z0-9]:</value>
   </data>
   <data name="Server" xml:space="preserve">
-    <value>Serveur</value>
+    <value>サーバ</value>
   </data>
   <data name="Synchronization" xml:space="preserve">
-    <value>Synchronisation</value>
+    <value>同期</value>
   </data>
   <data name="TTDelete" xml:space="preserve">
-    <value>Clique droit sur le compte que vous souhaitez supprimer</value>
+    <value>削除したいアカウントを右クリックします</value>
   </data>
   <data name="TTHorloge" xml:space="preserve">
-    <value>Synchronisation de l'horloge</value>
+    <value>クロック同期</value>
   </data>
   <data name="TTRename" xml:space="preserve">
-    <value>Clique droit sur le compte que vous souhaitez renommer</value>
+    <value>名前を変更したいアカウントを右クリックします</value>
   </data>
   <data name="TTServer" xml:space="preserve">
-    <value>Connection pour l'extension web et import/export</value>
+    <value>Web拡張およびインポート/エクスポート用の接続</value>
   </data>
   <data name="IntNewAccount1" xml:space="preserve">
-    <value>Pas de QR code trouver</value>
+    <value>QRコードが見つかりません</value>
   </data>
   <data name="IntNewAccount2" xml:space="preserve">
-    <value>La clé que vous avez rentrez n'est pas correct</value>
+    <value>入力したキーが正しくありません。</value>
   </data>
   <data name="IntNewAccountP2" xml:space="preserve">
-    <value>Veuillez entrez un nom de compte</value>
+    <value>アカウント名を入力してください</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Erreur</value>
+    <value>エラー</value>
   </data>
   <data name="IntNP1" xml:space="preserve">
-    <value>Voulez-vous importer les données ?</value>
+    <value>データをインポートしますか?</value>
   </data>
   <data name="IntNP2" xml:space="preserve">
-    <value>L'adresse IP n'est pas valide ou inaccessible.</value>
+    <value>IP アドレスが無効または到達不能です。</value>
   </data>
   <data name="IntNP3" xml:space="preserve">
-    <value>Veuillez rentrer un réseau correct exemple: 192.168.1</value>
+    <value>正しいネットワークを入力してください。例: 192.168.1</value>
   </data>
   <data name="IntNP4" xml:space="preserve">
-    <value>Le serveur n'est pas démarrer.</value>
+    <value>サーバーが起動されていません。</value>
   </data>
   <data name="App1" xml:space="preserve">
-    <value>L'application est déjà en cours d'exécution.</value>
+    <value>アプリケーションはすでに実行されています。</value>
   </data>
   <data name="Encryption1" xml:space="preserve">
-    <value>Erreur : Le fichier de données n'est pas lisible sur cette machine. Il peut être corrompu ou la clé est incorrecte. L'application va maintenant se fermer.</value>
+    <value>エラー: データファイルはこのマシンでは読み取れません。破損しているか、キーが正しくない可能性があります。アプリケーションを終了します。</value>
   </data>
   <data name="Encryption2" xml:space="preserve">
-    <value>Erreur de décryption</value>
+    <value>復号化エラー</value>
   </data>
   <data name="IntNP5" xml:space="preserve">
-    <value>Interface non sélectionnée</value>
+    <value>インターフェースが選択されていません</value>
   </data>
   <data name="IntNP6" xml:space="preserve">
-    <value>IP introuvable</value>
+    <value>IPが見つかりません</value>
   </data>
   <data name="ErrorIntAdd" xml:space="preserve">
-    <value>Le nom du dossier ne peut pas être vide.</value>
+    <value>フォルダ名は空にできません。</value>
   </data>
 </root>

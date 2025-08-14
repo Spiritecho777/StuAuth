@@ -58,5 +58,17 @@ namespace StuAuth.Properties {
                 this["LangCode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int InterfaceSelect {
+            get {
+                return ((int)(this["InterfaceSelect"]));
+            }
+            set {
+                this["InterfaceSelect"] = value;
+            }
+        }
     }
 }

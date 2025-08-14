@@ -142,6 +142,15 @@ namespace StuAuth.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à The folder name cannot be empty..
+        /// </summary>
+        internal static string ErrorIntAdd {
+            get {
+                return ResourceManager.GetString("ErrorIntAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à There is an error in your export file, please check and try again..
         /// </summary>
         internal static string ErrorIntImport {
@@ -318,6 +327,24 @@ namespace StuAuth.Properties {
         internal static string IntNP4 {
             get {
                 return ResourceManager.GetString("IntNP4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Interface not selected.
+        /// </summary>
+        internal static string IntNP5 {
+            get {
+                return ResourceManager.GetString("IntNP5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à IP not found.
+        /// </summary>
+        internal static string IntNP6 {
+            get {
+                return ResourceManager.GetString("IntNP6", resourceCulture);
             }
         }
         

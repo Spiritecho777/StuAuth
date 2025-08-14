@@ -118,138 +118,138 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Back" xml:space="preserve">
-    <value>Retour</value>
+    <value>Kein</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Annuler</value>
+    <value>Nullañ</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Confirmer</value>
+    <value>Kadarnaat</value>
   </data>
   <data name="ErrorExport" xml:space="preserve">
-    <value>Il y a un dossier vide veuillez le supprimer avant l'export</value>
+    <value>Ur renkell goullo zo, diverkit anezhi a-raok ezporzhiañ mar plij.</value>
   </data>
   <data name="ErrorExportQR" xml:space="preserve">
-    <value>Le répertoire {0} n'a pas pu être créé.</value>
+    <value>N'hall ket bezañ krouet ar c'havlec'h {0}.</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Export</value>
+    <value>Ezporzhiañ</value>
   </data>
   <data name="ExportQR" xml:space="preserve">
-    <value>Enregistrer les QR codes</value>
+    <value>Enrollañ ar c'hodoù QR</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Import</value>
+    <value>Enporzhiañ</value>
   </data>
   <data name="IntAdd" xml:space="preserve">
-    <value>Entrez le nom du dossier</value>
+    <value>Lakait anv an teuliad</value>
   </data>
   <data name="IntAppVersion" xml:space="preserve">
-    <value>Numéro de version actuel : </value>
+    <value>Niverenn stumm bremañ : </value>
   </data>
   <data name="IntDeleteAccount" xml:space="preserve">
-    <value>Le compte {0} a été supprimé avec succès.</value>
+    <value>Dilamet eo bet ar gont {0} gant berzh.</value>
   </data>
   <data name="IntDeleteFolder1" xml:space="preserve">
-    <value>Le dossier {0} contient des comptes. Voulez-vous le supprimer ainsi que tous ses comptes ?</value>
+    <value>En teuliad {0} ez eus kontoù. Fellout a ra deoc'h dilemel anezhañ hag e holl gontoù ?</value>
   </data>
   <data name="IntDeleteFolder2" xml:space="preserve">
-    <value>Confirmation de suppression</value>
+    <value>Kadarnaat an dilemel</value>
   </data>
   <data name="IntDeleteFolder3" xml:space="preserve">
-    <value>Le dossier {0} et tous ses comptes ont été supprimés.</value>
+    <value>Dilamet eo bet an teuliad {0} hag hec'h holl gontoù.</value>
   </data>
   <data name="IntDeleteFolder4" xml:space="preserve">
-    <value>Le dossier {0} a été supprimé avec succès.</value>
+    <value>Dilamet eo bet an teuliad {0} gant berzh.</value>
   </data>
   <data name="IntExport1" xml:space="preserve">
-    <value>Exporter vers fichier texte</value>
+    <value>Ezporzhiañ d'ur restr testenn</value>
   </data>
   <data name="IntExport2" xml:space="preserve">
-    <value>Exporter vers fichier QRCode</value>
+    <value>Ezporzhiañ d'ar restr QRCode</value>
   </data>
   <data name="Txt1" xml:space="preserve">
-    <value>Fichiers texte (*.txt)|*.txt</value>
+    <value>Restroù testenn (*.txt)|*.txt</value>
   </data>
   <data name="Txt2" xml:space="preserve">
-    <value>Sélectionnez un fichier texte</value>
+    <value>Dibabit ur restr testenn</value>
   </data>
   <data name="ErrorIntImport" xml:space="preserve">
-    <value>Il y a une erreur dans votre fichier d'export veuillez vérifier et recommencer</value>
+    <value>Ur fazi zo en ho restr ezporzhiañ, gwiriit ha klaskit en-dro.</value>
   </data>
   <data name="IntRename" xml:space="preserve">
-    <value>Entrez le nouveau nom</value>
+    <value>Lakait an anv nevez</value>
   </data>
   <data name="QRCode" xml:space="preserve">
-    <value>QRCode</value>
+    <value>Kod QR</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Enregistrer</value>
+    <value>Saveteiñ</value>
   </data>
   <data name="Rename" xml:space="preserve">
-    <value>Renommée</value>
+    <value>Brud</value>
   </data>
   <data name="Secret Key" xml:space="preserve">
-    <value>Clé Secrète [A-Za-z0-9]:</value>
+    <value>Alc'hwez kuzh [A-Za-z0-9]:</value>
   </data>
   <data name="Server" xml:space="preserve">
-    <value>Serveur</value>
+    <value>Dafariad</value>
   </data>
   <data name="Synchronization" xml:space="preserve">
-    <value>Synchronisation</value>
+    <value>Sinkronelaat</value>
   </data>
   <data name="TTDelete" xml:space="preserve">
-    <value>Clique droit sur le compte que vous souhaitez supprimer</value>
+    <value>Klikit gant ar stokell dehou war ar gont a fell deoc'h dilemel</value>
   </data>
   <data name="TTHorloge" xml:space="preserve">
-    <value>Synchronisation de l'horloge</value>
+    <value>Sinkronelaat an eurier</value>
   </data>
   <data name="TTRename" xml:space="preserve">
-    <value>Clique droit sur le compte que vous souhaitez renommer</value>
+    <value>Klikañ gant ar stokell dehou war ar gont a fell deoc'h adenvel</value>
   </data>
   <data name="TTServer" xml:space="preserve">
-    <value>Connection pour l'extension web et import/export</value>
+    <value>Kevreadenn evit astenn ar web hag enporzhiañ/ezporzhiañ</value>
   </data>
   <data name="IntNewAccount1" xml:space="preserve">
-    <value>Pas de QR code trouver</value>
+    <value>N'eus bet kavet kod QR ebet</value>
   </data>
   <data name="IntNewAccount2" xml:space="preserve">
-    <value>La clé que vous avez rentrez n'est pas correct</value>
+    <value>N'eo ket reizh an alc'hwez lakaet ganeoc'h.</value>
   </data>
   <data name="IntNewAccountP2" xml:space="preserve">
-    <value>Veuillez entrez un nom de compte</value>
+    <value>Lakait un anv kont mar plij</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Erreur</value>
+    <value>Fazi</value>
   </data>
   <data name="IntNP1" xml:space="preserve">
-    <value>Voulez-vous importer les données ?</value>
+    <value>Fellout a ra deoc'h enporzhiañ ar roadennoù ?</value>
   </data>
   <data name="IntNP2" xml:space="preserve">
-    <value>L'adresse IP n'est pas valide ou inaccessible.</value>
+    <value>Didalvoudek pe n'haller ket tizhout ar chomlec'h IP.</value>
   </data>
   <data name="IntNP3" xml:space="preserve">
-    <value>Veuillez rentrer un réseau correct exemple: 192.168.1</value>
+    <value>Lakait ur skouer rouedad reizh : 192.168.1</value>
   </data>
   <data name="IntNP4" xml:space="preserve">
-    <value>Le serveur n'est pas démarrer.</value>
+    <value>N'eo ket loc'het an dafariad.</value>
   </data>
   <data name="App1" xml:space="preserve">
-    <value>L'application est déjà en cours d'exécution.</value>
+    <value>Emañ an arload o vont en-dro dija.</value>
   </data>
   <data name="Encryption1" xml:space="preserve">
-    <value>Erreur : Le fichier de données n'est pas lisible sur cette machine. Il peut être corrompu ou la clé est incorrecte. L'application va maintenant se fermer.</value>
+    <value>Fazi : N'eo ket lennus ar restr roadennoù war an urzhiataer-mañ. Marteze eo gwastet pe n'eo ket reizh an alc'hwez. Serret e vo an arload bremañ.</value>
   </data>
   <data name="Encryption2" xml:space="preserve">
-    <value>Erreur de décryption</value>
+    <value>Fazi dirinegañ</value>
   </data>
   <data name="IntNP5" xml:space="preserve">
-    <value>Interface non sélectionnée</value>
+    <value>N'eo ket bet diuzet an etrefas</value>
   </data>
   <data name="IntNP6" xml:space="preserve">
-    <value>IP introuvable</value>
+    <value>IP n'eo ket bet kavet</value>
   </data>
   <data name="ErrorIntAdd" xml:space="preserve">
-    <value>Le nom du dossier ne peut pas être vide.</value>
+    <value>Anv an teuliad n'hall ket bezañ goullo.</value>
   </data>
 </root>

@@ -29,24 +29,21 @@ namespace StuAuth
         private HttpServer server;
         private AccountManager accountManager = new AccountManager();
         public bool isServerRunning = false;
-        public string name; 
+        public string name;
         #endregion
 
         public Main(MainWindow window)
         {
             InitializeComponent();
             //Choix de la langue
+            Language.ItemsSource = new List<string> { "Br", "En", "Fr", "Ja" };
             switch (Properties.Settings.Default.LangCode)
             {
-                case "en":
-                    Language.SelectedIndex = 0;
-                    break;
-                case "fr":
-                    Language.SelectedIndex = 1;
-                    break;
-                default:
-                    Language.SelectedIndex = 0;
-                    break;
+                case "Br": Language.SelectedIndex = 0; break;
+                case "En": Language.SelectedIndex = 1; break;
+                case "Fr": Language.SelectedIndex = 2; break;
+                case "Ja": Language.SelectedIndex = 3; break;
+                default: Language.SelectedIndex = 1; break;
             }
             windows = window;
             server = new HttpServer(this);
@@ -227,6 +224,12 @@ namespace StuAuth
                 {
                     string FolderN = Microsoft.VisualBasic.Interaction.InputBox(loc["IntAdd"]);
 
+                    if (string.IsNullOrWhiteSpace(FolderN))
+                    {
+                        MessageBox.Show(loc["Error"], loc["ErrorIntAdd"]);
+                        return;
+                    }
+
                     accountManager.Add(FolderN);
                     UpdateFolderList();
                 }
@@ -354,10 +357,8 @@ namespace StuAuth
 
         private void LanguageSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Language.SelectedItem is ComboBoxItem selectedItem)
+            if (Language.SelectedItem is string langCode)
             {
-                string langCode = selectedItem.Tag.ToString();
-
                 var loc = (Loc)System.Windows.Application.Current.Resources["Loc"];
                 loc.Culture = new CultureInfo(langCode);
 

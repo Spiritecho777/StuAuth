@@ -243,4 +243,13 @@
   <data name="Encryption2" xml:space="preserve">
     <value>Decryption error</value>
   </data>
+  <data name="IntNP5" xml:space="preserve">
+    <value>Interface not selected</value>
+  </data>
+  <data name="IntNP6" xml:space="preserve">
+    <value>IP not found</value>
+  </data>
+  <data name="ErrorIntAdd" xml:space="preserve">
+    <value>The folder name cannot be empty.</value>
+  </data>
 </root>

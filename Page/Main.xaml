@@ -74,10 +74,7 @@
         </Button>
         <Label x:Name="FolderName" Content="" FontSize="20" Margin="0,45,180,0" Width="200" Height="40" VerticalAlignment="Top"/>
         <Button x:Name="Back" Content="&#60;--" Click="Back_Click" FontSize="20" Margin="0,45,37,0" Width="57" Style="{StaticResource ChargedButton}"/>
-        <ComboBox x:Name="Language" FontSize="15" Margin="0,10,37,0" Width="30" Height=" 30" VerticalAlignment="Top" HorizontalAlignment="Right" SelectionChanged="LanguageSelector_SelectionChanged" Style="{StaticResource FlatComboBox}">
-            <ComboBoxItem Tag="en">En</ComboBoxItem>
-            <ComboBoxItem Tag="fr">Fr</ComboBoxItem>
-        </ComboBox>
+        <ComboBox x:Name="Language" FontSize="15" Margin="0,10,37,0" Width="30" Height=" 30" VerticalAlignment="Top" HorizontalAlignment="Right" SelectionChanged="LanguageSelector_SelectionChanged" Style="{StaticResource FlatComboBox}"/>
         <ListView x:Name="AccountList" HorizontalAlignment="Center" Height="465" Margin="-15,80,0,0" VerticalAlignment="Top" Width="350"/>
     </Grid>
 </Page>

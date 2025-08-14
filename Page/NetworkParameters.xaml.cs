@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Resources;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -25,14 +26,25 @@ namespace StuAuth.Page
         public NetworkParameters(Main main,HttpServer server, AccountManager accountManager)
         {
             InitializeComponent();
+            var loc = (Loc)Application.Current.Resources["Loc"];
             this.main = main;
             this.server = server;
             this.accountManager = accountManager;
             IPApp.ItemsSource = listIPA;
             IPApp.Text = IPApplication;
 
-            string ipAdress = GetLocalIPAddress();
-            IPServ.Content = ipAdress;
+            LoadNetworkInterfaces();
+            ListInterface.SelectedIndex = Properties.Settings.Default.InterfaceSelect;
+
+            if (ListInterface.SelectedItem is NetworkInterfaceInfo selectedInterface)
+            {
+                string ipAdress = GetLocalIPAddress(selectedInterface.Name);
+                IPServ.Content = ipAdress;
+            }
+            else
+            {
+                IPServ.Content = loc["IntNP5"];
+            }
 
             if (!main.isServerRunning)
             {
@@ -178,15 +190,39 @@ namespace StuAuth.Page
                 }
             }
         }
+
+        private void ChangedInterface(object sender, EventArgs e)
+        {
+            if (ListInterface.SelectedItem is NetworkInterfaceInfo selectedInterface)
+            {
+                string ipAddress = GetLocalIPAddress(selectedInterface.Name);
+                IPServ.Content = ipAddress;
+                Properties.Settings.Default.InterfaceSelect = ListInterface.SelectedIndex;
+                Properties.Settings.Default.Save();
+            }
+        }
         #endregion
 
         #region Reseau
-        private string GetLocalIPAddress()
+        private string GetLocalIPAddress(string interfaceName)
         {
-            string hostName = Dns.GetHostName();
-            IPAddress[] addresses = Dns.GetHostAddresses(hostName);
+            var loc = (Loc)Application.Current.Resources["Loc"];
+            foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (ni.Name != interfaceName || ni.OperationalStatus != OperationalStatus.Up)
+                    continue;
 
-            return addresses.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString() ?? "IP introuvable";
+                foreach (var addr in ni.GetIPProperties().UnicastAddresses)
+                {
+                    if (addr.Address.AddressFamily == AddressFamily.InterNetwork &&
+                        !IPAddress.IsLoopback(addr.Address))
+                    {
+                        return addr.Address.ToString();
+                    }
+                }
+            }
+
+            return loc["IntNP6"];
         }
 
         private bool IsValidIPAddress(string ipAddress)
@@ -356,6 +392,29 @@ namespace StuAuth.Page
                 return false;
             }
         }
+
+        private void LoadNetworkInterfaces()
+        {
+            var interfaces = NetworkInterface.GetAllNetworkInterfaces()
+                .Where(ni => ni.OperationalStatus == OperationalStatus.Up)
+                .Select(ni => new NetworkInterfaceInfo
+                {
+                    Name = ni.Name,
+                    Description = ni.Description
+                })
+                .ToList();
+
+            ListInterface.ItemsSource = interfaces;
+        }
         #endregion
     }
+
+    public class NetworkInterfaceInfo
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public override string ToString() => $"{Name} - {Description}";
+    }
+
 }
