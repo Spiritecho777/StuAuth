@@ -25,7 +25,7 @@ Manual backups only. Full control.
 - Or build yourself: clone → open in VS/Code with MAUI → run
 
 **Desktop (WPF – Windows)**  
-- Prebuilt EXE: [download here](https://github.com/Spiritecho777/StuAuth/blob/master/release/Setup%20StuAuth.msi)
+- Prebuilt EXE: [download here](blob:https://github.com/545d0c2f-c21e-4ce4-a22e-7ff704c6725e)
 - Or build yourself: clone → Visual Studio → build)
 
 **Web Extension (Javascript – Firefox)**  
