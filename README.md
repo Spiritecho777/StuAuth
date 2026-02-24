@@ -21,15 +21,15 @@ Manual backups only. Full control.
 ### Downloads / Builds
 
 **Mobile (MAUI – Android)**  
-- APK prebuilt: [download here](https://github.com/Spiritecho777/StuAuthMobile/releases)  
+- APK prebuilt: [download here](https://github.com/Spiritecho777/StuAuthMobile/release)  
 - Or build yourself: clone → open in VS/Code with MAUI → run
 
 **Desktop (WPF – Windows)**  
-- Prebuilt EXE: [download here](https://github.com/Spiritecho777/StuAuth/releases)
+- Prebuilt EXE: [download here](https://github.com/Spiritecho777/StuAuth/release)
 - Or build yourself: clone → Visual Studio → build)
 
 **Web Extension (Javascript – Firefox)**  
-- XPI Prebuilt: [download here](https://github.com/Spiritecho777/StuAuthWeb/releases) 
+- XPI Prebuilt: [download here](https://github.com/Spiritecho777/StuAuthWeb/release) 
 
 ### License
 MIT – do whatever you want, no warranty.
