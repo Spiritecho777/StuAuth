@@ -29,7 +29,7 @@ Manual backups only. Full control.
 - Or build yourself: clone → Visual Studio → build)
 
 **Web Extension (Javascript – Firefox)**  
-- XPI Prebuilt: [download here](https://github.com/Spiritecho777/StuAuthWeb/release](https://github.com/Spiritecho777/StuAuthWeb/tree/main/release) 
+- XPI Prebuilt: [download here](https://github.com/Spiritecho777/StuAuthWeb/blob/main/release/StuAuthWeb3.0.xpi) 
 
 ### License
 MIT – do whatever you want, no warranty.
