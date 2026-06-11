@@ -1,0 +1,32 @@
+#include <windows.h>
+
+IDI_ICON1 ICON "Asset/Icone.ico"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION @APP_VERSION_COMMA@
+PRODUCTVERSION @APP_VERSION_COMMA@
+FILEFLAGSMASK 0x3fL
+FILEFLAGS 0x0L
+FILEOS 0x40004L
+FILETYPE 0x1L
+FILESUBTYPE 0x0L
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904E4"
+		BEGIN
+			VALUE "CompanyName", "Stusoft\0"
+			VALUE "FileDescription", "StuAuth Application\0"
+			VALUE "FileVersion", "@APP_VERSION@\0"
+			VALUE "InternalName", "StuAuth\0"
+			VALUE "OriginalFilename", "StuAuth.exe\0"
+			VALUE "ProductName", "StuAuth\0"
+			VALUE "ProductVersion", "@APP_VERSION@\0"
+		END
+	END
+
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x0409, 0x04E4
+	END
+END

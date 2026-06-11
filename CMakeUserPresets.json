@@ -1,0 +1,147 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "Debug-windows-x64",
+      "displayName": "Debug Windows x64",
+      "binaryDir": "${sourceDir}/out/build/debug",
+      "generator": "Ninja",
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "OPENSSL_ROOT_DIR": "C:/OpenSSL-Win64",
+        "OPENSSL_INCLUDE_DIR": "C:/OpenSSL-Win64/include",
+        "OPENSSL_CRYPTO_LIBRARY": "C:/OpenSSL-Win64/lib/libcrypto.lib",
+        "OPENSSL_SSL_LIBRARY": "C:/OpenSSL-Win64/lib/libssl.lib"
+      },
+      "inherits": [
+        "Qt-Default"
+      ]
+    },
+    {
+      "name": "Release-windows-x64",
+      "displayName": "Release Windows x64",
+      "binaryDir": "${sourceDir}/out/build/release",
+      "generator": "Ninja",
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "OPENSSL_ROOT_DIR": "C:/OpenSSL-Win64",
+        "OPENSSL_INCLUDE_DIR": "C:/OpenSSL-Win64/include",
+        "OPENSSL_CRYPTO_LIBRARY": "C:/OpenSSL-Win64/lib/libcrypto.lib",
+        "OPENSSL_SSL_LIBRARY": "C:/OpenSSL-Win64/lib/libssl.lib"
+      },
+      "inherits": [
+        "Qt-Default"
+      ]
+    },
+    {
+      "name": "Debug-linux-x64",
+      "displayName": "Debug Linux x64",
+      "binaryDir": "${sourceDir}/out/build/debug",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "OPENSSL_ROOT_DIR": "/usr",
+        "OPENSSL_CRYPTO_LIBRARY": "/usr/lib/libcrypto.so",
+        "OPENSSL_SSL_LIBRARY": "/usr/lib/libssl.so"
+      },
+      "inherits": [
+        "Qt-Default"
+      ]
+    },
+    {
+      "hidden": true,
+      "name": "Qt-Default",
+      "inherits": "6.10.2_msvc2022_64",
+      "vendor": {
+        "qt-project.org/Default": {
+          "checksum": "cH20gmaAEOt5ccHf/hFE6SDnGQw="
+        }
+      }
+    },
+    {
+      "hidden": true,
+      "name": "6.10.2_msvc2022_64",
+      "inherits": "Qt",
+      "environment": {
+        "QTDIR": "C:/Qt/6.10.2/msvc2022_64"
+      },
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "generator": "Ninja",
+      "vendor": {
+        "qt-project.org/Version": {
+          "checksum": "dj7XANAOf97mFk+jtVxiOiHpK9o="
+        }
+      }
+    },
+    {
+      "hidden": true,
+      "name": "Dynamic_msvc2022_64",
+      "inherits": "Qt",
+      "environment": {
+        "QTDIR": "C:/Qt/6.10.2/Dynamic/msvc2022_64"
+      },
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "generator": "Ninja",
+      "vendor": {
+        "qt-project.org/Version": {
+          "checksum": "7oPxR55HbPpnTOEBmP7YS+m+JcY="
+        }
+      }
+    },
+    {
+      "hidden": true,
+      "name": "msvc_qtbase",
+      "inherits": "Qt",
+      "environment": {
+        "QTDIR": "C:/Qt/6.10.2/Static/msvc"
+      },
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "generator": "Ninja",
+      "vendor": {
+        "qt-project.org/Version": {
+          "checksum": "Yk8Rv3UYFffZa6R8PusAyCb5FOY="
+        }
+      }
+    },
+    {
+      "hidden": true,
+      "name": "Static_msvc",
+      "inherits": "Qt",
+      "environment": {
+        "QTDIR": "C:/Qt/6.10.2/Static/msvc"
+      },
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "generator": "Ninja",
+      "vendor": {
+        "qt-project.org/Version": {
+          "checksum": "vuecQ3StiJNl56ao1R6eW3OKSik="
+        }
+      }
+    }
+  ],
+  "vendor": {
+    "qt-project.org/Presets": {
+      "checksum": "cMSb5ljT/Zi06hKKZGBdJbKISpM="
+    }
+  }
+}
