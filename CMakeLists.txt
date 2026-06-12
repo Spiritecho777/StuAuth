@@ -63,7 +63,7 @@ endif()
 # -------------------------
 # Qt Widgets (statique)
 # -------------------------
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Network)
 
 # -------------------------
 # Sources / Headers
@@ -150,6 +150,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         Qt6::Widgets
+        Qt6::Network
         OpenSSL::SSL
         OpenSSL::Crypto
         

@@ -37,13 +37,11 @@ StuauthWindow::StuauthWindow(QWidget* parent) : QMainWindow(parent)
     connect(actBz, &QAction::triggered, this, [this]() { setLanguage("bz"); });
     connect(actJa, &QAction::triggered, this, [this]() { setLanguage("ja"); });
 
+    // --- Barre d’état ---
+    m_tray = new TrayManager(this, this);
+
     connect(&TranslationManager::instance(), &TranslationManager::languageChanged,
         this, &StuauthWindow::retranslateUi);
-
-    // --- Barre d’état ---
-	m_tray = new TrayManager(this, this);
-	connect(&TranslationManager::instance(), &TranslationManager::languageChanged,
-		this, &StuauthWindow::retranslateUi);
 }
 
 // Langue

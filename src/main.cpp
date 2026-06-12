@@ -7,6 +7,9 @@
 #include "commun/TrayManager.h"
 #include "commun/TranslationManager.h"
 
+#include "core/AccountManager.h"
+#include "network/HttpServer.h"
+
 /*#ifdef _WIN32
 #include <winsock2.h>
 #endif*/
@@ -30,6 +33,9 @@ int main(int argc, char* argv[])
         return 0;
 
     StuauthWindow w;
+    //AccountManager am;
+    //HttpServer server(&am);
+    //StuauthWindow w(&am, &server);
 
     w.show();
 
