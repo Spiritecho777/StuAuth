@@ -9,6 +9,8 @@
 #include <QGuiApplication>
 #include <QRubberBand>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QRegularExpression>
 
 // ─────────────────────────────────────────────
 //  Widget de sélection de zone écran

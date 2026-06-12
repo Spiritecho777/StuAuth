@@ -1,50 +1,156 @@
 #include "StuauthWindow.h"
 #include "../commun/TranslationManager.h"
+#include "../ui/SelectAccountPage.h"
+#include "../ui/NewAccountPage.h"
+#include "../ui/NewAccount2Page.h"
+#include "../ui/ImportPage.h"
+#include "../ui/NetworkPage.h"
 
 #include <QMenuBar>
-#include <QProcess>
 #include <QActionGroup>
 #include <QCloseEvent>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QInputDialog>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QProcess>
+#include <QApplication>
+#include <QSettings>
+#include <QCursor>
+
+// ─────────────────────────────────────────────
+//  Constructeur
+// ─────────────────────────────────────────────
 
 StuauthWindow::StuauthWindow(QWidget* parent) : QMainWindow(parent)
 {
-    this->setWindowTitle("StuAuth");
-    this->resize(410, 610);
+    setWindowTitle("StuAuth");
+    resize(410, 610);
 
-    // --- Menu ---
-    langMenu = menuBar()->addMenu(tr("Langue"));
+    m_am = new AccountManager();
+    m_server = new HttpServer(m_am, this);
+
+    // ── Menu langue ──────────────────────────────
+    m_langMenu = menuBar()->addMenu(tr("Langue"));
 
     QActionGroup* langGroup = new QActionGroup(this);
     langGroup->setExclusive(true);
 
-    QAction* actFr = langMenu->addAction("Français");
-    QAction* actEn = langMenu->addAction("English");
-    QAction* actBz = langMenu->addAction("Brezhoneg");
-    QAction* actJa = langMenu->addAction("日本語");
+    m_actFr = m_langMenu->addAction("Français");
+    m_actEn = m_langMenu->addAction("English");
+    m_actBz = m_langMenu->addAction("Brezhoneg");
+    m_actJa = m_langMenu->addAction("日本語");
 
-    actFr->setCheckable(true);
-    actEn->setCheckable(true);
-    actBz->setCheckable(true);
-    actJa->setCheckable(true);
+    for (QAction* a : { m_actFr, m_actEn, m_actBz, m_actJa })
+    {
+        a->setCheckable(true);
+        langGroup->addAction(a);
+    }
 
-    langGroup->addAction(actFr);
-    langGroup->addAction(actEn);
-    langGroup->addAction(actBz);
-    langGroup->addAction(actJa);
+    connect(m_actFr, &QAction::triggered, this, [this]() { setLanguage("fr"); });
+    connect(m_actEn, &QAction::triggered, this, [this]() { setLanguage("en"); });
+    connect(m_actBz, &QAction::triggered, this, [this]() { setLanguage("bz"); });
+    connect(m_actJa, &QAction::triggered, this, [this]() { setLanguage("ja"); });
 
-    connect(actFr, &QAction::triggered, this, [this]() { setLanguage("fr"); });
-    connect(actEn, &QAction::triggered, this, [this]() { setLanguage("en"); });
-    connect(actBz, &QAction::triggered, this, [this]() { setLanguage("bz"); });
-    connect(actJa, &QAction::triggered, this, [this]() { setLanguage("ja"); });
+    // Coche la langue actuellement active
+    const QString cur = TranslationManager::instance().currentLanguage();
+    if (cur == "fr") m_actFr->setChecked(true);
+    else if (cur == "bz") m_actBz->setChecked(true);
+    else if (cur == "ja") m_actJa->setChecked(true);
+    else                  m_actEn->setChecked(true);
 
-    // --- Barre d’état ---
+    // ── Stack + page principale ──────────────────
+    m_stack = new QStackedWidget(this);
+    setCentralWidget(m_stack);
+
+    buildMainWidget();
+    m_stack->addWidget(m_main);
+
+    updateFolderList();
+
+    // ── Tray ────────────────────────────────────
     m_tray = new TrayManager(this, this);
 
     connect(&TranslationManager::instance(), &TranslationManager::languageChanged,
         this, &StuauthWindow::retranslateUi);
 }
 
-// Langue
+// ─────────────────────────────────────────────
+//  Construction de la page principale
+// ─────────────────────────────────────────────
+
+void StuauthWindow::buildMainWidget()
+{
+    m_main = new QWidget();
+
+    // Toolbar ligne 1 : Renommer | + | - | Export | ?
+    m_btnRename = new QPushButton(tr("Renommer"));
+    m_btnAdd = new QPushButton("+");
+    m_btnDel = new QPushButton("-");
+    m_btnExport = new QPushButton(tr("Exporter"));
+    m_btnHelp = new QPushButton("?");
+
+    m_btnAdd->setFixedSize(30, 30);
+    m_btnDel->setFixedSize(30, 30);
+    m_btnHelp->setFixedSize(25, 30);
+
+    QHBoxLayout* toolbar1 = new QHBoxLayout();
+    toolbar1->addWidget(m_btnRename);
+    toolbar1->addStretch();
+    toolbar1->addWidget(m_btnAdd);
+    toolbar1->addWidget(m_btnDel);
+    toolbar1->addWidget(m_btnExport);
+    toolbar1->addWidget(m_btnHelp);
+
+    // Toolbar ligne 2 : Serveur | Synchro | NomDossier | <--
+    m_btnServer = new QPushButton("⬤");
+    m_btnSynchro = new QPushButton("⟳");
+    m_lblFolder = new QLabel();
+    m_btnBack = new QPushButton("<--");
+
+    m_btnServer->setFixedSize(30, 30);
+    m_btnSynchro->setFixedSize(30, 30);
+    m_btnBack->setFixedSize(57, 30);
+    m_lblFolder->setMinimumWidth(150);
+
+    m_btnServer->setStyleSheet("QPushButton { background-color: red; border-radius: 5px; }");
+
+    QHBoxLayout* toolbar2 = new QHBoxLayout();
+    toolbar2->addWidget(m_btnServer);
+    toolbar2->addWidget(m_btnSynchro);
+    toolbar2->addWidget(m_lblFolder);
+    toolbar2->addStretch();
+    toolbar2->addWidget(m_btnBack);
+
+    // Liste
+    m_list = new QListWidget();
+    m_list->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    // Layout principal
+    QVBoxLayout* layout = new QVBoxLayout(m_main);
+    layout->setContentsMargins(10, 10, 10, 10);
+    layout->addLayout(toolbar1);
+    layout->addLayout(toolbar2);
+    layout->addWidget(m_list);
+
+    // Connexions
+    connect(m_btnAdd, &QPushButton::clicked, this, &StuauthWindow::onAddClicked);
+    connect(m_btnDel, &QPushButton::clicked, this, &StuauthWindow::onDeleteClicked);
+    connect(m_btnRename, &QPushButton::clicked, this, &StuauthWindow::onRenameClicked);
+    connect(m_btnBack, &QPushButton::clicked, this, &StuauthWindow::onBackClicked);
+    connect(m_btnExport, &QPushButton::clicked, this, &StuauthWindow::onExportClicked);
+    connect(m_btnHelp, &QPushButton::clicked, this, &StuauthWindow::onHelpClicked);
+    connect(m_btnSynchro, &QPushButton::clicked, this, &StuauthWindow::onTimeSynchro);
+    connect(m_btnServer, &QPushButton::clicked, this, &StuauthWindow::onServerClicked);
+    connect(m_list, &QListWidget::itemDoubleClicked, this, &StuauthWindow::onItemDoubleClicked);
+}
+
+// ─────────────────────────────────────────────
+//  Langue
+// ─────────────────────────────────────────────
+
 void StuauthWindow::setLanguage(const QString& lang)
 {
     TranslationManager::instance().setLanguage(lang);
@@ -52,18 +158,363 @@ void StuauthWindow::setLanguage(const QString& lang)
 
 void StuauthWindow::retranslateUi()
 {
-    langMenu->setTitle(tr("Langue"));
-
+    m_langMenu->setTitle(tr("Langue"));
+    m_btnRename->setText(tr("Renommer"));
+    m_btnExport->setText(tr("Exporter"));
     m_tray->retranslate();
 }
 
+// ─────────────────────────────────────────────
+//  Données
+// ─────────────────────────────────────────────
+
+void StuauthWindow::updateFolderList()
+{
+    m_names.clear();
+    m_uris.clear();
+
+    QMap<QString, int> occ = m_am->countFolderOccurrences();
+    QStringList valid = m_am->getValidLines(occ);
+
+    for (const QString& line : valid)
+    {
+        QStringList parts = line.split(';');
+        if (parts.size() == 2)
+        {
+            m_names << parts[0];
+            m_uris << parts[1];
+        }
+    }
+
+    m_currentFolder.clear();
+    m_lblFolder->clear();
+    showFolderView();
+}
+
+void StuauthWindow::showFolderView()
+{
+    m_list->clear();
+    QStringList seen;
+    for (const QString& name : m_names)
+    {
+        QString folder = name.split('\\').value(0);
+        if (!seen.contains(folder))
+        {
+            seen << folder;
+            m_list->addItem(folder);
+        }
+    }
+}
+
+void StuauthWindow::showAccountView(const QString& folderName)
+{
+    m_names.clear();
+    m_uris.clear();
+
+    for (const QString& line : m_am->getAccountsByFolder(folderName))
+    {
+        QStringList parts = line.split(';');
+        if (parts.size() == 2)
+        {
+            m_names << parts[0];
+            m_uris << parts[1];
+        }
+    }
+
+    m_list->clear();
+    for (const QString& name : m_names)
+    {
+        QString accountName = name.split('\\').value(1);
+        if (!accountName.isEmpty())
+            m_list->addItem(accountName);
+    }
+}
+
+// ─────────────────────────────────────────────
+//  Navigation
+// ─────────────────────────────────────────────
+
+void StuauthWindow::showMainView()
+{
+    // Supprime toutes les pages empilées sauf la principale (index 0)
+    while (m_stack->count() > 1)
+    {
+        QWidget* w = m_stack->widget(1);
+        m_stack->removeWidget(w);
+        w->deleteLater();
+    }
+    m_stack->setCurrentIndex(0);
+    updateFolderList();
+}
+
+void StuauthWindow::navigateToAccount(const QString& name, const QString& otpUri)
+{
+    auto* page = new SelectAccountPage(name, otpUri);
+    connect(page, &SelectAccountPage::navigateBack, this, &StuauthWindow::showMainView);
+    m_stack->addWidget(page);
+    m_stack->setCurrentWidget(page);
+}
+
+void StuauthWindow::navigateToNewAccount(const QString& folderName)
+{
+    auto* page = new NewAccountPage(folderName);
+    connect(page, &NewAccountPage::navigateBack, this, &StuauthWindow::showMainView);
+    connect(page, &NewAccountPage::navigateToNaming, this, [this, folderName](const QString& uri) {
+        navigateToNaming(uri, folderName);
+        });
+    connect(page, &NewAccountPage::navigateToImport, this, [this, folderName](const QStringList& acc) {
+        navigateToImport(acc, folderName);
+        });
+    m_stack->addWidget(page);
+    m_stack->setCurrentWidget(page);
+}
+
+void StuauthWindow::navigateToNaming(const QString& otpUri, const QString& folderName)
+{
+    auto* page = new NewAccount2Page(otpUri, folderName);
+    connect(page, &NewAccount2Page::navigateBack, this, &StuauthWindow::showMainView);
+    connect(page, &NewAccount2Page::accountSaved, this, &StuauthWindow::showMainView);
+    m_stack->addWidget(page);
+    m_stack->setCurrentWidget(page);
+}
+
+void StuauthWindow::navigateToImport(const QStringList& accounts, const QString& folderName)
+{
+    auto* page = new ImportPage(accounts, folderName);
+    connect(page, &ImportPage::navigateBack, this, &StuauthWindow::showMainView);
+    connect(page, &ImportPage::importDone, this, &StuauthWindow::showMainView);
+    m_stack->addWidget(page);
+    m_stack->setCurrentWidget(page);
+}
+
+void StuauthWindow::navigateToNetwork()
+{
+    auto* page = new NetworkPage(m_am, m_server);
+    connect(page, &NetworkPage::navigateBack, this, &StuauthWindow::showMainView);
+    connect(page, &NetworkPage::serverStateChanged, this, &StuauthWindow::updateServerButton);
+    m_stack->addWidget(page);
+    m_stack->setCurrentWidget(page);
+}
+
+// ─────────────────────────────────────────────
+//  Slots boutons
+// ─────────────────────────────────────────────
+
+void StuauthWindow::onItemDoubleClicked(QListWidgetItem* item)
+{
+    if (!item) return;
+    int row = m_list->row(item);
+
+    if (m_currentFolder.isEmpty())
+    {
+        m_currentFolder = item->text();
+        m_lblFolder->setText(m_currentFolder);
+        showAccountView(m_currentFolder);
+    }
+    else
+    {
+        if (row >= 0 && row < m_names.size())
+            navigateToAccount(m_names[row], m_uris[row]);
+    }
+}
+
+void StuauthWindow::onAddClicked()
+{
+    if (!m_currentFolder.isEmpty())
+    {
+        navigateToNewAccount(m_currentFolder);
+    }
+    else
+    {
+        bool ok;
+        QString name = QInputDialog::getText(this, tr("Nouveau dossier"),
+            tr("Nom du dossier :"),
+            QLineEdit::Normal, "", &ok);
+        if (!ok) return;
+        if (name.trimmed().isEmpty())
+        {
+            QMessageBox::warning(this, tr("Erreur"),
+                tr("Le nom du dossier ne peut pas être vide."));
+            return;
+        }
+        m_am->addFolder(name.trimmed());
+        updateFolderList();
+    }
+}
+
+void StuauthWindow::onDeleteClicked()
+{
+    QListWidgetItem* item = m_list->currentItem();
+    if (!item) return;
+    QString name = item->text();
+
+    if (!m_currentFolder.isEmpty())
+    {
+        if (m_am->deleteFolderOrAccount(name, false))
+        {
+            QMessageBox::information(this, tr("Supprimé"),
+                tr("Le compte \"%1\" a été supprimé.").arg(name));
+            showAccountView(m_currentFolder);
+        }
+    }
+    else
+    {
+        if (!m_am->deleteFolderOrAccount(name, true, false))
+        {
+            auto confirm = QMessageBox::warning(this, tr("Dossier non vide"),
+                tr("Le dossier \"%1\" contient des comptes.\n"
+                    "Voulez-vous le supprimer quand même ?").arg(name),
+                QMessageBox::Yes | QMessageBox::No);
+
+            if (confirm == QMessageBox::Yes)
+                m_am->deleteFolderOrAccount(name, true, true);
+        }
+        updateFolderList();
+    }
+}
+
+void StuauthWindow::onRenameClicked()
+{
+    QListWidgetItem* item = m_list->currentItem();
+    if (!item) return;
+
+    QString oldName = item->text();
+    bool ok;
+    QString newName = QInputDialog::getText(this, tr("Renommer"),
+        tr("Nouveau nom :"),
+        QLineEdit::Normal, oldName, &ok);
+    if (!ok || newName.trimmed().isEmpty()) return;
+
+    bool isFolder = m_currentFolder.isEmpty();
+    m_am->renameFolderOrAccount(oldName, newName.trimmed(), isFolder);
+
+    if (isFolder) updateFolderList();
+    else          showAccountView(m_currentFolder);
+}
+
+void StuauthWindow::onBackClicked()
+{
+    updateFolderList();
+}
+
+void StuauthWindow::onExportClicked()
+{
+    QMenu menu(this);
+    menu.addAction(tr("Exporter en texte"), this, &StuauthWindow::exportToText);
+    menu.addAction(tr("Exporter en QR Code"), this, &StuauthWindow::exportToQRCode);
+    menu.exec(QCursor::pos());
+}
+
+void StuauthWindow::onHelpClicked()
+{
+    QMessageBox::information(this, tr("À propos"),
+        tr("StuAuth — version %1").arg(QApplication::applicationVersion()));
+}
+
+void StuauthWindow::onTimeSynchro()
+{
+#ifdef _WIN32
+    QProcess::startDetached("powershell.exe",
+        { "-Command", "net start w32time ; w32tm /resync" });
+#else
+    timeSynchroLinux();
+#endif
+}
+
+void StuauthWindow::timeSynchroLinux()
+{
+    QProcess p;
+    p.start("timedatectl", { "set-ntp", "true" });
+    p.waitForFinished(3000);
+}
+
+void StuauthWindow::onServerClicked()
+{
+    navigateToNetwork();
+}
+
+void StuauthWindow::updateServerButton()
+{
+    if (m_server && m_server->isRunning())
+        m_btnServer->setStyleSheet(
+            "QPushButton { background-color: green; border-radius: 5px; }");
+    else
+        m_btnServer->setStyleSheet(
+            "QPushButton { background-color: red; border-radius: 5px; }");
+}
+
+// ─────────────────────────────────────────────
+//  Export
+// ─────────────────────────────────────────────
+
+void StuauthWindow::exportToText()
+{
+    QStringList lines = m_am->readLines();
+    for (const QString& line : lines)
+    {
+        if (line.split(';').value(1).isEmpty())
+        {
+            QMessageBox::warning(this, tr("Erreur"),
+                tr("Certains dossiers sont vides, impossible d'exporter."));
+            return;
+        }
+    }
+
+    QString path = QFileDialog::getSaveFileName(this, tr("Exporter"),
+        "", tr("Fichiers texte (*.txt)"));
+    if (path.isEmpty()) return;
+
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+
+    QTextStream out(&file);
+    for (const QString& line : lines)
+    {
+        QString uri = line.split(';').value(1);
+        if (!uri.isEmpty()) out << uri << "\n";
+    }
+}
+
+void StuauthWindow::exportToQRCode()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Dossier de destination"));
+    if (dir.isEmpty()) return;
+
+    QStringList lines = m_am->readLines();
+    for (const QString& line : lines)
+    {
+        QStringList parts = line.split(';');
+        if (parts.size() < 2 || parts[1].isEmpty()) continue;
+
+        QString accountName = parts[0].split('\\').value(1);
+        if (accountName.isEmpty()) continue;
+
+        // TODO : générer le QR PNG avec ZXing-C++
+        QFile f(dir + "/" + accountName + ".txt");
+        if (f.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QTextStream out(&f);
+            out << parts[1];
+        }
+    }
+
+    QMessageBox::information(this, tr("Export terminé"),
+        tr("Les comptes ont été exportés dans :\n%1").arg(dir));
+}
+
+// ─────────────────────────────────────────────
+//  Close event → systray
+// ─────────────────────────────────────────────
+
 void StuauthWindow::closeEvent(QCloseEvent* event)
 {
-    if (m_tray) {
-        this->hide();
-        event->ignore();  // Ignore la fermeture, cache juste la fenêtre
+    if (m_tray)
+    {
+        hide();
+        event->ignore();
     }
-    else {
-        event->accept();  // Sinon ferme vraiment
+    else
+    {
+        event->accept();
     }
 }
