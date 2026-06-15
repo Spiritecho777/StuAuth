@@ -7,6 +7,7 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QFont>
+#include <QDebug>
 
 SelectAccountPage::SelectAccountPage(const QString& name, const QString& otpUri, QWidget* parent)
     : QWidget(parent)

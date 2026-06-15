@@ -7,6 +7,7 @@
 #include <QStandardPaths>
 #include <QRegularExpression>
 #include <QMessageBox>
+#include <QDebug>
 #include <QUrl>
 
 // ─────────────────────────────────────────────
@@ -239,7 +240,13 @@ void AccountManager::ensureDecrypted() const
     QByteArray cipher = enc.readAll();
     enc.close();
 
-    if (cipher.isEmpty()) return;
+    // Fichier vide = aucun compte enregistré, rien à déchiffrer
+    if (cipher.isEmpty())
+    {
+        QFile out(m_plainPath);
+        out.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        return;
+    }
 
     CryptoUtils crypto;
     QByteArray plain = crypto.decryptBytes(cipher);
@@ -267,6 +274,14 @@ void AccountManager::encrypt() const
     if (!f.open(QIODevice::ReadOnly)) return;
     QByteArray plain = f.readAll();
     f.close();
+
+    // Fichier vide (dernier dossier supprimé) : on tronque directement Account.dat
+    if (plain.isEmpty())
+    {
+        QFile enc(m_encryptedPath);
+        enc.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        return;
+    }
 
     CryptoUtils crypto;
     QByteArray cipher = crypto.encryptBytes(plain);
@@ -314,7 +329,7 @@ QString AccountManager::updateUri(const QString& uri, const QString& newName) co
     QStringList nameDetails = last.split('?');
     if (nameDetails.size() < 2) return uri;
 
-    nameDetails[0] = QString::fromUtf8(QUrl::toPercentEncoding(newName));
+    nameDetails[0] = QUrl::toPercentEncoding(newName);
     uriParts.last() = nameDetails.join('?');
 
     return uriParts.join('/');

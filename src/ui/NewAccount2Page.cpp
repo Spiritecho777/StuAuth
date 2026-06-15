@@ -49,21 +49,11 @@ void NewAccount2Page::onSaveClicked()
         return;
     }
 
-    // Reconstruction de l'URI avec le nom : otpauth://totp/NOM?secret=...
-    QStringList parts = m_otpUri.split('/');
-    if (parts.size() >= 4)
-    {
-        // Remplace la partie label dans l'URI
-        parts[3] = QUrl::toPercentEncoding(name) + (parts.size() > 4 ? "" : "");
-        if (parts.size() == 4)
-        {
-            // URI courte : otpauth://totp/?secret=...  → on insère le nom
-            QString query = parts[3].section('?', 1);
-            parts[3] = QUrl::toPercentEncoding(name) + "?" + query;
-        }
-    }
-
-    QString finalUri = parts.join('/');
+    // Reconstruction propre : on garde la query string intacte
+    // otpauth://totp/?secret=XXX  →  otpauth://totp/NOM?secret=XXX
+    QUrl url(m_otpUri);
+    QString query = url.query();   // "secret=XXX&digits=6&period=30"
+    QString finalUri = "otpauth://totp/" + QUrl::toPercentEncoding(name) + "?" + query;
     QString line = m_folderName + "\\" + name + ";" + finalUri;
 
     AccountManager am;

@@ -43,6 +43,7 @@ private slots:
 private:
     QTcpServer* m_server = nullptr;
     QThread* m_thread = nullptr;
+    bool            m_running = false;
     AccountManager* m_accounts = nullptr;
 
     QString buildJsonResponse() const;

@@ -56,12 +56,14 @@ bool HttpServer::start(const QString& ip, quint16 port)
             emit started(ip, port);
         });
 
+    m_running = true;
     m_thread->start();
     return true;
 }
 
 void HttpServer::stop()
 {
+    m_running = false;
     if (m_server)
     {
         m_server->close();
@@ -81,7 +83,7 @@ void HttpServer::stop()
 
 bool HttpServer::isRunning() const
 {
-    return m_server && m_server->isListening();
+    return m_running;
 }
 
 // ─────────────────────────────────────────────

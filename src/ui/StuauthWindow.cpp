@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QSettings>
 #include <QCursor>
+#include <QDebug>
 
 // ─────────────────────────────────────────────
 //  Constructeur
@@ -214,7 +215,7 @@ void StuauthWindow::showAccountView(const QString& folderName)
     for (const QString& line : m_am->getAccountsByFolder(folderName))
     {
         QStringList parts = line.split(';');
-        if (parts.size() == 2)
+        if (parts.size() == 2 && !parts[0].isEmpty() && !parts[1].isEmpty())
         {
             m_names << parts[0];
             m_uris << parts[1];
@@ -245,6 +246,7 @@ void StuauthWindow::showMainView()
     }
     m_stack->setCurrentIndex(0);
     updateFolderList();
+    updateServerButton();  // rafraîchit le bouton après retour depuis NetworkPage
 }
 
 void StuauthWindow::navigateToAccount(const QString& name, const QString& otpUri)

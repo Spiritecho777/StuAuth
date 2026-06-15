@@ -52,8 +52,12 @@ int TotpEngine::secondsRemaining(int step)
 
 QString TotpEngine::extractSecret(const QString& otpauthUri)
 {
-    QUrl url(otpauthUri);
-    QUrlQuery query(url.query());
+    // QUrl ne parse pas bien le scheme otpauth://
+    // On extrait la query string manuellement
+    int qmark = otpauthUri.indexOf('?');
+    if (qmark == -1) return {};
+
+    QUrlQuery query(otpauthUri.mid(qmark + 1));
     return query.queryItemValue("secret").toUpper().remove('=');
 }
 

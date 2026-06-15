@@ -13,6 +13,81 @@
 #include <QJsonObject>
 #include <QTcpSocket>
 #include <QRegularExpression>
+#include <QProcess>
+#include <QThread>
+
+// ─────────────────────────────────────────────
+//  Worker de scan (classe séparée, pas de lambda)
+// ─────────────────────────────────────────────
+
+class ScanWorker : public QObject
+{
+    Q_OBJECT
+public:
+    explicit ScanWorker(const QString& subnet) : m_subnet(subnet) {}
+
+signals:
+    void finished(QStringList found);
+
+public slots:
+    void run()
+    {
+        QStringList found;
+
+        // ── ARP d'abord : rapide et fiable sur le LAN ──
+#ifdef _WIN32
+        QStringList arpArgs = { "-a" };
+#else
+        QStringList arpArgs = { "-n" };
+#endif
+        QProcess arp;
+        arp.start("arp", arpArgs);
+        arp.waitForFinished(3000);
+        QString arpOut = QString::fromLocal8Bit(arp.readAllStandardOutput());
+
+        static QRegularExpression arpRe(R"((\d+\.\d+\.\d+\.\d+))");
+        QRegularExpressionMatchIterator it = arpRe.globalMatch(arpOut);
+        while (it.hasNext())
+        {
+            QString ip = it.next().captured(1);
+            if (ip.startsWith(m_subnet + ".") && !found.contains(ip))
+                found << ip;
+        }
+
+        // ── Ping parallèle sur les IP manquantes ────────
+        // Lance tous les process simultanément
+        QList<QPair<QString, QProcess*>> procs;
+        for (int i = 1; i < 255; ++i)
+        {
+            QString ip = m_subnet + "." + QString::number(i);
+            if (found.contains(ip)) continue;
+
+            QProcess* p = new QProcess();
+#ifdef _WIN32
+            p->start("ping", { "-n", "1", "-w", "100", ip });
+#else
+            p->start("ping", { "-c", "1", "-W", "1", ip });
+#endif
+            procs << qMakePair(ip, p);
+        }
+
+        // Attend tous les résultats
+        for (auto& pair : procs)
+        {
+            pair.second->waitForFinished(2000);
+            if (pair.second->exitCode() == 0 && !found.contains(pair.first))
+                found << pair.first;
+            delete pair.second;
+        }
+
+        emit finished(found);
+    }
+
+private:
+    QString m_subnet;
+};
+
+#include "NetworkPage.moc"
 
 // ─────────────────────────────────────────────
 //  Constructeur
@@ -58,6 +133,7 @@ void NetworkPage::buildUi()
     m_lblServerIp = new QLabel(tr("—"));
     m_comboIface = new QComboBox();
 
+    m_btnScan = new QPushButton(tr("Scanner"));
     m_btnServer = new QPushButton(tr("Serveur"));
     m_btnSync = new QPushButton(tr("Synchroniser"));
     m_btnBack = new QPushButton(tr("Retour"));
@@ -66,7 +142,6 @@ void NetworkPage::buildUi()
     m_progress->setVisible(false);
     m_progress->setTextVisible(false);
 
-    // Layout
     QGridLayout* grid = new QGridLayout();
     grid->addWidget(m_lblApp, 0, 0, 1, 2);
     grid->addWidget(m_editSubnet, 1, 0, 1, 2);
@@ -76,6 +151,7 @@ void NetworkPage::buildUi()
     grid->addWidget(m_comboIface, 4, 1);
 
     QHBoxLayout* btnRow = new QHBoxLayout();
+    btnRow->addWidget(m_btnScan);
     btnRow->addWidget(m_btnServer);
     btnRow->addWidget(m_btnSync);
     btnRow->addStretch();
@@ -88,15 +164,13 @@ void NetworkPage::buildUi()
     layout->addWidget(m_progress);
     layout->addLayout(btnRow);
 
-    // Connexions
     connect(m_btnServer, &QPushButton::clicked, this, &NetworkPage::onServerToggle);
     connect(m_btnSync, &QPushButton::clicked, this, &NetworkPage::onSyncClicked);
     connect(m_btnBack, &QPushButton::clicked, this, &NetworkPage::navigateBack);
+    connect(m_btnScan, &QPushButton::clicked, this, &NetworkPage::onScanSubnet);
+    connect(m_editSubnet, &QLineEdit::returnPressed, this, &NetworkPage::onScanSubnet);
     connect(m_comboIface, QOverload<int>::of(&QComboBox::currentIndexChanged),
         this, &NetworkPage::onInterfaceChanged);
-
-    connect(m_editSubnet, &QLineEdit::returnPressed, this, &NetworkPage::onScanSubnet);
-
     connect(m_comboAppIp, &QComboBox::currentTextChanged, this, [this](const QString& ip) {
         m_appIp = ip;
         QSettings s;
@@ -124,11 +198,9 @@ void NetworkPage::loadNetworkInterfaces()
 void NetworkPage::onInterfaceChanged(int index)
 {
     if (index < 0) return;
-
     QString ifaceName = m_comboIface->itemData(index).toString();
     m_serverIp = getLocalIp(ifaceName);
     m_lblServerIp->setText(m_serverIp.isEmpty() ? tr("Introuvable") : m_serverIp);
-
     QSettings s;
     s.setValue("InterfaceSelect", index);
 }
@@ -140,9 +212,7 @@ QString NetworkPage::getLocalIp(const QString& ifaceName) const
     {
         if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol &&
             !entry.ip().isLoopback())
-        {
             return entry.ip().toString();
-        }
     }
     return {};
 }
@@ -154,7 +224,6 @@ QString NetworkPage::getLocalIp(const QString& ifaceName) const
 void NetworkPage::onScanSubnet()
 {
     QString subnet = m_editSubnet->text().trimmed();
-    // Validation format x.x.x
     static QRegularExpression re(R"(^\d{1,3}\.\d{1,3}\.\d{1,3}$)");
     if (!re.match(subnet).hasMatch())
     {
@@ -164,21 +233,25 @@ void NetworkPage::onScanSubnet()
     }
 
     m_comboAppIp->clear();
+    m_btnScan->setEnabled(false);
 
-    // Ping asynchrone sur .1 → .254
-    for (int i = 1; i < 255; ++i)
-    {
-        QString ip = subnet + "." + QString::number(i);
-        QTcpSocket* sock = new QTcpSocket(this);
-        sock->connectToHost(ip, 19755);
+    QThread* thread = new QThread(this);
+    ScanWorker* worker = new ScanWorker(subnet);
+    worker->moveToThread(thread);
 
-        connect(sock, &QTcpSocket::connected, this, [this, ip, sock]() {
-            m_comboAppIp->addItem(ip);
-            sock->disconnectFromHost();
-            sock->deleteLater();
-            });
-        connect(sock, &QAbstractSocket::errorOccurred, sock, &QObject::deleteLater);
-    }
+    connect(thread, &QThread::started, worker, &ScanWorker::run);
+    connect(worker, &ScanWorker::finished, this, [this, thread, worker](const QStringList& found)
+        {
+            for (const QString& ip : found)
+                m_comboAppIp->addItem(ip);
+
+            m_btnScan->setEnabled(true);
+            worker->deleteLater();
+            thread->quit();
+            thread->deleteLater();
+        });
+
+    thread->start();
 }
 
 // ─────────────────────────────────────────────
@@ -188,13 +261,9 @@ void NetworkPage::onScanSubnet()
 void NetworkPage::onServerToggle()
 {
     if (!m_server->isRunning())
-    {
         m_server->start(m_serverIp);
-    }
     else
-    {
         m_server->stop();
-    }
 
     updateServerButton();
     emit serverStateChanged();
@@ -224,7 +293,6 @@ void NetworkPage::onSyncClicked()
     auto answer = QMessageBox::question(this, tr("Synchronisation"),
         tr("Synchroniser les comptes depuis %1 ?").arg(m_appIp),
         QMessageBox::Yes | QMessageBox::No);
-
     if (answer != QMessageBox::Yes) return;
 
     if (!isHostReachable(m_appIp))
@@ -240,8 +308,8 @@ void NetworkPage::onSyncClicked()
     m_progress->setVisible(true);
     m_progress->setValue(0);
 
-    QUrl url(QString("http://%1:19755/").arg(m_appIp));
-    QNetworkReply* reply = m_nam->get(QNetworkRequest(url));
+    QNetworkReply* reply = m_nam->get(
+        QNetworkRequest(QUrl(QString("http://%1:19755/").arg(m_appIp))));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]()
         {
@@ -255,7 +323,6 @@ void NetworkPage::onSyncClicked()
                 m_btnSync->setEnabled(true);
                 return;
             }
-
             onSyncFinished(reply->readAll());
             reply->deleteLater();
         });
@@ -263,35 +330,27 @@ void NetworkPage::onSyncClicked()
 
 void NetworkPage::onSyncFinished(const QByteArray& data)
 {
-    QJsonDocument doc = QJsonDocument::fromJson(data);
-    QJsonObject   obj = doc.object();
+    QJsonObject obj = QJsonDocument::fromJson(data).object();
 
     QStringList accounts = obj["Accounts"].toString().split('\n', Qt::SkipEmptyParts);
     QStringList folders = obj["Folder"].toString().split('\n', Qt::SkipEmptyParts);
-
     QStringList existing = m_am->getAllOtpSecrets();
-    int total = accounts.size();
 
+    int total = accounts.size();
     for (int i = 0; i < total; ++i)
     {
         QString uri = accounts[i].trimmed();
         QString folder = (i < folders.size()) ? folders[i].trimmed() : "Default";
 
-        // Extraire le secret pour éviter les doublons
         static QRegularExpression re("secret=([^&]+)");
         QRegularExpressionMatch m = re.match(uri);
-        if (!m.hasMatch()) continue;
+        if (!m.hasMatch() || existing.contains(m.captured(1))) continue;
 
-        if (existing.contains(m.captured(1))) continue;
-
-        // Extraire le label depuis l'URI
         QUrl    qurl(uri);
         QString label = QUrl::fromPercentEncoding(qurl.path().mid(1).toUtf8());
         if (label.isEmpty()) label = "Unknown";
 
-        QString line = folder + "\\" + label + ";" + uri;
-        m_am->addAccount(line);
-
+        m_am->addAccount(folder + "\\" + label + ";" + uri);
         m_progress->setValue(((i + 1) * 100) / total);
     }
 
@@ -299,7 +358,6 @@ void NetworkPage::onSyncFinished(const QByteArray& data)
     m_btnBack->setEnabled(true);
     m_btnServer->setEnabled(true);
     m_btnSync->setEnabled(true);
-
     emit navigateBack();
 }
 
@@ -315,7 +373,7 @@ bool NetworkPage::isHostReachable(const QString& ip) const
 }
 
 // ─────────────────────────────────────────────
-//  Traduction dynamique
+//  Traduction
 // ─────────────────────────────────────────────
 
 void NetworkPage::retranslateUi()
@@ -324,5 +382,6 @@ void NetworkPage::retranslateUi()
     m_lblServer->setText(tr("Serveur :"));
     m_btnSync->setText(tr("Synchroniser"));
     m_btnBack->setText(tr("Retour"));
+    m_btnScan->setText(tr("Scanner"));
     m_btnServer->setText(tr("Serveur"));
 }
