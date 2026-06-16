@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <QFont>
 #include <QDebug>
+#include <QDateTime>
 
 SelectAccountPage::SelectAccountPage(const QString& name, const QString& otpUri, QWidget* parent)
     : QWidget(parent)
@@ -85,6 +86,10 @@ void SelectAccountPage::refreshOtp()
     m_lblCode->setText(code);
     m_lblTimer->setText(QString::number(remaining) + "s");
     m_progress->setValue(remaining);
+
+    qDebug() << "UTC now:" << QDateTime::currentDateTimeUtc();
+    qDebug() << "epoch:" << QDateTime::currentSecsSinceEpoch();
+    qDebug() << "counter:" << QDateTime::currentSecsSinceEpoch() / 30;
 }
 
 void SelectAccountPage::onTick()

@@ -34,7 +34,7 @@ StuauthWindow::StuauthWindow(QWidget* parent) : QMainWindow(parent)
     m_server = new HttpServer(m_am, this);
 
     // ── Menu langue ──────────────────────────────
-    m_langMenu = menuBar()->addMenu(tr("Langue"));
+    /*m_langMenu = menuBar()->addMenu(tr("Langue"));
 
     QActionGroup* langGroup = new QActionGroup(this);
     langGroup->setExclusive(true);
@@ -61,7 +61,7 @@ StuauthWindow::StuauthWindow(QWidget* parent) : QMainWindow(parent)
     else if (cur == "bz") m_actBz->setChecked(true);
     else if (cur == "ja") m_actJa->setChecked(true);
     else                  m_actEn->setChecked(true);
-
+    */
     // ── Stack + page principale ──────────────────
     m_stack = new QStackedWidget(this);
     setCentralWidget(m_stack);
@@ -97,6 +97,20 @@ void StuauthWindow::buildMainWidget()
     m_btnDel->setFixedSize(30, 30);
     m_btnHelp->setFixedSize(25, 30);
 
+	m_btnLang = new QPushButton("🌐");
+    QFont f = m_btnLang->font();
+    f.setPointSize(10);
+    m_btnLang->setFont(f);
+	m_btnLang->setFixedSize(50, 30);
+
+	m_langMenu = new QMenu(this);
+	m_actFr = m_langMenu->addAction("Français");
+	m_actEn = m_langMenu->addAction("English");
+	m_actBz = m_langMenu->addAction("Brezhoneg");
+	m_actJa = m_langMenu->addAction("日本語");
+
+	m_btnLang->setMenu(m_langMenu);
+
     QHBoxLayout* toolbar1 = new QHBoxLayout();
     toolbar1->addWidget(m_btnRename);
     toolbar1->addStretch();
@@ -104,6 +118,7 @@ void StuauthWindow::buildMainWidget()
     toolbar1->addWidget(m_btnDel);
     toolbar1->addWidget(m_btnExport);
     toolbar1->addWidget(m_btnHelp);
+	toolbar1->addWidget(m_btnLang);
 
     // Toolbar ligne 2 : Serveur | Synchro | NomDossier | <--
     m_btnServer = new QPushButton("⬤");
@@ -146,6 +161,11 @@ void StuauthWindow::buildMainWidget()
     connect(m_btnSynchro, &QPushButton::clicked, this, &StuauthWindow::onTimeSynchro);
     connect(m_btnServer, &QPushButton::clicked, this, &StuauthWindow::onServerClicked);
     connect(m_list, &QListWidget::itemDoubleClicked, this, &StuauthWindow::onItemDoubleClicked);
+
+	connect(m_actFr, &QAction::triggered, this, [this]() { setLanguage("fr"); });
+	connect(m_actEn, &QAction::triggered, this, [this]() { setLanguage("en"); });
+	connect(m_actBz, &QAction::triggered, this, [this]() { setLanguage("bz"); });
+	connect(m_actJa, &QAction::triggered, this, [this]() { setLanguage("ja"); });
 }
 
 // ─────────────────────────────────────────────
@@ -416,8 +436,14 @@ void StuauthWindow::onHelpClicked()
 void StuauthWindow::onTimeSynchro()
 {
 #ifdef _WIN32
-    QProcess::startDetached("powershell.exe",
-        { "-Command", "net start w32time ; w32tm /resync" });
+    // Élévation UAC via PowerShell Start-Process -Verb RunAs
+    QProcess::startDetached("powershell.exe", {
+        "-Command",
+        "Start-Process cmd.exe "
+        "-ArgumentList '/C net start w32time & w32tm /resync' "
+        "-Verb RunAs "
+        "-WindowStyle Hidden"
+        });
 #else
     timeSynchroLinux();
 #endif
@@ -425,9 +451,10 @@ void StuauthWindow::onTimeSynchro()
 
 void StuauthWindow::timeSynchroLinux()
 {
+    // timedatectl est fourni par systemd, présent sur toutes les distros modernes
     QProcess p;
-    p.start("timedatectl", { "set-ntp", "true" });
-    p.waitForFinished(3000);
+    p.start("pkexec", { "timedatectl", "set-ntp", "true" });
+    p.waitForFinished(5000);
 }
 
 void StuauthWindow::onServerClicked()
@@ -451,17 +478,6 @@ void StuauthWindow::updateServerButton()
 
 void StuauthWindow::exportToText()
 {
-    QStringList lines = m_am->readLines();
-    for (const QString& line : lines)
-    {
-        if (line.split(';').value(1).isEmpty())
-        {
-            QMessageBox::warning(this, tr("Erreur"),
-                tr("Certains dossiers sont vides, impossible d'exporter."));
-            return;
-        }
-    }
-
     QString path = QFileDialog::getSaveFileName(this, tr("Exporter"),
         "", tr("Fichiers texte (*.txt)"));
     if (path.isEmpty()) return;
@@ -470,11 +486,22 @@ void StuauthWindow::exportToText()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return;
 
     QTextStream out(&file);
-    for (const QString& line : lines)
+    int count = 0;
+    for (const QString& line : m_am->readLines())
     {
         QString uri = line.split(';').value(1);
-        if (!uri.isEmpty()) out << uri << "\n";
+        if (!uri.isEmpty())
+        {
+            out << uri << "\n";
+            count++;
+        }
     }
+
+    if (count == 0)
+        QMessageBox::warning(this, tr("Export"), tr("Aucun compte à exporter."));
+    else
+        QMessageBox::information(this, tr("Export terminé"),
+            tr("%1 compte(s) exporté(s).").arg(count));
 }
 
 void StuauthWindow::exportToQRCode()

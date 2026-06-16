@@ -88,6 +88,7 @@ private:
 
     // Menu langue
     QMenu* m_langMenu = nullptr;
+	QPushButton* m_btnLang = nullptr;
     QAction* m_actFr = nullptr;
     QAction* m_actEn = nullptr;
     QAction* m_actBz = nullptr;

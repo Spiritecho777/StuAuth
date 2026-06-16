@@ -1,6 +1,10 @@
 #include <QCoreApplication>
 #include <QApplication>
 #include <QIcon>
+#include <QFile>
+#include <QStandardPaths>
+#include <QDebug>
+#include <QDir>
 
 #include "commun/AppInitializer.h"
 #include "ui/StuauthWindow.h"
@@ -40,6 +44,12 @@ int main(int argc, char* argv[])
     w.show();
 
     int ret = a.exec();
+
+    // Suppression du fichier déchiffré temporaire à la fermeture
+    QString appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString decryptedPath = appData + "/Account_decrypted.dat";
+    if (QFile::exists(decryptedPath))
+        QFile::remove(decryptedPath);
 
 //#ifdef _WIN32
 //    WSACleanup();

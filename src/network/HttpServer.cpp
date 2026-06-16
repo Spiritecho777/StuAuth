@@ -131,46 +131,35 @@ void HttpServer::onReadyRead()
 
 QString HttpServer::buildJsonResponse() const
 {
+    // Format : chaque entrée = "Dossier|otpauth://..."
+    // On ignore les lignes sans URI (dossiers vides)
+    QStringList lines = m_accounts->readLines();
+    QStringList accounts;
+    QStringList folders;
+
+    for (const QString& line : lines)
+    {
+        int sep = line.indexOf(';');
+        if (sep == -1) continue;
+
+        QString path = line.left(sep);   // "Dossier\NomCompte"
+        QString uri = line.mid(sep + 1).trimmed();
+        if (uri.isEmpty()) continue;     // ignore dossiers vides
+
+        QString folder = path.split('\\').value(0);
+        accounts << uri;
+        folders << folder;
+    }
+
     QJsonObject obj;
-    obj["Accounts"] = getAccounts();
-    obj["Folder"] = getFolders();
+    obj["Accounts"] = accounts.join('\n');
+    obj["Folder"] = folders.join('\n');
 
     return QString::fromUtf8(QJsonDocument(obj).toJson(QJsonDocument::Compact));
 }
 
-QString HttpServer::getAccounts() const
-{
-    // Retourne la partie après ";" de chaque ligne (l'URI otpauth)
-    QStringList lines = m_accounts->readLines();
-    QStringList results;
-
-    for (const QString& line : lines)
-    {
-        int idx = line.indexOf(';');
-        if (idx != -1)
-            results << line.mid(idx + 1).trimmed();
-    }
-
-    return results.join('\n');
-}
-
-QString HttpServer::getFolders() const
-{
-    // Retourne la partie avant "\" de chaque ligne (le nom du dossier)
-    QStringList lines = m_accounts->readLines();
-    QStringList results;
-
-    for (const QString& line : lines)
-    {
-        int idx = line.indexOf('\\');
-        if (idx != -1)
-            results << line.left(idx).trimmed();
-        else
-            results << line.trimmed();
-    }
-
-    return results.join('\n');
-}
+QString HttpServer::getAccounts() const { return {}; }
+QString HttpServer::getFolders()  const { return {}; }
 
 // ─────────────────────────────────────────────
 //  Réponse HTTP/1.1 minimale avec CORS

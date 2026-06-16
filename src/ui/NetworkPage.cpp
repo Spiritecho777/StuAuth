@@ -15,6 +15,7 @@
 #include <QRegularExpression>
 #include <QProcess>
 #include <QThread>
+#include <QDebug>
 
 // ─────────────────────────────────────────────
 //  Worker de scan (classe séparée, pas de lambda)
