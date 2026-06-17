@@ -12,6 +12,9 @@
 #include <QPainter>
 #include <QRegularExpression>
 
+#include <ReadBarcode.h>
+#include <BarcodeFormat.h>
+
 // ─────────────────────────────────────────────
 //  Widget de sélection de zone écran
 //  (remplace le Form WinForms de capture QR)
@@ -47,14 +50,35 @@ protected:
         if (e->buttons() & Qt::LeftButton)
             m_rubber->setGeometry(QRect(m_origin, e->pos()).normalized());
     }
+
     void mouseReleaseEvent(QMouseEvent* e) override
     {
         QRect sel = QRect(m_origin, e->pos()).normalized();
         hide();
         if (sel.isValid())
-            emit regionSelected(m_screen.copy(sel));
+        {
+            // ── Corrige le décalage DPI ──
+            qreal dpr = m_screen.devicePixelRatio();
+            if (dpr > 1.0)
+            {
+                // QImage::copy() travaille en pixels physiques
+                QImage full = m_screen.toImage();
+                QRect physSel(
+                    qRound(sel.x() * dpr),
+                    qRound(sel.y() * dpr),
+                    qRound(sel.width() * dpr),
+                    qRound(sel.height() * dpr)
+                );
+                emit regionSelected(QPixmap::fromImage(full.copy(physSel)));
+            }
+            else
+            {
+                emit regionSelected(m_screen.copy(sel));
+            }
+        }
         close();
     }
+
 
 private:
     QPixmap     m_screen;
@@ -135,6 +159,29 @@ void NewAccountPage::onImportClicked()
     emit navigateToImport({});
 }
 
+void NewAccountPage::processQrText(const QString& text)
+{
+    if (text.contains("migration"))
+    {
+        // Import Google Auth migration
+        QList<OtpEntry> entries = ProtoParser::parseFromMigrationUri(text);
+        QStringList uris;
+        for (const OtpEntry& e : entries)
+            uris << e.toOtpauthUri();
+        emit navigateToImport(uris);
+    }
+    else if (text.startsWith("otpauth://"))
+    {
+        // Compte unique
+        emit navigateToNaming(text);
+    }
+    else
+    {
+        QMessageBox::warning(this, tr("QR Code"),
+            tr("QR code non reconnu : %1").arg(text));
+    }
+}
+
 void NewAccountPage::onCaptureClicked()
 {
     // Capture écran + détection QR
@@ -145,17 +192,35 @@ void NewAccountPage::onCaptureClicked()
 
     connect(capture, &ScreenCapture::regionSelected, this, [this](const QPixmap& region)
         {
-            // TODO : décoder le QR avec ZXing-C++ ici
-            // Exemple d'intégration ZXing :
-            //   QImage img = region.toImage().convertToFormat(QImage::Format_RGB32);
-            //   ZXing::ImageView view(img.bits(), img.width(), img.height(), ZXing::ImageFormat::XRGB);
-            //   auto result = ZXing::ReadBarcode(view);
-            //   if (result.isValid()) processQrText(result.text());
+            QImage img = region.toImage().convertToFormat(QImage::Format_RGB32);
+            if (img.isNull())
+            {
+                QMessageBox::warning(this, tr("Erreur"), tr("Impossible de capturer la région."));
+                return;
+            }
 
-            // Stub temporaire : demande manuelle si ZXing non intégré
-            Q_UNUSED(region)
-                QMessageBox::information(this, tr("QR Code"),
-                    tr("Intégrez ZXing-C++ pour activer la détection automatique."));
+            ZXing::ImageView view(
+                img.bits(),
+                img.width(),
+                img.height(),
+                ZXing::ImageFormat::BGRX,
+                img.bytesPerLine()
+
+            );
+
+            ZXing::ReaderOptions opts;
+            opts.setTryHarder(true);
+            opts.setTryRotate(true);
+
+            auto result = ZXing::ReadBarcode(view, opts);
+
+            if (!result.isValid())
+            {
+                QMessageBox::warning(this, tr("QR Code"), tr("Aucun QR code détecté."));
+                return;
+            }
+
+            processQrText(QString::fromStdString(result.text()));
         });
 
     window()->hide();

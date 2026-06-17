@@ -20,6 +20,8 @@
 #include <QSettings>
 #include <QCursor>
 #include <QDebug>
+#include <MultiFormatWriter.h>
+#include <BitMatrix.h>
 
 // ─────────────────────────────────────────────
 //  Constructeur
@@ -33,35 +35,6 @@ StuauthWindow::StuauthWindow(QWidget* parent) : QMainWindow(parent)
     m_am = new AccountManager();
     m_server = new HttpServer(m_am, this);
 
-    // ── Menu langue ──────────────────────────────
-    /*m_langMenu = menuBar()->addMenu(tr("Langue"));
-
-    QActionGroup* langGroup = new QActionGroup(this);
-    langGroup->setExclusive(true);
-
-    m_actFr = m_langMenu->addAction("Français");
-    m_actEn = m_langMenu->addAction("English");
-    m_actBz = m_langMenu->addAction("Brezhoneg");
-    m_actJa = m_langMenu->addAction("日本語");
-
-    for (QAction* a : { m_actFr, m_actEn, m_actBz, m_actJa })
-    {
-        a->setCheckable(true);
-        langGroup->addAction(a);
-    }
-
-    connect(m_actFr, &QAction::triggered, this, [this]() { setLanguage("fr"); });
-    connect(m_actEn, &QAction::triggered, this, [this]() { setLanguage("en"); });
-    connect(m_actBz, &QAction::triggered, this, [this]() { setLanguage("bz"); });
-    connect(m_actJa, &QAction::triggered, this, [this]() { setLanguage("ja"); });
-
-    // Coche la langue actuellement active
-    const QString cur = TranslationManager::instance().currentLanguage();
-    if (cur == "fr") m_actFr->setChecked(true);
-    else if (cur == "bz") m_actBz->setChecked(true);
-    else if (cur == "ja") m_actJa->setChecked(true);
-    else                  m_actEn->setChecked(true);
-    */
     // ── Stack + page principale ──────────────────
     m_stack = new QStackedWidget(this);
     setCentralWidget(m_stack);
@@ -504,12 +477,15 @@ void StuauthWindow::exportToText()
             tr("%1 compte(s) exporté(s).").arg(count));
 }
 
+
 void StuauthWindow::exportToQRCode()
 {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Dossier de destination"));
     if (dir.isEmpty()) return;
 
     QStringList lines = m_am->readLines();
+    int count = 0;
+
     for (const QString& line : lines)
     {
         QStringList parts = line.split(';');
@@ -518,18 +494,49 @@ void StuauthWindow::exportToQRCode()
         QString accountName = parts[0].split('\\').value(1);
         if (accountName.isEmpty()) continue;
 
-        // TODO : générer le QR PNG avec ZXing-C++
-        QFile f(dir + "/" + accountName + ".txt");
-        if (f.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-            QTextStream out(&f);
-            out << parts[1];
+        QString uri = parts[1];
+
+        // ── Génération du QR code via ZXing ──
+        try {
+            ZXing::MultiFormatWriter writer(ZXing::BarcodeFormat::QRCode);
+            ZXing::BitMatrix matrix = writer.encode(uri.toStdString(), 256, 256);
+
+            // ── Conversion BitMatrix → QImage ──
+            int w = matrix.width();
+            int h = matrix.height();
+            QImage img(w, h, QImage::Format_RGB32);
+
+            for (int y = 0; y < h; ++y)
+            {
+                for (int x = 0; x < w; ++x)
+                {
+                    QRgb color = matrix.get(x, y) ? qRgb(0, 0, 0)
+                        : qRgb(255, 255, 255);
+                    img.setPixel(x, y, color);
+                }
+            }
+
+
+            // ── Mise à l'échelle pour lisibilité ──
+            QImage scaled = img.scaled(512, 512, Qt::KeepAspectRatio,
+                Qt::FastTransformation);
+
+            QString path = dir + "/" + accountName + ".png";
+            if (scaled.save(path, "PNG"))
+                count++;
+        }
+        catch (...) {
+            qDebug() << "Erreur QR pour:" << accountName;
         }
     }
 
-    QMessageBox::information(this, tr("Export terminé"),
-        tr("Les comptes ont été exportés dans :\n%1").arg(dir));
+    if (count == 0)
+        QMessageBox::warning(this, tr("Export"), tr("Aucun compte à exporter."));
+    else
+        QMessageBox::information(this, tr("Export terminé"),
+            tr("%1 QR code(s) exporté(s) dans :\n%2").arg(count).arg(dir));
 }
+
 
 // ─────────────────────────────────────────────
 //  Close event → systray

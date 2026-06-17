@@ -35,18 +35,6 @@ if (WIN32)
         ${CMAKE_BINARY_DIR}/Asset/Icone.ico
         COPYONLY
     )
-
-    #configure_file(
-    #    ${CMAKE_SOURCE_DIR}/Asset/IconeOFF.ico
-    #    ${CMAKE_BINARY_DIR}/Asset/IconeOFF.ico
-    #    COPYONLY
-    #)
-
-    #configure_file(
-    #    ${CMAKE_SOURCE_DIR}/Asset/IconeON.ico
-    #    ${CMAKE_BINARY_DIR}/Asset/IconeON.ico
-    #    COPYONLY
-    #)
 endif()
 
 # -------------------------
@@ -64,6 +52,16 @@ endif()
 # Qt Widgets (statique)
 # -------------------------
 find_package(Qt6 REQUIRED COMPONENTS Widgets Network)
+
+# -------------------------
+# ZXing local
+# -------------------------
+set(ZXING_READERS ON CACHE BOOL "" FORCE)
+set(ZXING_WRITERS ON CACHE BOOL "" FORCE)
+set(ZXING_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(ZXING_TESTS OFF CACHE BOOL "" FORCE)
+
+add_subdirectory(src/thirdparty/zxing)
 
 # -------------------------
 # Sources / Headers
@@ -107,8 +105,6 @@ qt_add_resources(${PROJECT_NAME} "resources"
     PREFIX "/icons"
     FILES
         Asset/Icone.png
-        #Asset/IconeOFF.png
-        #Asset/IconeON.png
 )
 
 qt_add_resources(${PROJECT_NAME} "translations"
@@ -153,6 +149,7 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Network
         OpenSSL::SSL
         OpenSSL::Crypto
+        ZXing::ZXing
         
 )
 

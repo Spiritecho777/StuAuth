@@ -26,6 +26,7 @@ private slots:
 
 private:
     void buildUi();
+    void processQrText(const QString& text);
 
     QString      m_folderName;
 
