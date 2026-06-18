@@ -32,12 +32,12 @@ bool HttpServer::start(const QString& ip, quint16 port)
 
     // Le serveur tourne dans un thread dédié
     m_thread = new QThread(this);
-    m_server = new QTcpServer();      // pas de parent : on le déplace dans le thread
 
-    m_server->moveToThread(m_thread);
-
+    // QTcpServer doit être créé dans son thread, pas ici
     connect(m_thread, &QThread::started, this, [this, ip, port]()
         {
+            m_server = new QTcpServer();  // créé dans le bon thread
+
             QHostAddress addr = (ip.isEmpty() || ip == "0.0.0.0")
                 ? QHostAddress::AnyIPv4
                 : QHostAddress(ip);
@@ -51,10 +51,10 @@ bool HttpServer::start(const QString& ip, quint16 port)
 
             connect(m_server, &QTcpServer::newConnection,
                 this, &HttpServer::onNewConnection,
-                Qt::DirectConnection);
+                Qt::QueuedConnection);
 
             emit started(ip, port);
-        });
+        }, Qt::QueuedConnection);
 
     m_running = true;
     m_thread->start();

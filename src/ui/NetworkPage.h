@@ -52,7 +52,6 @@ private:
     QPushButton* m_btnServer = nullptr;
     QPushButton* m_btnSync = nullptr;
     QPushButton* m_btnBack = nullptr;
-    QPushButton* m_btnScan = nullptr;
     QProgressBar* m_progress = nullptr;
 
     QString      m_appIp;

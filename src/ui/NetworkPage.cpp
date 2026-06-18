@@ -15,7 +15,6 @@
 #include <QRegularExpression>
 #include <QProcess>
 #include <QThread>
-#include <QDebug>
 
 // ─────────────────────────────────────────────
 //  Worker de scan (classe séparée, pas de lambda)
@@ -25,7 +24,8 @@ class ScanWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit ScanWorker(const QString& subnet) : m_subnet(subnet) {}
+    explicit ScanWorker(const QString& subnet, const QStringList& ipList)
+        : m_subnet(subnet), m_ipList(ipList) {}
 
 signals:
     void finished(QStringList found);
@@ -56,11 +56,9 @@ public slots:
         }
 
         // ── Ping parallèle sur les IP manquantes ────────
-        // Lance tous les process simultanément
         QList<QPair<QString, QProcess*>> procs;
-        for (int i = 1; i < 255; ++i)
+        for (const QString& ip : m_ipList)
         {
-            QString ip = m_subnet + "." + QString::number(i);
             if (found.contains(ip)) continue;
 
             QProcess* p = new QProcess();
@@ -85,7 +83,8 @@ public slots:
     }
 
 private:
-    QString m_subnet;
+    QString     m_subnet;
+    QStringList m_ipList;
 };
 
 #include "NetworkPage.moc"
@@ -126,7 +125,7 @@ void NetworkPage::buildUi()
 {
     m_lblApp = new QLabel(tr("IP de l'application distante :"));
     m_editSubnet = new QLineEdit();
-    m_editSubnet->setPlaceholderText(tr("ex: 192.168.1  → Entrée pour scanner"));
+    m_editSubnet->setPlaceholderText(tr("ex: 192.168.1.0/24"));
     m_comboAppIp = new QComboBox();
     m_comboAppIp->setEditable(true);
 
@@ -134,7 +133,6 @@ void NetworkPage::buildUi()
     m_lblServerIp = new QLabel(tr("—"));
     m_comboIface = new QComboBox();
 
-    m_btnScan = new QPushButton(tr("Scanner"));
     m_btnServer = new QPushButton(tr("Serveur"));
     m_btnSync = new QPushButton(tr("Synchroniser"));
     m_btnBack = new QPushButton(tr("Retour"));
@@ -152,7 +150,6 @@ void NetworkPage::buildUi()
     grid->addWidget(m_comboIface, 4, 1);
 
     QHBoxLayout* btnRow = new QHBoxLayout();
-    btnRow->addWidget(m_btnScan);
     btnRow->addWidget(m_btnServer);
     btnRow->addWidget(m_btnSync);
     btnRow->addStretch();
@@ -168,7 +165,6 @@ void NetworkPage::buildUi()
     connect(m_btnServer, &QPushButton::clicked, this, &NetworkPage::onServerToggle);
     connect(m_btnSync, &QPushButton::clicked, this, &NetworkPage::onSyncClicked);
     connect(m_btnBack, &QPushButton::clicked, this, &NetworkPage::navigateBack);
-    connect(m_btnScan, &QPushButton::clicked, this, &NetworkPage::onScanSubnet);
     connect(m_editSubnet, &QLineEdit::returnPressed, this, &NetworkPage::onScanSubnet);
     connect(m_comboIface, QOverload<int>::of(&QComboBox::currentIndexChanged),
         this, &NetworkPage::onInterfaceChanged);
@@ -185,6 +181,10 @@ void NetworkPage::buildUi()
 
 void NetworkPage::loadNetworkInterfaces()
 {
+    // Bloquer le signal pendant le chargement pour éviter
+    // onInterfaceChanged appelé avec un index invalide
+    QSignalBlocker blocker(m_comboIface);
+
     m_comboIface->clear();
     for (const QNetworkInterface& iface : QNetworkInterface::allInterfaces())
     {
@@ -222,22 +222,80 @@ QString NetworkPage::getLocalIp(const QString& ifaceName) const
 //  Scan subnet
 // ─────────────────────────────────────────────
 
+// Convertit un CIDR en liste d'IPs à scanner
+// Supporte /8, /16, /24 uniquement (classes A, B, C)
+static QStringList cidrToIpList(const QString& cidr)
+{
+    QStringList result;
+    QStringList parts = cidr.split('/');
+    if (parts.size() != 2) return result;
+
+    QString ip = parts[0].trimmed();
+    int     prefix = parts[1].trimmed().toInt();
+
+    QStringList octets = ip.split('.');
+    if (octets.size() != 4) return result;
+
+    if (prefix == 24)
+    {
+        // Scanner .1 → .254 sur le /24
+        QString base = octets[0] + "." + octets[1] + "." + octets[2];
+        for (int i = 1; i < 255; ++i)
+            result << base + "." + QString::number(i);
+    }
+    else if (prefix == 16)
+    {
+        // Scanner x.x.0.1 → x.x.255.254
+        QString base = octets[0] + "." + octets[1];
+        for (int c = 0; c < 256; ++c)
+            for (int d = 1; d < 255; ++d)
+                result << base + "." + QString::number(c) + "." + QString::number(d);
+    }
+    else if (prefix == 8)
+    {
+        // /8 = trop large pour un ping complet, on scanne juste le /24 détecté
+        QString base = octets[0] + "." + octets[1] + "." + octets[2];
+        for (int i = 1; i < 255; ++i)
+            result << base + "." + QString::number(i);
+    }
+
+    return result;
+}
+
 void NetworkPage::onScanSubnet()
 {
-    QString subnet = m_editSubnet->text().trimmed();
-    static QRegularExpression re(R"(^\d{1,3}\.\d{1,3}\.\d{1,3}$)");
-    if (!re.match(subnet).hasMatch())
+    QString input = m_editSubnet->text().trimmed();
+
+    // Accepte "192.168.1.0/24", "192.168.1/24", "192.168.1.0/16" etc.
+    static QRegularExpression re(R"(^(\d{1,3}(?:\.\d{1,3}){1,3})\s*/\s*(\d{1,2})$)");
+    QRegularExpressionMatch match = re.match(input);
+
+    if (!match.hasMatch())
     {
         QMessageBox::warning(this, tr("Erreur"),
-            tr("Entrez un sous-réseau valide (ex: 192.168.1)"));
+            tr("Entrez un sous-réseau CIDR valide (ex: 192.168.1.0/24)"));
         return;
     }
 
+    int prefix = match.captured(2).toInt();
+    if (prefix != 8 && prefix != 16 && prefix != 24)
+    {
+        QMessageBox::warning(this, tr("Erreur"),
+            tr("Seuls les préfixes /8, /16 et /24 sont supportés."));
+        return;
+    }
+
+    QStringList ipList = cidrToIpList(match.captured(1) + "/" + QString::number(prefix));
+    if (ipList.isEmpty()) return;
+
+    // Extraire le subnet (x.x.x) pour le filtre ARP
+    QStringList octets = match.captured(1).split('.');
+    QString subnet = octets[0] + "." + octets[1] + "." + (octets.size() > 2 ? octets[2] : "0");
+
     m_comboAppIp->clear();
-    m_btnScan->setEnabled(false);
 
     QThread* thread = new QThread(this);
-    ScanWorker* worker = new ScanWorker(subnet);
+    ScanWorker* worker = new ScanWorker(subnet, ipList);
     worker->moveToThread(thread);
 
     connect(thread, &QThread::started, worker, &ScanWorker::run);
@@ -246,7 +304,6 @@ void NetworkPage::onScanSubnet()
             for (const QString& ip : found)
                 m_comboAppIp->addItem(ip);
 
-            m_btnScan->setEnabled(true);
             worker->deleteLater();
             thread->quit();
             thread->deleteLater();
@@ -266,7 +323,6 @@ void NetworkPage::onServerToggle()
     else
         m_server->stop();
 
-    updateServerButton();
     emit serverStateChanged();
     emit navigateBack();
 }
@@ -383,6 +439,5 @@ void NetworkPage::retranslateUi()
     m_lblServer->setText(tr("Serveur :"));
     m_btnSync->setText(tr("Synchroniser"));
     m_btnBack->setText(tr("Retour"));
-    m_btnScan->setText(tr("Scanner"));
     m_btnServer->setText(tr("Serveur"));
 }
