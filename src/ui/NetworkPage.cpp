@@ -306,6 +306,7 @@ void NetworkPage::onScanSubnet()
 
             worker->deleteLater();
             thread->quit();
+			thread->wait();
             thread->deleteLater();
         });
 

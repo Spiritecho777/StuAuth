@@ -1,21 +1,57 @@
 #include "AccountManager.h"
-#include "../commun/CryptoUtils.h"
+#include "../commun/security/CryptoUtils.h"
 
 #include <QDir>
 #include <QFile>
-#include <QTextStream>
 #include <QStandardPaths>
 #include <QRegularExpression>
 #include <QMessageBox>
-#include <QDebug>
 #include <QUrl>
 
-// ─────────────────────────────────────────────
-//  Format du fichier Account.dat (déchiffré)
-//
-//  Chaque ligne :  Dossier\NomCompte;otpauth://totp/...
-//  Ligne dossier vide :  Dossier\;
-// ─────────────────────────────────────────────
+namespace
+{
+    struct AccountEntry
+    {
+        QString rawLine;
+        QString fullName; // ex: "Dossier\Compte" ou "Dossier\"
+        QString uri;
+        bool valid = false;
+
+        QString folder() const
+        {
+            return fullName.section('\\', 0, 0);
+        }
+
+        QString accountName() const
+        {
+            return fullName.section('\\', 1, 1);
+        }
+
+        bool hasAccount() const
+        {
+            return !uri.isEmpty();
+        }
+    };
+
+    AccountEntry parseLine(const QString& line)
+    {
+        AccountEntry entry;
+        entry.rawLine = line;
+
+        const int sep = line.indexOf(';');
+        if (sep < 0)
+            return entry;
+
+        entry.fullName = line.left(sep).trimmed();
+        entry.uri = line.mid(sep + 1).trimmed();
+
+        if (entry.fullName.isEmpty())
+            return entry;
+
+        entry.valid = true;
+        return entry;
+    }
+}
 
 AccountManager::AccountManager()
 {
@@ -23,130 +59,133 @@ AccountManager::AccountManager()
     QDir().mkpath(m_dataDir);
 
     m_encryptedPath = m_dataDir + "/Account.dat";
-    m_plainPath = m_dataDir + "/Account_decrypted.dat";
 
-    if (QFile::exists(m_encryptedPath))
-    {
-        ensureDecrypted();
-    }
-    else
-    {
-        createEmptyFiles();
-        encrypt();
+    if (!QFile::exists(m_encryptedPath)) {
+        QFile file(m_encryptedPath);
+        file.open(QIODevice::WriteOnly);
+        file.close();
     }
 }
 
-// ─────────────────────────────────────────────
-//  Lecture
-// ─────────────────────────────────────────────
-
 QStringList AccountManager::readLines() const
 {
-    ensureDecrypted();
-
-    QFile f(m_plainPath);
-    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+    QString text;
+    if (!loadPlainText(text))
         return {};
 
-    QStringList lines;
-    QTextStream in(&f);
-    while (!in.atEnd())
-    {
-        QString line = in.readLine();
-        if (!line.isEmpty())
-            lines << line;
+    QStringList result;
+    const QStringList lines = text.split('\n', Qt::SkipEmptyParts);
+
+    for (const QString& line : lines) {
+        const QString trimmed = line.trimmed();
+        if (!trimmed.isEmpty())
+            result << trimmed;
     }
-    return lines;
+
+    return result;
 }
 
 QStringList AccountManager::getAccountsByFolder(const QString& folderName) const
 {
     QStringList result;
-    for (const QString& line : readLines())
-    {
-        QStringList parts = line.split(';');
-        if (parts.size() < 2) continue;
 
-        QString folder = parts[0].split('\\').value(0);
-        if (folder == folderName)
+    const QStringList lines = readLines();
+    for (const QString& line : lines) {
+        const AccountEntry entry = parseLine(line);
+        if (!entry.valid)
+            continue;
+
+        if (entry.folder() == folderName)
             result << line;
     }
+
     return result;
 }
 
 QStringList AccountManager::getAllOtpSecrets() const
 {
     QStringList secrets;
-    static QRegularExpression re("secret=([^&]+)");
+    static const QRegularExpression re("secret=([^&]+)");
 
-    for (const QString& line : readLines())
-    {
-        QStringList parts = line.split(';');
-        if (parts.size() < 2) continue;
+    const QStringList lines = readLines();
+    for (const QString& line : lines) {
+        const AccountEntry entry = parseLine(line);
+        if (!entry.valid || !entry.hasAccount())
+            continue;
 
-        QRegularExpressionMatch m = re.match(parts[1]);
-        if (m.hasMatch())
-            secrets << m.captured(1);
+        const QRegularExpressionMatch match = re.match(entry.uri);
+        if (match.hasMatch())
+            secrets << match.captured(1);
     }
+
     return secrets;
 }
 
 QMap<QString, int> AccountManager::countFolderOccurrences() const
 {
-    QMap<QString, int> occ;
-    for (const QString& line : readLines())
-    {
-        QStringList parts = line.split(';');
-        if (parts.size() < 2) continue;
+    QMap<QString, int> occurrences;
 
-        QString folder = parts[0].split('\\').value(0);
-        occ[folder]++;
+    const QStringList lines = readLines();
+    for (const QString& line : lines) {
+        const AccountEntry entry = parseLine(line);
+        if (!entry.valid)
+            continue;
+
+        occurrences[entry.folder()]++;
     }
-    return occ;
+
+    return occurrences;
 }
 
 QStringList AccountManager::getValidLines(const QMap<QString, int>& occurrences) const
 {
     QStringList valid;
-    for (const QString& line : readLines())
-    {
-        QStringList parts = line.split(';');
-        if (parts.size() < 2) continue;
 
-        QString folder = parts[0].split('\\').value(0);
-        bool hasAccount = !parts[1].isEmpty();
+    const QStringList lines = readLines();
+    for (const QString& line : lines) {
+        const AccountEntry entry = parseLine(line);
+        if (!entry.valid)
+            continue;
 
-        if (hasAccount || occurrences.value(folder) == 1)
+        if (entry.hasAccount() || occurrences.value(entry.folder()) == 1)
             valid << line;
     }
+
     return valid;
 }
 
-// ─────────────────────────────────────────────
-//  Écriture
-// ─────────────────────────────────────────────
-
 void AccountManager::addFolder(const QString& folderName)
 {
-    if (folderName.isEmpty()) return;
+    const QString cleanFolder = folderName.trimmed();
+    if (cleanFolder.isEmpty())
+        return;
 
     QStringList lines = readLines();
-    lines << folderName + "\\;";
-    writeLines(lines);
-    encrypt();
+
+    bool alreadyExists = false;
+    for (const QString& line : lines) {
+        const AccountEntry entry = parseLine(line);
+        if (entry.valid && entry.folder() == cleanFolder) {
+            alreadyExists = true;
+            break;
+        }
+    }
+
+    if (!alreadyExists) {
+        lines << (cleanFolder + "\\;");
+        writeLines(lines);
+    }
 }
 
 void AccountManager::addAccount(const QString& account)
 {
-    QFile f(m_plainPath);
-    if (!f.open(QIODevice::Append | QIODevice::Text))
+    const QString cleanAccount = account.trimmed();
+    if (cleanAccount.isEmpty())
         return;
 
-    QTextStream out(&f);
-    out << account << "\n";
-    f.close();
-
-    encrypt();
+    QStringList lines = readLines();
+    lines << cleanAccount;
+    writeLines(lines);
 }
 
 bool AccountManager::deleteFolderOrAccount(const QString& name, bool isFolder, bool force)
@@ -154,28 +193,23 @@ bool AccountManager::deleteFolderOrAccount(const QString& name, bool isFolder, b
     QStringList lines = readLines();
     bool deleted = false;
 
-    for (int i = lines.size() - 1; i >= 0; --i)
-    {
-        QStringList parts = lines[i].split(';');
-        if (parts.size() < 2) continue;
+    for (int i = lines.size() - 1; i >= 0; --i) {
+        const AccountEntry entry = parseLine(lines[i]);
+        if (!entry.valid)
+            continue;
 
-        QStringList pathParts = parts[0].split('\\');
+        if (isFolder) {
+            if (entry.folder() != name)
+                continue;
 
-        if (isFolder)
-        {
-            if (pathParts.value(0) != name) continue;
-
-            bool hasAccount = !parts[1].isEmpty();
-            if (hasAccount && !force)
+            if (entry.hasAccount() && !force)
                 return false;
 
             lines.removeAt(i);
             deleted = true;
         }
-        else
-        {
-            if (pathParts.size() > 1 && pathParts.value(1) == name)
-            {
+        else {
+            if (entry.accountName() == name) {
                 lines.removeAt(i);
                 deleted = true;
             }
@@ -183,151 +217,138 @@ bool AccountManager::deleteFolderOrAccount(const QString& name, bool isFolder, b
     }
 
     if (deleted)
-    {
         writeLines(lines);
-        encrypt();
-    }
 
     return deleted;
 }
 
 void AccountManager::renameFolderOrAccount(const QString& oldName, const QString& newName, bool isFolder)
 {
+    const QString cleanNewName = newName.trimmed();
+    if (cleanNewName.isEmpty())
+        return;
+
     QStringList lines = readLines();
 
-    for (int i = 0; i < lines.size(); ++i)
-    {
-        QStringList parts = lines[i].split(';');
-        if (parts.size() < 2) continue;
+    for (int i = 0; i < lines.size(); ++i) {
+        AccountEntry entry = parseLine(lines[i]);
+        if (!entry.valid)
+            continue;
 
-        QStringList pathParts = parts[0].split('\\');
+        QStringList pathParts = entry.fullName.split('\\');
 
-        if (isFolder)
-        {
-            if (pathParts.value(0) == oldName)
-            {
-                pathParts[0] = newName;
-                parts[0] = pathParts.join('\\');
+        if (isFolder) {
+            if (!pathParts.isEmpty() && pathParts[0] == oldName) {
+                pathParts[0] = cleanNewName;
+                entry.fullName = pathParts.join('\\');
             }
         }
-        else
-        {
-            if (pathParts.size() > 1 && pathParts.value(1) == oldName)
-            {
-                pathParts[1] = newName;
-                parts[0] = pathParts.join('\\');
-                parts[1] = updateUri(parts[1], newName);
+        else {
+            if (pathParts.size() > 1 && pathParts[1] == oldName) {
+                pathParts[1] = cleanNewName;
+                entry.fullName = pathParts.join('\\');
+
+                if (!entry.uri.isEmpty())
+                    entry.uri = updateUri(entry.uri, cleanNewName);
             }
         }
 
-        lines[i] = parts.join(';');
+        lines[i] = entry.fullName + ";" + entry.uri;
     }
 
     writeLines(lines);
-    encrypt();
-}
-
-// ─────────────────────────────────────────────
-//  Helpers privés
-// ─────────────────────────────────────────────
-
-void AccountManager::ensureDecrypted() const
-{
-    if (!QFile::exists(m_encryptedPath)) return;
-
-    QFile enc(m_encryptedPath);
-    if (!enc.open(QIODevice::ReadOnly)) return;
-    QByteArray cipher = enc.readAll();
-    enc.close();
-
-    // Fichier vide = aucun compte enregistré, rien à déchiffrer
-    if (cipher.isEmpty())
-    {
-        QFile out(m_plainPath);
-        out.open(QIODevice::WriteOnly | QIODevice::Truncate);
-        return;
-    }
-
-    CryptoUtils crypto;
-    QByteArray plain = crypto.decryptBytes(cipher);
-
-    if (plain.isEmpty())
-    {
-        QMessageBox::critical(nullptr,
-            QObject::tr("Erreur de déchiffrement"),
-            QObject::tr("Impossible de déchiffrer Account.dat.\n"
-                "Le fichier est corrompu ou la clé est incorrecte."));
-        return;
-    }
-
-    QFile out(m_plainPath);
-    if (out.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        out.write(plain);
-        out.close();
-    }
-}
-
-void AccountManager::encrypt() const
-{
-    QFile f(m_plainPath);
-    if (!f.open(QIODevice::ReadOnly)) return;
-    QByteArray plain = f.readAll();
-    f.close();
-
-    // Fichier vide (dernier dossier supprimé) : on tronque directement Account.dat
-    if (plain.isEmpty())
-    {
-        QFile enc(m_encryptedPath);
-        enc.open(QIODevice::WriteOnly | QIODevice::Truncate);
-        return;
-    }
-
-    CryptoUtils crypto;
-    QByteArray cipher = crypto.encryptBytes(plain);
-
-    if (cipher.isEmpty()) return;
-
-    QFile enc(m_encryptedPath);
-    if (enc.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        enc.write(cipher);
-        enc.close();
-    }
-}
-
-void AccountManager::createEmptyFiles() const
-{
-    QFile(m_encryptedPath).open(QIODevice::WriteOnly);
-    QFile(m_plainPath).open(QIODevice::WriteOnly);
-}
-
-void AccountManager::writeLines(const QStringList& lines) const
-{
-    QFile f(m_plainPath);
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
-        return;
-
-    QTextStream out(&f);
-    for (const QString& line : lines)
-        out << line << "\n";
 }
 
 bool AccountManager::fileExists() const
 {
-    return QFile::exists(m_plainPath);
+    return QFile::exists(m_encryptedPath);
+}
+
+bool AccountManager::loadPlainText(QString& outText) const
+{
+    outText.clear();
+
+    QFile file(m_encryptedPath);
+    if (!file.open(QIODevice::ReadOnly))
+        return false;
+
+    const QByteArray encrypted = file.readAll();
+    file.close();
+
+    if (encrypted.isEmpty()) {
+        outText.clear();
+        return true;
+    }
+
+    CryptoUtils crypto;
+    const QByteArray plain = crypto.decryptBytes(encrypted);
+
+    if (plain.isEmpty()) {
+        QMessageBox::critical(
+            nullptr,
+            QObject::tr("Erreur de déchiffrement"),
+            QObject::tr("Impossible de déchiffrer Account.dat.\n"
+                "Le fichier est corrompu ou la clé est incorrecte.")
+        );
+        return false;
+    }
+
+    outText = QString::fromUtf8(plain);
+    return true;
+}
+
+bool AccountManager::savePlainText(const QString& text) const
+{
+    QFile file(m_encryptedPath);
+
+    if (text.isEmpty()) {
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+            return false;
+
+        file.close();
+        return true;
+    }
+
+    CryptoUtils crypto;
+    const QByteArray cipher = crypto.encryptBytes(text.toUtf8());
+    if (cipher.isEmpty())
+        return false;
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return false;
+
+    const qint64 written = file.write(cipher);
+    file.close();
+
+    return written == cipher.size();
+}
+
+void AccountManager::writeLines(const QStringList& lines) const
+{
+    QString text;
+
+    for (const QString& line : lines) {
+        const QString trimmed = line.trimmed();
+        if (!trimmed.isEmpty())
+            text += trimmed + "\n";
+    }
+
+    savePlainText(text);
 }
 
 QString AccountManager::updateUri(const QString& uri, const QString& newName) const
 {
-    if (uri.isEmpty()) return uri;
+    if (uri.isEmpty())
+        return uri;
 
     QStringList uriParts = uri.split('/');
-    if (uriParts.size() < 4) return uri;
+    if (uriParts.size() < 4)
+        return uri;
 
     QString last = uriParts.last();
     QStringList nameDetails = last.split('?');
-    if (nameDetails.size() < 2) return uri;
+    if (nameDetails.size() < 2)
+        return uri;
 
     nameDetails[0] = QUrl::toPercentEncoding(newName);
     uriParts.last() = nameDetails.join('?');

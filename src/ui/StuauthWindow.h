@@ -40,6 +40,7 @@ private slots:
     void onServerClicked();
     void onItemDoubleClicked(QListWidgetItem* item);
     void retranslateUi();
+	void onMasterPasswordClicked();
 
 private:
     // ── Navigation ──────────────────────────────
@@ -76,6 +77,7 @@ private:
     QPushButton* m_btnDel = nullptr;
     QPushButton* m_btnExport = nullptr;
     QPushButton* m_btnHelp = nullptr;
+	QPushButton* m_btnMasterPassword = nullptr;
 
     // Toolbar ligne 2
     QPushButton* m_btnServer = nullptr;

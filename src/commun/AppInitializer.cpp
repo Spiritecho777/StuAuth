@@ -1,9 +1,14 @@
 #include "AppInitializer.h"
-#include "LockManager.h"
-#include "CryptoInitializer.h"
+#include "security/LockManager.h"
+#include "security/CryptoInitializer.h"
+#include "security/AuthManager.h"
 
 bool AppInitializer::init()
 {
 	CryptoInitializer::init();
-	return LockManager::acquire();
+
+	if (!LockManager::acquire()) return false;
+	if (!AuthManager::init()) return false;
+	
+	return true;
 }

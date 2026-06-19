@@ -1,10 +1,12 @@
 #include "StuauthWindow.h"
 #include "../commun/TranslationManager.h"
+#include "../commun/security/CryptoUtils.h"
 #include "../ui/SelectAccountPage.h"
 #include "../ui/NewAccountPage.h"
 #include "../ui/NewAccount2Page.h"
 #include "../ui/ImportPage.h"
 #include "../ui/NetworkPage.h"
+#include "../ui/MasterPasswordPopup.h"
 
 #include <QMenuBar>
 #include <QActionGroup>
@@ -65,10 +67,17 @@ void StuauthWindow::buildMainWidget()
     m_btnDel = new QPushButton("-");
     m_btnExport = new QPushButton(tr("Exporter"));
     m_btnHelp = new QPushButton("?");
+#ifdef __linux__
+    m_btnMasterPassword = new QPushButton();
+    m_btnMasterPassword->setIcon(style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+#elif WIN32
+    m_btnMasterPassword = new QPushButton("🔒", this);
+#endif
 
     m_btnAdd->setFixedSize(30, 30);
     m_btnDel->setFixedSize(30, 30);
     m_btnHelp->setFixedSize(25, 30);
+	m_btnMasterPassword->setFixedSize(40, 40);
 
 	m_btnLang = new QPushButton("🌐");
     QFont f = m_btnLang->font();
@@ -90,6 +99,7 @@ void StuauthWindow::buildMainWidget()
     toolbar1->addWidget(m_btnAdd);
     toolbar1->addWidget(m_btnDel);
     toolbar1->addWidget(m_btnExport);
+	toolbar1->addWidget(m_btnMasterPassword);
     toolbar1->addWidget(m_btnHelp);
 	toolbar1->addWidget(m_btnLang);
 
@@ -134,6 +144,9 @@ void StuauthWindow::buildMainWidget()
     connect(m_btnSynchro, &QPushButton::clicked, this, &StuauthWindow::onTimeSynchro);
     connect(m_btnServer, &QPushButton::clicked, this, &StuauthWindow::onServerClicked);
     connect(m_list, &QListWidget::itemDoubleClicked, this, &StuauthWindow::onItemDoubleClicked);
+
+    connect(m_btnMasterPassword, &QPushButton::clicked, this, &StuauthWindow::onMasterPasswordClicked);
+
 
 	connect(m_actFr, &QAction::triggered, this, [this]() { setLanguage("fr"); });
 	connect(m_actEn, &QAction::triggered, this, [this]() { setLanguage("en"); });
@@ -402,8 +415,9 @@ void StuauthWindow::onExportClicked()
 
 void StuauthWindow::onHelpClicked()
 {
+    QString version = APP_VERSION;
     QMessageBox::information(this, tr("À propos"),
-        tr("StuAuth — version %1").arg(QApplication::applicationVersion()));
+        tr("StuAuth — version: %1").arg(APP_VERSION));
 }
 
 void StuauthWindow::onTimeSynchro()
@@ -552,5 +566,129 @@ void StuauthWindow::closeEvent(QCloseEvent* event)
     else
     {
         event->accept();
+    }
+}
+
+// ─────────────────────────────────────────────
+//  Sécurité
+// ─────────────────────────────────────────────
+
+void StuauthWindow::onMasterPasswordClicked()
+{
+    QWidget* parent = this;
+
+    const bool hasMaster = CryptoUtils::hasMasterPasswordConfigured();
+
+    // ─────────────────────────────
+    // Cas 1 : pas de mdp → création
+    // ─────────────────────────────
+    if (!hasMaster)
+    {
+        MasterPasswordPopup dlg(
+            "Créer un mot de passe maître",
+            "Entrez un mot de passe maître :",
+            parent
+        );
+
+        if (dlg.exec() != QDialog::Accepted)
+            return;
+
+        QString pwd = dlg.password();
+        if (pwd.isEmpty())
+        {
+            QMessageBox::warning(parent,
+                "Erreur", "Le mot de passe ne peut pas être vide.");
+            return;
+        }
+
+        if (!CryptoUtils::setOrChangeMasterPassword(pwd))
+        {
+            QMessageBox::critical(parent,
+                "Erreur", "Impossible d’enregistrer le mot de passe.");
+            return;
+        }
+
+        QMessageBox::information(parent,
+            "Succès", "Mot de passe maître activé.");
+
+        return;
+    }
+
+    // ─────────────────────────────
+    // Cas 2 : mdp existe → choix
+    // ─────────────────────────────
+    QMessageBox msg(parent);
+    msg.setWindowTitle("Mot de passe maître");
+    msg.setText("Que souhaitez-vous faire ?");
+    QPushButton* changeBtn = msg.addButton("Changer", QMessageBox::AcceptRole);
+    QPushButton* disableBtn = msg.addButton("Désactiver", QMessageBox::DestructiveRole);
+    msg.addButton("Annuler", QMessageBox::RejectRole);
+
+    msg.exec();
+
+    if (msg.clickedButton() == changeBtn)
+    {
+        // ── vérifier ancien mdp
+        MasterPasswordPopup checkDlg(
+            "Vérification",
+            "Entrez le mot de passe actuel :",
+            parent
+        );
+
+        if (checkDlg.exec() != QDialog::Accepted)
+            return;
+
+        if (!CryptoUtils::verifyMasterPassword(checkDlg.password()))
+        {
+            QMessageBox::critical(parent,
+                "Erreur", "Mot de passe incorrect.");
+            return;
+        }
+
+        // ── nouveau mdp
+        MasterPasswordPopup newDlg(
+            "Nouveau mot de passe",
+            "Entrez le nouveau mot de passe :",
+            parent
+        );
+
+        if (newDlg.exec() != QDialog::Accepted)
+            return;
+
+        QString newPwd = newDlg.password();
+        if (newPwd.isEmpty())
+        {
+            QMessageBox::warning(parent,
+                "Erreur", "Le mot de passe ne peut pas être vide.");
+            return;
+        }
+
+        CryptoUtils::setOrChangeMasterPassword(newPwd);
+
+        QMessageBox::information(parent,
+            "Succès", "Mot de passe modifié.");
+    }
+    else if (msg.clickedButton() == disableBtn)
+    {
+        MasterPasswordPopup checkDlg(
+            "Confirmation",
+            "Entrez le mot de passe pour désactiver :",
+            parent
+        );
+
+        if (checkDlg.exec() != QDialog::Accepted)
+            return;
+
+        if (!CryptoUtils::verifyMasterPassword(checkDlg.password()))
+        {
+            QMessageBox::critical(parent,
+                "Erreur", "Mot de passe incorrect.");
+            return;
+        }
+
+        CryptoUtils::disableMasterPassword();
+
+        QMessageBox::information(parent,
+            "Succès", "Mot de passe maître désactivé.");
     }
 }

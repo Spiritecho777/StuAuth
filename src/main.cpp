@@ -14,17 +14,8 @@
 #include "core/AccountManager.h"
 #include "network/HttpServer.h"
 
-/*#ifdef _WIN32
-#include <winsock2.h>
-#endif*/
-
 int main(int argc, char* argv[])
 {
-//#ifdef _WIN32
-//    WSADATA wsadata;
-//    WSAStartup(MAKEWORD(2, 2), &wsadata);
-//#endif
-
     QCoreApplication::setOrganizationName("Stusoft");
     QCoreApplication::setApplicationName("StuAuth");
 
@@ -37,23 +28,8 @@ int main(int argc, char* argv[])
         return 0;
 
     StuauthWindow w;
-    //AccountManager am;
-    //HttpServer server(&am);
-    //StuauthWindow w(&am, &server);
 
     w.show();
 
-    int ret = a.exec();
-
-    // Suppression du fichier déchiffré temporaire à la fermeture
-    QString appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QString decryptedPath = appData + "/Account_decrypted.dat";
-    if (QFile::exists(decryptedPath))
-        QFile::remove(decryptedPath);
-
-//#ifdef _WIN32
-//    WSACleanup();
-//#endif
-
-    return ret;
+    return a.exec();
 }

@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # -------------------------
 # Version appli (unique)
 # -------------------------
-set(APP_VERSION "4.0.0")
+set(APP_VERSION "4.0.1")
 string(REPLACE "." "," APP_VERSION_COMMA "${APP_VERSION}")
 add_definitions(-DAPP_VERSION="${APP_VERSION}")
 
@@ -68,6 +68,7 @@ add_subdirectory(src/thirdparty/zxing)
 # -------------------------
 file(GLOB_RECURSE SOURCES
     "${CMAKE_SOURCE_DIR}/src/commun/*.cpp"
+    "${CMAKE_SOURCE_DIR}/src/commun/security/*.cpp"
     "${CMAKE_SOURCE_DIR}/src/ui/*.cpp"
     "${CMAKE_SOURCE_DIR}/src/core/*.cpp"
     "${CMAKE_SOURCE_DIR}/src/network/*.cpp"
@@ -75,6 +76,7 @@ file(GLOB_RECURSE SOURCES
 
 file(GLOB_RECURSE HEADERS
     "${CMAKE_SOURCE_DIR}/src/commun/*.h"
+    "${CMAKE_SOURCE_DIR}/src/commun/security/*.h"
     "${CMAKE_SOURCE_DIR}/src/ui/*.h"
     "${CMAKE_SOURCE_DIR}/src/core/*.h"
     "${CMAKE_SOURCE_DIR}/src/network/*.h"
@@ -125,7 +127,7 @@ if (WIN32)
         PROPERTIES
             LANGUAGE RC
     )
-    target_sources(${PROJECT_NAME} PRIVATE app.rc "src/commun/LockManager.cpp" "src/commun/LockManager.h")
+    target_sources(${PROJECT_NAME} PRIVATE app.rc "src/commun/security/LockManager.cpp" "src/commun/security/LockManager.h")
     set_target_properties(${PROJECT_NAME}
         PROPERTIES
             WIN32_EXECUTABLE TRUE

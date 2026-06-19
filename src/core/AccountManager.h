@@ -7,31 +7,31 @@
 class AccountManager
 {
 public:
-	AccountManager();
+    AccountManager();
 
-	// Lecture
-	QStringList readLines() const;
-	QStringList getAccountsByFolder(const QString& folderName) const;
-	QStringList getAllOtpSecrets() const;
-	QMap<QString, int> countFolderOccurrences() const;
-	QStringList getValidLines(const QMap<QString, int>& occurrences) const;
+    QStringList readLines() const;
+    QStringList getAccountsByFolder(const QString& folderName) const;
+    QStringList getAllOtpSecrets() const;
 
-	// Écriture
-	void addFolder(const QString& folderName);
-	void addAccount(const QString& line);
-	bool deleteFolderOrAccount(const QString& name, bool isFolder, bool force = false);
-	void renameFolderOrAccount(const QString& oldName, const QString& newName, bool isFolder);
+    QMap<QString, int> countFolderOccurrences() const;
+    QStringList getValidLines(const QMap<QString, int>& occurrences) const;
+
+    void addFolder(const QString& folderName);
+    void addAccount(const QString& account);
+
+    bool deleteFolderOrAccount(const QString& name, bool isFolder, bool force = false);
+    void renameFolderOrAccount(const QString& oldName, const QString& newName, bool isFolder);
+
+    bool fileExists() const;
 
 private:
-	QString m_dataDir;
-	QString m_encryptedPath;
-	QString m_plainPath;
+    bool loadPlainText(QString& outText) const;
+    bool savePlainText(const QString& text) const;
+    void writeLines(const QStringList& lines) const;
 
-	// Helpers
-	void ensureDecrypted() const;
-	void encrypt() const;
-	void createEmptyFiles() const;
-	void writeLines(const QStringList& lines) const;
-	bool fileExists() const;
-	QString updateUri(const QString& uri, const QString& newName) const;
+    QString updateUri(const QString& uri, const QString& newName) const;
+
+private:
+    QString m_dataDir;
+    QString m_encryptedPath;
 };
