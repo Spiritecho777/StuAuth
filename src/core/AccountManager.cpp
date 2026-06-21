@@ -355,3 +355,14 @@ QString AccountManager::updateUri(const QString& uri, const QString& newName) co
 
     return uriParts.join('/');
 }
+
+void AccountManager::rewriteWithCurrentKey(const QStringList& lines)
+{
+    if (lines.isEmpty() && fileExists())
+    {
+        qDebug() << "Refuse overwrite empty data";
+        return;
+    }
+
+    writeLines(lines);
+}

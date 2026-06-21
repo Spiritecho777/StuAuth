@@ -18,6 +18,7 @@ public:
 
     void addFolder(const QString& folderName);
     void addAccount(const QString& account);
+    void rewriteWithCurrentKey(const QStringList& lines);
 
     bool deleteFolderOrAccount(const QString& name, bool isFolder, bool force = false);
     void renameFolderOrAccount(const QString& oldName, const QString& newName, bool isFolder);

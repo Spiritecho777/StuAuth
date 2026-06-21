@@ -7,6 +7,7 @@
 #include "../ui/ImportPage.h"
 #include "../ui/NetworkPage.h"
 #include "../ui/MasterPasswordPopup.h"
+#include "../core/AccountManager.h"
 
 #include <QMenuBar>
 #include <QActionGroup>
@@ -585,8 +586,8 @@ void StuauthWindow::onMasterPasswordClicked()
     if (!hasMaster)
     {
         MasterPasswordPopup dlg(
-            "Créer un mot de passe maître",
-            "Entrez un mot de passe maître :",
+            tr("Créer un mot de passe maître"),
+            tr("Entrez un mot de passe maître :"),
             parent
         );
 
@@ -597,19 +598,34 @@ void StuauthWindow::onMasterPasswordClicked()
         if (pwd.isEmpty())
         {
             QMessageBox::warning(parent,
-                "Erreur", "Le mot de passe ne peut pas être vide.");
+                tr("Erreur"),
+                tr("Le mot de passe ne peut pas être vide."));
+            return;
+        }
+
+        QStringList data = m_am->readLines();
+
+        if (data.isEmpty() && m_am->fileExists())
+        {
+            QMessageBox::critical(parent,
+                tr("Erreur"),
+                tr("Impossible de lire les données existantes."));
             return;
         }
 
         if (!CryptoUtils::setOrChangeMasterPassword(pwd))
         {
             QMessageBox::critical(parent,
-                "Erreur", "Impossible d’enregistrer le mot de passe.");
+                tr("Erreur"),
+                tr("Impossible d’enregistrer le mot de passe."));
             return;
         }
 
+        m_am->rewriteWithCurrentKey(data);
+
         QMessageBox::information(parent,
-            "Succès", "Mot de passe maître activé.");
+            tr("Succès"),
+            tr("Mot de passe maître activé."));
 
         return;
     }
@@ -618,20 +634,21 @@ void StuauthWindow::onMasterPasswordClicked()
     // Cas 2 : mdp existe → choix
     // ─────────────────────────────
     QMessageBox msg(parent);
-    msg.setWindowTitle("Mot de passe maître");
-    msg.setText("Que souhaitez-vous faire ?");
-    QPushButton* changeBtn = msg.addButton("Changer", QMessageBox::AcceptRole);
-    QPushButton* disableBtn = msg.addButton("Désactiver", QMessageBox::DestructiveRole);
-    msg.addButton("Annuler", QMessageBox::RejectRole);
+    msg.setWindowTitle(tr("Mot de passe maître"));
+    msg.setText(tr("Que souhaitez-vous faire ?"));
+
+    QPushButton* changeBtn = msg.addButton(tr("Changer"), QMessageBox::AcceptRole);
+    QPushButton* disableBtn = msg.addButton(tr("Désactiver"), QMessageBox::DestructiveRole);
+    msg.addButton(tr("Annuler"), QMessageBox::RejectRole);
 
     msg.exec();
 
     if (msg.clickedButton() == changeBtn)
     {
-        // ── vérifier ancien mdp
+        // Vérif ancien
         MasterPasswordPopup checkDlg(
-            "Vérification",
-            "Entrez le mot de passe actuel :",
+            tr("Vérification"),
+            tr("Entrez le mot de passe actuel :"),
             parent
         );
 
@@ -641,14 +658,15 @@ void StuauthWindow::onMasterPasswordClicked()
         if (!CryptoUtils::verifyMasterPassword(checkDlg.password()))
         {
             QMessageBox::critical(parent,
-                "Erreur", "Mot de passe incorrect.");
+                tr("Erreur"),
+                tr("Mot de passe incorrect."));
             return;
         }
 
-        // ── nouveau mdp
+        // Nouveau mdp
         MasterPasswordPopup newDlg(
-            "Nouveau mot de passe",
-            "Entrez le nouveau mot de passe :",
+            tr("Nouveau mot de passe"),
+            tr("Entrez le nouveau mot de passe :"),
             parent
         );
 
@@ -659,20 +677,33 @@ void StuauthWindow::onMasterPasswordClicked()
         if (newPwd.isEmpty())
         {
             QMessageBox::warning(parent,
-                "Erreur", "Le mot de passe ne peut pas être vide.");
+                tr("Erreur"),
+                tr("Le mot de passe ne peut pas être vide."));
+            return;
+        }
+
+        QStringList data = m_am->readLines();
+
+        if (data.isEmpty() && m_am->fileExists())
+        {
+            QMessageBox::critical(parent,
+                tr("Erreur"),
+                tr("Impossible de lire les données existantes."));
             return;
         }
 
         CryptoUtils::setOrChangeMasterPassword(newPwd);
+        m_am->rewriteWithCurrentKey(data);
 
         QMessageBox::information(parent,
-            "Succès", "Mot de passe modifié.");
+            tr("Succès"),
+            tr("Mot de passe modifié."));
     }
     else if (msg.clickedButton() == disableBtn)
     {
         MasterPasswordPopup checkDlg(
-            "Confirmation",
-            "Entrez le mot de passe pour désactiver :",
+            tr("Confirmation"),
+            tr("Entrez le mot de passe pour désactiver :"),
             parent
         );
 
@@ -682,13 +713,27 @@ void StuauthWindow::onMasterPasswordClicked()
         if (!CryptoUtils::verifyMasterPassword(checkDlg.password()))
         {
             QMessageBox::critical(parent,
-                "Erreur", "Mot de passe incorrect.");
+                tr("Erreur"),
+                tr("Mot de passe incorrect."));
+            return;
+        }
+
+        QStringList data = m_am->readLines();
+
+        if (data.isEmpty() && m_am->fileExists())
+        {
+            QMessageBox::critical(parent,
+                tr("Erreur"),
+                tr("Impossible de lire les données existantes."));
             return;
         }
 
         CryptoUtils::disableMasterPassword();
 
+        m_am->rewriteWithCurrentKey(data);
+
         QMessageBox::information(parent,
-            "Succès", "Mot de passe maître désactivé.");
+            tr("Succès"),
+            tr("Mot de passe maître désactivé."));
     }
 }
