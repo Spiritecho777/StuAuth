@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QSettings>
 
 #include <openssl/hmac.h>
 
@@ -16,8 +17,13 @@ QString TotpEngine::generate(const QString& base32Secret, int digits, int step)
     if (key.isEmpty())
         return QString(digits, '0');
 
-    // Compteur TOTP : secondes Unix / step, encodé big-endian sur 8 octets
-    quint64 counter = static_cast<quint64>(QDateTime::currentSecsSinceEpoch()) / step;
+    QSettings s;
+    qint64 timeOffset = s.value("timeOffset", 0).toLongLong();
+
+    qint64 now = QDateTime::currentSecsSinceEpoch() + (timeOffset / 1000);
+
+    quint64 counter = static_cast<quint64>(now) / step;
+
 
     QByteArray msg(8, 0);
     for (int i = 7; i >= 0; --i)
@@ -46,7 +52,11 @@ QString TotpEngine::generate(const QString& base32Secret, int digits, int step)
 
 int TotpEngine::secondsRemaining(int step)
 {
-    qint64 now = QDateTime::currentSecsSinceEpoch();
+    QSettings s;
+    qint64 offset = s.value("timeOffset", 0).toLongLong();
+
+    qint64 now = QDateTime::currentSecsSinceEpoch() + (offset / 1000);
+
     return static_cast<int>(step - (now % step));
 }
 

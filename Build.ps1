@@ -87,7 +87,7 @@ function Build-Windows-Dynamic {
 	Remove-Item "build" -Recurse -Force
 
 	cmake -B build -S . -G "Visual Studio 17 2022" -T v143 `
-	-DCMAKE_PREFIX_PATH="C:/Qt/6.10.2/msvc2022_64" `
+	-DCMAKE_PREFIX_PATH="C:/Qt/6.10.2/msvc2022_64"
 
 	cmake --build build --config Release
 

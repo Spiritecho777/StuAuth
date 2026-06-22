@@ -57,9 +57,10 @@ private:
     void showAccountView(const QString& folderName);
     void exportToText();
     void exportToQRCode();
-    void timeSynchroLinux();
     void updateServerButton();
     void setLanguage(const QString& lang);
+	void onLockStateChanged();
+	void updateLangButton();
 
     void closeEvent(QCloseEvent* event) override;
 

@@ -1,6 +1,8 @@
 #include "StuauthWindow.h"
 #include "../commun/TranslationManager.h"
+#include "../commun/TrayManager.h"
 #include "../commun/security/CryptoUtils.h"
+#include "../commun/security/RuntimeSecret.h"
 #include "../ui/SelectAccountPage.h"
 #include "../ui/NewAccountPage.h"
 #include "../ui/NewAccount2Page.h"
@@ -23,6 +25,12 @@
 #include <QSettings>
 #include <QCursor>
 #include <QDebug>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QDateTime>
+#include <QElapsedTimer>
+
 #include <MultiFormatWriter.h>
 #include <BitMatrix.h>
 
@@ -43,15 +51,19 @@ StuauthWindow::StuauthWindow(QWidget* parent) : QMainWindow(parent)
     setCentralWidget(m_stack);
 
     buildMainWidget();
+    updateLangButton();
     m_stack->addWidget(m_main);
 
     updateFolderList();
 
     // ── Tray ────────────────────────────────────
     m_tray = new TrayManager(this, this);
+	m_tray->refreshLockState();
 
     connect(&TranslationManager::instance(), &TranslationManager::languageChanged,
         this, &StuauthWindow::retranslateUi);
+    connect(m_tray, &TrayManager::lockStateChanged,
+        this, &StuauthWindow::onLockStateChanged);
 }
 
 // ─────────────────────────────────────────────
@@ -80,9 +92,9 @@ void StuauthWindow::buildMainWidget()
     m_btnHelp->setFixedSize(25, 30);
 	m_btnMasterPassword->setFixedSize(40, 40);
 
-	m_btnLang = new QPushButton("🌐");
+	m_btnLang = new QPushButton();
     QFont f = m_btnLang->font();
-    f.setPointSize(10);
+    f.setPointSize(9);
     m_btnLang->setFont(f);
 	m_btnLang->setFixedSize(50, 30);
 
@@ -170,6 +182,23 @@ void StuauthWindow::retranslateUi()
     m_btnRename->setText(tr("Renommer"));
     m_btnExport->setText(tr("Exporter"));
     m_tray->retranslate();
+
+    updateLangButton();
+}
+
+static QString shortLang(const QString& lang)
+{
+    if (lang == "fr") return "FR";
+    if (lang == "en") return "EN";
+    if (lang == "bz") return "BZ";
+    if (lang == "ja") return "JA";
+    return "??";
+}
+
+void StuauthWindow::updateLangButton()
+{
+    QString lang = TranslationManager::instance().currentLanguage();
+    m_btnLang->setText(shortLang(lang));
 }
 
 // ─────────────────────────────────────────────
@@ -423,26 +452,73 @@ void StuauthWindow::onHelpClicked()
 
 void StuauthWindow::onTimeSynchro()
 {
-#ifdef _WIN32
-    // Élévation UAC via PowerShell Start-Process -Verb RunAs
-    QProcess::startDetached("powershell.exe", {
-        "-Command",
-        "Start-Process cmd.exe "
-        "-ArgumentList '/C net start w32time & w32tm /resync' "
-        "-Verb RunAs "
-        "-WindowStyle Hidden"
-        });
-#else
-    timeSynchroLinux();
-#endif
-}
+    QNetworkAccessManager* nam = new QNetworkAccessManager(this);
 
-void StuauthWindow::timeSynchroLinux()
-{
-    // timedatectl est fourni par systemd, présent sur toutes les distros modernes
-    QProcess p;
-    p.start("pkexec", { "timedatectl", "set-ntp", "true" });
-    p.waitForFinished(5000);
+    QDateTime t0 = QDateTime::currentDateTimeUtc();
+
+    QNetworkReply* reply = nam->head(QNetworkRequest(QUrl("https://google.com")));
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, t0]()
+        {
+            QDateTime t1 = QDateTime::currentDateTimeUtc();
+
+            if (reply->error() != QNetworkReply::NoError)
+            {
+                QMessageBox::warning(this,
+                    tr("Erreur"),
+                    tr("Impossible de synchroniser l'heure."));
+                reply->deleteLater();
+                return;
+            }
+
+            QByteArray dateHeader = reply->rawHeader("Date");
+
+            if (dateHeader.isEmpty())
+            {
+                QMessageBox::warning(this,
+                    tr("Erreur"),
+                    tr("Réponse invalide du serveur."));
+                reply->deleteLater();
+                return;
+            }
+
+            QString rawDate = QString::fromUtf8(dateHeader).trimmed();
+
+            // Format HTTP-date standard : "Sun, 06 Nov 1994 08:49:37 GMT"
+            QDateTime serverTime = QLocale::c().toDateTime(
+                rawDate,
+                "ddd, dd MMM yyyy HH:mm:ss 'GMT'"
+            );
+            serverTime.setTimeSpec(Qt::UTC);
+
+            if (!serverTime.isValid())
+            {
+                qDebug() << "Date header brut =" << rawDate;
+
+                QMessageBox::warning(this,
+                    tr("Erreur"),
+                    tr("Date serveur invalide."));
+                reply->deleteLater();
+                return;
+            }
+
+            qint64 t0_ms = t0.toMSecsSinceEpoch();
+            qint64 t1_ms = t1.toMSecsSinceEpoch();
+            qint64 midpoint_ms = (t0_ms + t1_ms) / 2;
+
+            QDateTime clientMidpoint = QDateTime::fromMSecsSinceEpoch(midpoint_ms, Qt::UTC);
+
+            qint64 offset = clientMidpoint.msecsTo(serverTime);
+
+            QSettings s;
+            s.setValue("timeOffset", offset);
+
+            QMessageBox::information(this,
+                tr("Synchronisation"),
+                tr("Décalage appliqué : %1 ms").arg(offset));
+
+            reply->deleteLater();
+        });
 }
 
 void StuauthWindow::onServerClicked()
@@ -570,6 +646,22 @@ void StuauthWindow::closeEvent(QCloseEvent* event)
     }
 }
 
+void StuauthWindow::onLockStateChanged()
+{
+    if (!RuntimeSecret::instance().hasSecret())
+    {
+        // verrouillé → vider UI
+        m_list->clear();
+        m_lblFolder->clear();
+        m_currentFolder.clear();
+    }
+    else
+    {
+        // déverrouillé → reload
+        updateFolderList();
+    }
+}
+
 // ─────────────────────────────────────────────
 //  Sécurité
 // ─────────────────────────────────────────────
@@ -622,6 +714,7 @@ void StuauthWindow::onMasterPasswordClicked()
         }
 
         m_am->rewriteWithCurrentKey(data);
+        m_tray->refreshLockState();
 
         QMessageBox::information(parent,
             tr("Succès"),
@@ -694,6 +787,7 @@ void StuauthWindow::onMasterPasswordClicked()
 
         CryptoUtils::setOrChangeMasterPassword(newPwd);
         m_am->rewriteWithCurrentKey(data);
+        m_tray->refreshLockState();
 
         QMessageBox::information(parent,
             tr("Succès"),
@@ -731,6 +825,7 @@ void StuauthWindow::onMasterPasswordClicked()
         CryptoUtils::disableMasterPassword();
 
         m_am->rewriteWithCurrentKey(data);
+        m_tray->refreshLockState();
 
         QMessageBox::information(parent,
             tr("Succès"),

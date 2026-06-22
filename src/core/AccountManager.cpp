@@ -1,5 +1,6 @@
 #include "AccountManager.h"
 #include "../commun/security/CryptoUtils.h"
+#include "../commun/security/RuntimeSecret.h"
 
 #include <QDir>
 #include <QFile>
@@ -278,6 +279,13 @@ bool AccountManager::loadPlainText(QString& outText) const
     if (encrypted.isEmpty()) {
         outText.clear();
         return true;
+    }
+
+
+    if (!RuntimeSecret::instance().hasSecret() &&
+        CryptoUtils::hasMasterPasswordConfigured())
+    {
+        return false;
     }
 
     CryptoUtils crypto;
