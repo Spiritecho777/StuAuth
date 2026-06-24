@@ -45,10 +45,23 @@
     </message>
 </context>
 <context>
+    <name>MasterPasswordPopup</name>
+    <message>
+        <location filename="../../src/ui/MasterPasswordPopup.cpp" line="25"/>
+        <source>Valider</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/MasterPasswordPopup.cpp" line="26"/>
+        <source>Annuler</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NetworkPage</name>
     <message>
         <location filename="../../src/ui/NetworkPage.cpp" line="126"/>
-        <location filename="../../src/ui/NetworkPage.cpp" line="438"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="439"/>
         <source>IP de l&apos;application distante :</source>
         <translation type="unfinished"></translation>
     </message>
@@ -59,7 +72,7 @@
     </message>
     <message>
         <location filename="../../src/ui/NetworkPage.cpp" line="132"/>
-        <location filename="../../src/ui/NetworkPage.cpp" line="439"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="440"/>
         <source>Serveur :</source>
         <translation type="unfinished"></translation>
     </message>
@@ -70,19 +83,19 @@
     </message>
     <message>
         <location filename="../../src/ui/NetworkPage.cpp" line="136"/>
-        <location filename="../../src/ui/NetworkPage.cpp" line="442"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="443"/>
         <source>Serveur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/ui/NetworkPage.cpp" line="137"/>
-        <location filename="../../src/ui/NetworkPage.cpp" line="440"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="441"/>
         <source>Synchroniser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/ui/NetworkPage.cpp" line="138"/>
-        <location filename="../../src/ui/NetworkPage.cpp" line="441"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="442"/>
         <source>Retour</source>
         <translation type="unfinished"></translation>
     </message>
@@ -94,9 +107,9 @@
     <message>
         <location filename="../../src/ui/NetworkPage.cpp" line="275"/>
         <location filename="../../src/ui/NetworkPage.cpp" line="283"/>
-        <location filename="../../src/ui/NetworkPage.cpp" line="346"/>
-        <location filename="../../src/ui/NetworkPage.cpp" line="357"/>
-        <location filename="../../src/ui/NetworkPage.cpp" line="375"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="347"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="358"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="376"/>
         <source>Erreur</source>
         <translation type="unfinished"></translation>
     </message>
@@ -111,22 +124,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/NetworkPage.cpp" line="346"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="347"/>
         <source>Aucune IP d&apos;application configurée.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/NetworkPage.cpp" line="350"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="351"/>
         <source>Synchronisation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/NetworkPage.cpp" line="351"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="352"/>
         <source>Synchroniser les comptes depuis %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/NetworkPage.cpp" line="358"/>
+        <location filename="../../src/ui/NetworkPage.cpp" line="359"/>
         <source>L&apos;hôte %1 est inaccessible.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -230,22 +243,68 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/commun/LockManager.cpp" line="17"/>
+        <location filename="../../src/commun/security/AuthManager.cpp" line="18"/>
+        <source>Mot de passe maître</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commun/security/AuthManager.cpp" line="19"/>
+        <source>Entrez le mot de passe maître pour déverrouiller StuAuth :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commun/security/AuthManager.cpp" line="30"/>
+        <location filename="../../src/commun/TrayManager.cpp" line="77"/>
+        <source>Erreur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commun/security/AuthManager.cpp" line="31"/>
+        <source>Mot de passe maître incorrect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commun/security/LockManager.cpp" line="17"/>
         <source>Instance déjà ouverte</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/commun/LockManager.cpp" line="18"/>
+        <location filename="../../src/commun/security/LockManager.cpp" line="18"/>
         <source>StuAuth est déjà en cours d&apos;exécution.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/core/AccountManager.cpp" line="257"/>
+        <location filename="../../src/commun/TrayManager.cpp" line="64"/>
+        <source>Déverrouillage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commun/TrayManager.cpp" line="65"/>
+        <source>Entrez le mot de passe maître :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commun/TrayManager.cpp" line="78"/>
+        <source>Mot de passe incorrect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commun/TrayManager.cpp" line="108"/>
+        <source>Verrouiller</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commun/TrayManager.cpp" line="110"/>
+        <source>Déverrouiller</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/core/AccountManager.cpp" line="297"/>
         <source>Erreur de déchiffrement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/core/AccountManager.cpp" line="258"/>
+        <location filename="../../src/core/AccountManager.cpp" line="298"/>
         <source>Impossible de déchiffrer Account.dat.
 Le fichier est corrompu ou la clé est incorrecte.</source>
         <translation type="unfinished"></translation>
@@ -269,141 +328,293 @@ Le fichier est corrompu ou la clé est incorrecte.</source>
 <context>
     <name>StuauthWindow</name>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="63"/>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="156"/>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="378"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="78"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="182"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="421"/>
         <source>Renommer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="66"/>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="157"/>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="454"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="81"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="183"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="545"/>
         <source>Exporter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="155"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="181"/>
         <source>Langue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="325"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="368"/>
         <source>Nouveau dossier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="326"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="369"/>
         <source>Nom du dossier :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="331"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="374"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="468"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="479"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="499"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="693"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="703"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="711"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="754"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="773"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="783"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="810"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="820"/>
         <source>Erreur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="332"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="375"/>
         <source>Le nom du dossier ne peut pas être vide.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="350"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="393"/>
         <source>Supprimé</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="351"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="394"/>
         <source>Le compte &quot;%1&quot; a été supprimé.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="359"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="402"/>
         <source>Dossier non vide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="360"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="403"/>
         <source>Le dossier &quot;%1&quot; contient des comptes.
 Voulez-vous le supprimer quand même ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="379"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="422"/>
         <source>Nouveau nom :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="398"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="441"/>
         <source>Exporter en texte</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="399"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="442"/>
         <source>Exporter en QR Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="405"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="449"/>
         <source>À propos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="406"/>
-        <source>StuAuth — version %1</source>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="450"/>
+        <source>StuAuth — version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="455"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="469"/>
+        <source>Impossible de synchroniser l&apos;heure.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="480"/>
+        <source>Réponse invalide du serveur.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="500"/>
+        <source>Date serveur invalide.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="517"/>
+        <source>Synchronisation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="518"/>
+        <source>Décalage appliqué : %1 ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="546"/>
         <source>Fichiers texte (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="474"/>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="534"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="565"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="625"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="474"/>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="534"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="565"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="625"/>
         <source>Aucun compte à exporter.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="476"/>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="536"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="567"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="627"/>
         <source>Export terminé</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="477"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="568"/>
         <source>%1 compte(s) exporté(s).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="483"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="574"/>
         <source>Dossier de destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/ui/StuauthWindow.cpp" line="537"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="628"/>
         <source>%1 QR code(s) exporté(s) dans :
 %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="681"/>
+        <source>Créer un mot de passe maître</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="682"/>
+        <source>Entrez un mot de passe maître :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="694"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="774"/>
+        <source>Le mot de passe ne peut pas être vide.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="704"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="784"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="821"/>
+        <source>Impossible de lire les données existantes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="712"/>
+        <source>Impossible d’enregistrer le mot de passe.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="720"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="793"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="831"/>
+        <source>Succès</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="721"/>
+        <source>Mot de passe maître activé.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="730"/>
+        <source>Mot de passe maître</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="731"/>
+        <source>Que souhaitez-vous faire ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="733"/>
+        <source>Changer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="734"/>
+        <source>Désactiver</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="735"/>
+        <source>Annuler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="743"/>
+        <source>Vérification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="744"/>
+        <source>Entrez le mot de passe actuel :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="755"/>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="811"/>
+        <source>Mot de passe incorrect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="761"/>
+        <source>Nouveau mot de passe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="762"/>
+        <source>Entrez le nouveau mot de passe :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="794"/>
+        <source>Mot de passe modifié.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="799"/>
+        <source>Confirmation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="800"/>
+        <source>Entrez le mot de passe pour désactiver :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/StuauthWindow.cpp" line="832"/>
+        <source>Mot de passe maître désactivé.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>TrayManager</name>
     <message>
-        <location filename="../../src/commun/TrayManager.cpp" line="15"/>
-        <location filename="../../src/commun/TrayManager.cpp" line="44"/>
+        <location filename="../../src/commun/TrayManager.cpp" line="19"/>
+        <source>Verrouiller</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/commun/TrayManager.cpp" line="20"/>
+        <location filename="../../src/commun/TrayManager.cpp" line="52"/>
         <source>Ouvrir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/commun/TrayManager.cpp" line="16"/>
-        <location filename="../../src/commun/TrayManager.cpp" line="45"/>
+        <location filename="../../src/commun/TrayManager.cpp" line="21"/>
+        <location filename="../../src/commun/TrayManager.cpp" line="53"/>
         <source>Quitter</source>
         <translation type="unfinished"></translation>
     </message>
